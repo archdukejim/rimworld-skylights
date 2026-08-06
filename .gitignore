@@ -1,0 +1,7 @@
+# Build output
+Source/obj/
+Source/bin/
+*.user
+
+# Keep the deployed assembly output
+!1.6/Assemblies/

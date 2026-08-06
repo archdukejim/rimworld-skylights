@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Skylights</name>
+  <author>archdukejim</author>
+  <packageId>archdukejim.Skylights</packageId>
+  <supportedVersions>
+    <li>1.6</li>
+  </supportedVersions>
+  <description>Bring real daylight into a roofed room.
+
+A skylight is a reinforced transparent panel you set into a ceiling. It channels the actual sky above straight down onto the floor below, so crops grow and colonists work by natural light without a watt of power.
+
+--- HOW IT WORKS ---
+The light follows the real sun. It is strong at midday, fades through dusk, and goes dark at night, so a skylit grow room keeps the same day/night rhythm as an open field. Eclipses and heavy storms dim it just as they dim the sky outside.
+
+Because it needs the open sky, a skylight only works under a normal constructed or thin-rock roof. Set one under overhead mountain and no light gets through the solid rock.
+
+--- USING IT ---
+Research Skylights, then build them into your grow rooms and workshops like ceiling tiles. They are walkable, draw no power, and never overheat a room the way a sun lamp does. Space several across a large room for even coverage, or drop a single one over a small indoor garden.
+
+The trade-off against a sun lamp is honest: free and cool, but only as bright as the day outside, and dark every night.
+
+Safe to add or remove mid-save.</description>
+</ModMetaData>

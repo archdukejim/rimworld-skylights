@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Skylight_Channeling>Channeling daylight: {0}% of full sun</Skylight_Channeling>
+  <Skylight_Dark>Channeling daylight: dark (night)</Skylight_Dark>
+  <Skylight_NoRoof>No roof above — open sky already lights this spot</Skylight_NoRoof>
+  <Skylight_ThickRoof>Blocked by overhead mountain — no daylight gets through solid rock</Skylight_ThickRoof>
+</LanguageData>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>Skylight</defName>
+    <label>skylight</label>
+    <description>A reinforced transparent panel set into the ceiling. It channels real daylight into a roofed room, letting crops grow and colonists work by natural light without any power. Brightness follows the sun: strong at midday, dim under storms, and dark at night. It won't work under thick overhead mountain, which blocks the open sky.</description>
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <graphicData>
+      <texPath>Things/Building/Skylight</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <uiIconScale>0.85</uiIconScale>
+    <altitudeLayer>FloorEmplacement</altitudeLayer>
+    <passability>Standable</passability>
+    <fillPercent>0</fillPercent>
+    <castEdgeShadows>false</castEdgeShadows>
+    <useHitPoints>true</useHitPoints>
+    <rotatable>false</rotatable>
+    <selectable>true</selectable>
+    <canOverlapZones>true</canOverlapZones>
+    <clearBuildingArea>false</clearBuildingArea>
+    <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <statBases>
+      <MaxHitPoints>80</MaxHitPoints>
+      <WorkToBuild>1400</WorkToBuild>
+      <Mass>4</Mass>
+      <Flammability>0</Flammability>
+      <Beauty>2</Beauty>
+    </statBases>
+    <costList>
+      <Steel>20</Steel>
+      <ComponentIndustrial>1</ComponentIndustrial>
+    </costList>
+    <building>
+      <isEdifice>false</isEdifice>
+      <ai_chillDestination>false</ai_chillDestination>
+      <isInert>true</isInert>
+    </building>
+    <designationCategory>Furniture</designationCategory>
+    <researchPrerequisites>
+      <li>SkylightResearch</li>
+    </researchPrerequisites>
+    <constructEffect>ConstructMetal</constructEffect>
+    <specialDisplayRadius>4</specialDisplayRadius>
+    <comps>
+      <li Class="CompProperties_Glower">
+        <overlightRadius>3</overlightRadius>
+        <glowRadius>9</glowRadius>
+        <glowColor>(370, 360, 335, 0)</glowColor>
+      </li>
+      <li Class="Skylights.CompProperties_Skylight" />
+    </comps>
+  </ThingDef>
+
+</Defs>
