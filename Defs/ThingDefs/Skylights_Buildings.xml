@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- Shared base for both skylight buildings: walkable, powerless, sun-tracking. -->
+  <ThingDef Name="SkylightBase" ParentName="BuildingBase" Abstract="True">
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <graphicData>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <altitudeLayer>FloorEmplacement</altitudeLayer>
+    <passability>Standable</passability>
+    <fillPercent>0</fillPercent>
+    <castEdgeShadows>false</castEdgeShadows>
+    <rotatable>false</rotatable>
+    <selectable>true</selectable>
+    <canOverlapZones>true</canOverlapZones>
+    <clearBuildingArea>false</clearBuildingArea>
+    <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>Furniture</designationCategory>
+    <researchPrerequisites>
+      <li>SkylightResearch</li>
+    </researchPrerequisites>
+    <constructEffect>ConstructMetal</constructEffect>
+    <building>
+      <isEdifice>false</isEdifice>
+      <isInert>true</isInert>
+      <ai_chillDestination>false</ai_chillDestination>
+    </building>
+    <statBases>
+      <Flammability>0</Flammability>
+    </statBases>
+  </ThingDef>
+
+  <!-- Dome: small opening, spreads soft daylight over radius ~2, never bright enough to grow crops. -->
+  <ThingDef ParentName="SkylightBase">
+    <defName>Skylight_Dome</defName>
+    <label>dome skylight</label>
+    <description>A dome-style opening that spreads soft natural light across a small area. Because it is only a small bubble set into the roof, it needs no structural change and installs quickly. It brightens a room by real daylight — bright at midday, dark at night — but its light never concentrates enough to grow crops. It won't work under thick overhead mountain, which blocks the open sky.</description>
+    <graphicData>
+      <texPath>Things/Building/Skylight_Dome</texPath>
+    </graphicData>
+    <constructionSkillPrerequisite>3</constructionSkillPrerequisite>
+    <statBases>
+      <MaxHitPoints>60</MaxHitPoints>
+      <WorkToBuild>1250</WorkToBuild>
+      <Mass>2</Mass>
+      <Beauty>1</Beauty>
+    </statBases>
+    <costList>
+      <Steel>2</Steel>
+    </costList>
+    <specialDisplayRadius>2</specialDisplayRadius>
+    <comps>
+      <li Class="CompProperties_Glower">
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2.9</glowRadius>
+        <!-- Deliberately low magnitude: peaks around 0.4 ground glow at full sun, below the 0.51 crops need. -->
+        <glowColor>(100, 98, 88, 0)</glowColor>
+      </li>
+      <li Class="Skylights.CompProperties_Skylight" />
+    </comps>
+  </ThingDef>
+
+  <!-- Paned: single glazed square that passes the full sky onto its own tile (growable). -->
+  <ThingDef ParentName="SkylightBase">
+    <defName>Skylight_Paned</defName>
+    <label>paned skylight</label>
+    <description>A single reinforced glass pane in a frame that glazes one square of roof. It lets the full strength of the sky pass straight down onto the tile below — bright enough to grow crops by daylight, and dark at night. Built from one structural frame and one structural glass pane. It won't work under thick overhead mountain, which blocks the open sky.</description>
+    <graphicData>
+      <texPath>Things/Building/Skylight_Paned</texPath>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>50</MaxHitPoints>
+      <WorkToBuild>210</WorkToBuild>
+      <Mass>3</Mass>
+      <Beauty>3</Beauty>
+    </statBases>
+    <costList>
+      <StructuralFrame>1</StructuralFrame>
+      <StructuralGlass>1</StructuralGlass>
+    </costList>
+    <specialDisplayRadius>1</specialDisplayRadius>
+    <comps>
+      <li Class="CompProperties_Glower">
+        <overlightRadius>1</overlightRadius>
+        <glowRadius>1.6</glowRadius>
+        <!-- Full daylight magnitude, tiny radius: its own square reaches ~1.0 at midday, so plants grow. -->
+        <glowColor>(370, 362, 340, 0)</glowColor>
+      </li>
+      <li Class="Skylights.CompProperties_Skylight" />
+    </comps>
+  </ThingDef>
+
+</Defs>

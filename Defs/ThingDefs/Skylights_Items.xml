@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <ThingDef ParentName="ResourceBase">
+    <defName>StructuralFrame</defName>
+    <label>structural frame</label>
+    <description>A prefabricated metal frame used to mount panels and fixtures such as skylights. Fabricated in batches at an electric smelter.</description>
+    <graphicData>
+      <texPath>Things/Item/Resource/StructuralFrame</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.85, 0.85)</drawSize>
+    </graphicData>
+    <soundInteract>Metal_Drop</soundInteract>
+    <soundDrop>Metal_Drop</soundDrop>
+    <stackLimit>75</stackLimit>
+    <statBases>
+      <MarketValue>2.5</MarketValue>
+      <Mass>0.4</Mass>
+      <Flammability>0.2</Flammability>
+      <DeteriorationRate>1.0</DeteriorationRate>
+      <MaxHitPoints>60</MaxHitPoints>
+    </statBases>
+    <thingCategories>
+      <li>Manufactured</li>
+    </thingCategories>
+  </ThingDef>
+
+  <ThingDef ParentName="ResourceBase">
+    <defName>StructuralGlass</defName>
+    <label>structural glass</label>
+    <description>A reinforced, toughened transparent pane, cast at an electric smelter. Used to glaze skylights and other fixtures.</description>
+    <graphicData>
+      <texPath>Things/Item/Resource/StructuralGlass</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.85, 0.85)</drawSize>
+    </graphicData>
+    <soundInteract>Standard_Drop</soundInteract>
+    <soundDrop>Standard_Drop</soundDrop>
+    <stackLimit>75</stackLimit>
+    <statBases>
+      <MarketValue>3.0</MarketValue>
+      <Mass>0.5</Mass>
+      <Flammability>0</Flammability>
+      <DeteriorationRate>1.0</DeteriorationRate>
+      <MaxHitPoints>50</MaxHitPoints>
+    </statBases>
+    <thingCategories>
+      <li>Manufactured</li>
+    </thingCategories>
+  </ThingDef>
+
+</Defs>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <RecipeDef Name="SkylightSmelterRecipeBase" Abstract="True">
+    <workSpeedStat>SmeltingSpeed</workSpeedStat>
+    <effectWorking>Smelt</effectWorking>
+    <soundWorking>Recipe_Smelt</soundWorking>
+    <workSkill>Crafting</workSkill>
+    <recipeUsers>
+      <li>ElectricSmelter</li>
+    </recipeUsers>
+    <researchPrerequisite>SkylightResearch</researchPrerequisite>
+  </RecipeDef>
+
+  <!-- Structural frames: 1 steel -> 4 frames. -->
+  <RecipeDef ParentName="SkylightSmelterRecipeBase">
+    <defName>Make_StructuralFrame</defName>
+    <label>make structural frames x4</label>
+    <description>Fabricate four structural frames from one unit of steel.</description>
+    <jobString>Making structural frames.</jobString>
+    <workAmount>210</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <StructuralFrame>4</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <!-- Structural frames, bulk: 10 steel -> 40 frames, with a time discount. -->
+  <RecipeDef ParentName="SkylightSmelterRecipeBase">
+    <defName>Make_StructuralFrame_Bulk</defName>
+    <label>make structural frames x40</label>
+    <description>Fabricate forty structural frames from ten units of steel.</description>
+    <jobString>Making structural frames in bulk.</jobString>
+    <workAmount>1875</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>10</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <StructuralFrame>40</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <!-- Structural glass: 1 steel -> 1 pane. -->
+  <RecipeDef ParentName="SkylightSmelterRecipeBase">
+    <defName>Make_StructuralGlass</defName>
+    <label>make structural glass x1</label>
+    <description>Cast one reinforced glass pane from one unit of steel.</description>
+    <jobString>Casting structural glass.</jobString>
+    <workAmount>210</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <StructuralGlass>1</StructuralGlass>
+    </products>
+  </RecipeDef>
+
+  <!-- Structural glass, bulk: 10 steel -> 10 panes, with a time discount. -->
+  <RecipeDef ParentName="SkylightSmelterRecipeBase">
+    <defName>Make_StructuralGlass_Bulk</defName>
+    <label>make structural glass x10</label>
+    <description>Cast ten reinforced glass panes from ten units of steel.</description>
+    <jobString>Casting structural glass in bulk.</jobString>
+    <workAmount>1875</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>10</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <StructuralGlass>10</StructuralGlass>
+    </products>
+  </RecipeDef>
+
+</Defs>

@@ -6,19 +6,22 @@
   <supportedVersions>
     <li>1.6</li>
   </supportedVersions>
-  <description>Bring real daylight into a roofed room.
+  <description>Bring real daylight into a roofed room. Two skylights, powerless and cool, whose light follows the actual sky above — bright at midday, fading through dusk, dark at night, and dimmed by storms and eclipses. Neither works under thick overhead mountain, which seals off the sky.
 
-A skylight is a reinforced transparent panel you set into a ceiling. It channels the actual sky above straight down onto the floor below, so crops grow and colonists work by natural light without a watt of power.
+--- DOME SKYLIGHT ---
+A small dome-style opening that spreads soft daylight across a radius of about two tiles. Being a small bubble it needs no structural change to the roof and installs fast — a couple of steel and a bit of construction work. It lights a room by natural light but never concentrates enough sun to grow crops. Good for workshops, bedrooms and walkways.
 
---- HOW IT WORKS ---
-The light follows the real sun. It is strong at midday, fades through dusk, and goes dark at night, so a skylit grow room keeps the same day/night rhythm as an open field. Eclipses and heavy storms dim it just as they dim the sky outside.
+--- PANED SKYLIGHT ---
+A single glazed square that passes the full strength of the sky straight down onto its own tile — bright enough to grow crops by daylight. Built one tile at a time from a structural frame and a structural glass pane, so a large glass roof is a real construction project.
 
-Because it needs the open sky, a skylight only works under a normal constructed or thin-rock roof. Set one under overhead mountain and no light gets through the solid rock.
+--- THE SUPPLY CHAIN ---
+Structural frames and structural glass are both fabricated at an electric smelter:
+  Structural frames - one steel makes four frames.
+  Structural glass - one steel makes one pane.
+Each is available as a single batch or a discounted bulk batch.
 
---- USING IT ---
-Research Skylights, then build them into your grow rooms and workshops like ceiling tiles. They are walkable, draw no power, and never overheat a room the way a sun lamp does. Space several across a large room for even coverage, or drop a single one over a small indoor garden.
-
-The trade-off against a sun lamp is honest: free and cool, but only as bright as the day outside, and dark every night.
+--- VS. THE SUN LAMP ---
+An honest trade: skylights are free and never overheat a room, but they are only as bright as the day outside and go dark every night. Research Skylights to unlock both, plus the smelter recipes.
 
 Safe to add or remove mid-save.</description>
 </ModMetaData>
