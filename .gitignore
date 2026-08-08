@@ -3,5 +3,9 @@ Source/obj/
 Source/bin/
 *.user
 
+# Stray test screenshots
+screenshot_*.png
+screenshot_*.jpeg
+
 # Keep the deployed assembly output
 !1.6/Assemblies/

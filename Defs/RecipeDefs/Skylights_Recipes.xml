@@ -9,7 +9,7 @@
     <recipeUsers>
       <li>ElectricSmelter</li>
     </recipeUsers>
-    <researchPrerequisite>SkylightResearch</researchPrerequisite>
+    <researchPrerequisite>Electricity</researchPrerequisite>
   </RecipeDef>
 
   <!-- Structural frames: 1 steel -> 4 frames. -->
@@ -117,6 +117,60 @@
     </fixedIngredientFilter>
     <products>
       <StructuralGlass>10</StructuralGlass>
+    </products>
+  </RecipeDef>
+
+  <!-- Skylight dome: 2 steel -> 1 prefab dome unit. -->
+  <RecipeDef ParentName="SkylightSmelterRecipeBase">
+    <defName>Make_SkylightDome</defName>
+    <label>make skylight dome</label>
+    <description>Cast a prefabricated skylight dome from two units of steel.</description>
+    <jobString>Making skylight dome.</jobString>
+    <workAmount>1250</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>2</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <SkylightDome>1</SkylightDome>
+    </products>
+  </RecipeDef>
+
+  <!-- Reflection tube: 5 steel -> 1 mirror-lined tube, needed for mountain-piercing skylights. -->
+  <RecipeDef ParentName="SkylightSmelterRecipeBase">
+    <defName>Make_ReflectionTube</defName>
+    <label>make reflection tube</label>
+    <description>Fabricate a mirror-lined reflection tube from five units of steel.</description>
+    <jobString>Making reflection tube.</jobString>
+    <workAmount>1250</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>5</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <ReflectionTube>1</ReflectionTube>
     </products>
   </RecipeDef>
 

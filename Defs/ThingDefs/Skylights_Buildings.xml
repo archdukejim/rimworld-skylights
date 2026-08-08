@@ -9,19 +9,22 @@
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(1,1)</drawSize>
     </graphicData>
-    <altitudeLayer>FloorEmplacement</altitudeLayer>
+    <!-- A skylight sits up in the roof, so it draws over pretty much everything below it (plants, items, pawns). -->
+    <altitudeLayer>MoteOverhead</altitudeLayer>
     <passability>Standable</passability>
     <fillPercent>0</fillPercent>
     <castEdgeShadows>false</castEdgeShadows>
     <rotatable>false</rotatable>
-    <selectable>true</selectable>
+    <!-- Roof-mounted: not directly clickable (clicks pass through to whatever is below);
+         remove it with the Architect > Orders > Deconstruct area tool. -->
+    <selectable>false</selectable>
     <canOverlapZones>true</canOverlapZones>
     <clearBuildingArea>false</clearBuildingArea>
     <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
     <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
     <designationCategory>Furniture</designationCategory>
     <researchPrerequisites>
-      <li>SkylightResearch</li>
+      <li>Electricity</li>
     </researchPrerequisites>
     <constructEffect>ConstructMetal</constructEffect>
     <building>
@@ -38,29 +41,32 @@
   <ThingDef ParentName="SkylightBase">
     <defName>Skylight_Dome</defName>
     <label>dome skylight</label>
-    <description>A dome-style opening that spreads soft natural light across a small area. Because it is only a small bubble set into the roof, it needs no structural change and installs quickly. It brightens a room by real daylight — bright at midday, dark at night — but its light never concentrates enough to grow crops. It won't work under thick overhead mountain, which blocks the open sky.</description>
+    <description>A dome-style opening that spreads soft natural light across a small area. It is a prefabricated unit that simply drops into a roof, so it installs almost instantly. It brightens a room by real daylight — bright at midday, dark at night — but its light never concentrates enough to grow crops. It won't work under thick overhead mountain, which blocks the open sky.</description>
     <graphicData>
       <texPath>Things/Building/Skylight_Dome</texPath>
     </graphicData>
-    <constructionSkillPrerequisite>3</constructionSkillPrerequisite>
     <statBases>
       <MaxHitPoints>60</MaxHitPoints>
-      <WorkToBuild>1250</WorkToBuild>
+      <WorkToBuild>180</WorkToBuild>
       <Mass>2</Mass>
       <Beauty>1</Beauty>
     </statBases>
     <costList>
-      <Steel>2</Steel>
+      <SkylightDome>1</SkylightDome>
     </costList>
     <specialDisplayRadius>2</specialDisplayRadius>
     <comps>
       <li Class="CompProperties_Glower">
+        <!-- Low magnitude, non-overlit: caps at 0.5 ground glow so it can never grow crops, and
+             (scaled by glowFactor below) it tracks the sky proportionally — dimmer at dusk, dark at
+             night, never brighter than the daylight it channels. -->
         <overlightRadius>0</overlightRadius>
-        <glowRadius>2.9</glowRadius>
-        <!-- Deliberately low magnitude: peaks around 0.4 ground glow at full sun, below the 0.51 crops need. -->
-        <glowColor>(100, 98, 88, 0)</glowColor>
+        <glowRadius>2.6</glowRadius>
+        <glowColor>(120, 118, 106, 0)</glowColor>
       </li>
-      <li Class="Skylights.CompProperties_Skylight" />
+      <li Class="Skylights.CompProperties_Skylight">
+        <glowFactor>0.5</glowFactor>
+      </li>
     </comps>
   </ThingDef>
 
@@ -79,18 +85,53 @@
       <Beauty>3</Beauty>
     </statBases>
     <costList>
-      <StructuralFrame>1</StructuralFrame>
+      <!-- Four frame pieces (one per side of the window) plus a glass pane. -->
+      <StructuralFrame>4</StructuralFrame>
       <StructuralGlass>1</StructuralGlass>
     </costList>
-    <specialDisplayRadius>1</specialDisplayRadius>
+    <specialDisplayRadius>2</specialDisplayRadius>
+    <!-- Drag out a filled grid when building, exactly like placing floors. -->
+    <drawStyleCategory>Floors</drawStyleCategory>
+    <comps>
+      <li Class="Skylights.CompProperties_Skylight">
+        <!-- Renders and lights the tile as if there were no roof: full sky light, sky colour,
+             moonlight and shadows. Grows crops by day, dark at night, never brighter than outside. -->
+        <renderAsSky>true</renderAsSky>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <!-- Mountain dome: same soft daylight as the dome, but a reflection tube pierces thick overhead mountain. -->
+  <ThingDef ParentName="SkylightBase">
+    <defName>Skylight_MountainDome</defName>
+    <label>mountain dome skylight</label>
+    <description>A dome skylight fitted to a reflection tube that channels daylight down through solid overhead rock. It spreads the same soft natural light as a dome skylight — bright at midday, dark at night — but unlike a plain dome it keeps working beneath thick overhead mountain. Installed from a prefabricated skylight dome and a reflection tube, so fitting it takes real work.</description>
+    <graphicData>
+      <texPath>Things/Building/Skylight_Dome</texPath>
+    </graphicData>
+    <constructionSkillPrerequisite>3</constructionSkillPrerequisite>
+    <statBases>
+      <MaxHitPoints>60</MaxHitPoints>
+      <WorkToBuild>2500</WorkToBuild>
+      <Mass>2</Mass>
+      <Beauty>1</Beauty>
+    </statBases>
+    <costList>
+      <SkylightDome>1</SkylightDome>
+      <ReflectionTube>1</ReflectionTube>
+    </costList>
+    <specialDisplayRadius>2</specialDisplayRadius>
     <comps>
       <li Class="CompProperties_Glower">
-        <overlightRadius>1</overlightRadius>
-        <glowRadius>1.6</glowRadius>
-        <!-- Full daylight magnitude, tiny radius: its own square reaches ~1.0 at midday, so plants grow. -->
-        <glowColor>(370, 362, 340, 0)</glowColor>
+        <!-- Same soft, sky-proportional light as the dome (never grows crops). -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2.6</glowRadius>
+        <glowColor>(120, 118, 106, 0)</glowColor>
       </li>
-      <li Class="Skylights.CompProperties_Skylight" />
+      <li Class="Skylights.CompProperties_Skylight">
+        <worksUnderThickRoof>true</worksUnderThickRoof>
+        <glowFactor>0.5</glowFactor>
+      </li>
     </comps>
   </ThingDef>
 

@@ -17,7 +17,8 @@
       <MarketValue>2.5</MarketValue>
       <Mass>0.4</Mass>
       <Flammability>0.2</Flammability>
-      <DeteriorationRate>1.0</DeteriorationRate>
+      <!-- Metal frame: does not rot outdoors. -->
+      <DeteriorationRate>0</DeteriorationRate>
       <MaxHitPoints>60</MaxHitPoints>
     </statBases>
     <thingCategories>
@@ -41,8 +42,57 @@
       <MarketValue>3.0</MarketValue>
       <Mass>0.5</Mass>
       <Flammability>0</Flammability>
-      <DeteriorationRate>1.0</DeteriorationRate>
+      <!-- Glass: does not rot outdoors. -->
+      <DeteriorationRate>0</DeteriorationRate>
       <MaxHitPoints>50</MaxHitPoints>
+    </statBases>
+    <thingCategories>
+      <li>Manufactured</li>
+    </thingCategories>
+  </ThingDef>
+
+  <ThingDef ParentName="ResourceBase">
+    <defName>SkylightDome</defName>
+    <label>skylight dome</label>
+    <description>A prefabricated dome-shaped skylight unit, cast at an electric smelter and ready to set into a roof. Install one to channel real daylight into a room below.</description>
+    <graphicData>
+      <texPath>Things/Item/Resource/SkylightDome</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.85, 0.85)</drawSize>
+    </graphicData>
+    <soundInteract>Metal_Drop</soundInteract>
+    <soundDrop>Metal_Drop</soundDrop>
+    <stackLimit>25</stackLimit>
+    <statBases>
+      <MarketValue>18</MarketValue>
+      <Mass>2</Mass>
+      <Flammability>0.2</Flammability>
+      <DeteriorationRate>1.0</DeteriorationRate>
+      <MaxHitPoints>60</MaxHitPoints>
+    </statBases>
+    <thingCategories>
+      <li>Manufactured</li>
+    </thingCategories>
+  </ThingDef>
+
+  <ThingDef ParentName="ResourceBase">
+    <defName>ReflectionTube</defName>
+    <label>reflection tube</label>
+    <description>A polished, mirror-lined tube that pipes daylight down through solid rock. Fitted behind a skylight dome, it lets the dome keep working even beneath thick overhead mountain. Fabricated at an electric smelter.</description>
+    <graphicData>
+      <texPath>Things/Item/Resource/ReflectionTube</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.85, 0.85)</drawSize>
+    </graphicData>
+    <soundInteract>Metal_Drop</soundInteract>
+    <soundDrop>Metal_Drop</soundDrop>
+    <stackLimit>25</stackLimit>
+    <statBases>
+      <MarketValue>32</MarketValue>
+      <Mass>3</Mass>
+      <Flammability>0.2</Flammability>
+      <DeteriorationRate>1.0</DeteriorationRate>
+      <MaxHitPoints>60</MaxHitPoints>
     </statBases>
     <thingCategories>
       <li>Manufactured</li>

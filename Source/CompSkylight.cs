@@ -16,6 +16,16 @@ namespace Skylights
         /// <summary>Number of brightness steps between dark and full sun. Higher = smoother, more glow-grid recomputes.</summary>
         public int glowSteps = 12;
 
+        /// <summary>When true, daylight still reaches this cell through thick overhead mountain (e.g. piped down a reflection tube).</summary>
+        public bool worksUnderThickRoof = false;
+
+        /// <summary>Fraction of the outdoor sky glow this skylight channels indoors (1 = full sky, 0.5 = half). A dome only passes soft, partial light.</summary>
+        public float glowFactor = 1f;
+
+        /// <summary>When true the cell is rendered and lit as if there were no roof (full sky light, colour,
+        /// moonlight, shadows) via the Harmony patches, instead of driving a CompGlower. Used by the paned skylight.</summary>
+        public bool renderAsSky = false;
+
         public CompProperties_Skylight()
         {
             compClass = typeof(CompSkylight);
@@ -34,12 +44,19 @@ namespace Skylights
         private CompGlower glower;
         private ColorInt fullColor;   // full-daylight colour, taken from the glower's props
         private int lastBucket = -1;  // last applied brightness step, so we only touch the grid on change
+        private bool skyRegistered;   // renderAsSky: whether our cell is currently in the SkylightGrid
+        private IntVec3 skyCell = IntVec3.Invalid;  // the cell we registered, so we can deregister on despawn
 
         public CompProperties_Skylight Props => (CompProperties_Skylight)props;
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
+            if (Props.renderAsSky)
+            {
+                UpdateSkyChannel();
+                return;
+            }
             glower = parent.GetComp<CompGlower>();
             if (glower != null)
             {
@@ -51,17 +68,59 @@ namespace Skylights
 
         public override void CompTickRare()
         {
-            UpdateGlow();
+            if (Props.renderAsSky)
+                UpdateSkyChannel();
+            else
+                UpdateGlow();
         }
 
-        /// <summary>True when the sky can reach this cell (no roof, or a non-thick roof above).</summary>
+        public override void PostDeSpawn(Map map, DestroyMode mode = DestroyMode.Vanish)
+        {
+            if (Props.renderAsSky && skyRegistered)
+            {
+                SkylightGrid.Set(map, skyCell, false);
+                skyRegistered = false;
+            }
+            base.PostDeSpawn(map, mode);
+        }
+
+        /// <summary>Keep our cell's "as if no roof" registration in sync with whether we're channeling.</summary>
+        private void UpdateSkyChannel()
+        {
+            Map map = parent.Map;
+            if (map == null) return;
+            bool shouldChannel = RoofChannelsLight();
+            IntVec3 cell = parent.Position;
+            if (shouldChannel && skyRegistered && cell == skyCell) return;
+
+            if (skyRegistered)
+                SkylightGrid.Set(map, skyCell, false);
+            if (shouldChannel)
+            {
+                SkylightGrid.Set(map, cell, true);
+                skyCell = cell;
+                skyRegistered = true;
+            }
+            else
+            {
+                skyRegistered = false;
+            }
+        }
+
+        /// <summary>True when the skylight should channel daylight down: there is a roof above to
+        /// channel through, and it isn't blocking. Open sky is excluded — it already lights the cell
+        /// directly, so adding glow there would make the spot brighter than the sun outside.</summary>
         private bool RoofChannelsLight()
         {
             Map map = parent.Map;
             if (map == null) return false;
             RoofDef roof = map.roofGrid.RoofAt(parent.Position);
-            // Thick overhead rock (mountain) seals off the sky entirely.
-            return roof == null || !roof.isThickRoof;
+            // Open sky already lights this spot directly — channel nothing.
+            if (roof == null) return false;
+            // Thick overhead rock seals off the sky, unless a reflection tube pierces it.
+            if (roof.isThickRoof) return Props.worksUnderThickRoof;
+            // Constructed or thin roof: channel the daylight through.
+            return true;
         }
 
         private void UpdateGlow()
@@ -73,8 +132,10 @@ namespace Skylights
             float target = 0f;
             if (RoofChannelsLight())
             {
-                target = Mathf.Clamp01(map.skyManager.CurSkyGlow);
-                if (target < Props.minChannelGlow) target = 0f;
+                // Mirror the real sky, scaled by glowFactor: a dome passes only half the outdoor light.
+                float glow = Mathf.Clamp01(map.skyManager.CurSkyGlow);
+                if (glow >= Props.minChannelGlow)
+                    target = Mathf.Clamp01(glow * Props.glowFactor);
             }
 
             int steps = Mathf.Max(1, Props.glowSteps);
@@ -98,10 +159,10 @@ namespace Skylights
             if (map == null) return null;
 
             RoofDef roof = map.roofGrid.RoofAt(parent.Position);
+            if (roof != null && roof.isThickRoof && !Props.worksUnderThickRoof)
+                return "Skylight_ThickRoof".Translate();
             if (roof == null)
                 return "Skylight_NoRoof".Translate();
-            if (roof.isThickRoof)
-                return "Skylight_ThickRoof".Translate();
 
             float glow = Mathf.Clamp01(map.skyManager.CurSkyGlow);
             if (glow < Props.minChannelGlow)
