@@ -51,9 +51,37 @@
     </thingCategories>
   </ThingDef>
 
+  <!-- Tribal glazing: a crude pane knocked out at a crafting spot, no smelter. Glazes the basic skylight. -->
+  <ThingDef ParentName="ResourceBase">
+    <defName>BasicPane</defName>
+    <label>basic pane</label>
+    <description>A rough, hand-worked glass pane set in a light frame, knocked together at a crafting spot without a smelter. Not as clear or as strong as a cast structural pane, but enough to glaze a simple skylight and let daylight through.</description>
+    <graphicData>
+      <!-- TODO(art): dedicated basic-pane icon; reuses the structural-glass texture for now. -->
+      <texPath>Things/Item/Resource/StructuralGlass</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(0.85, 0.85)</drawSize>
+      <color>(150, 140, 110)</color>
+    </graphicData>
+    <soundInteract>Standard_Drop</soundInteract>
+    <soundDrop>Standard_Drop</soundDrop>
+    <stackLimit>75</stackLimit>
+    <statBases>
+      <MarketValue>2.0</MarketValue>
+      <Mass>0.5</Mass>
+      <Flammability>0.2</Flammability>
+      <!-- Glass: does not rot outdoors. -->
+      <DeteriorationRate>0</DeteriorationRate>
+      <MaxHitPoints>40</MaxHitPoints>
+    </statBases>
+    <thingCategories>
+      <li>Manufactured</li>
+    </thingCategories>
+  </ThingDef>
+
   <ThingDef ParentName="ResourceBase">
     <defName>TintedGlass</defName>
-    <label>tinted glass</label>
+    <label>tinted structural glass</label>
     <description>A reinforced glass pane treated with a UV-filtering tint, cast at an electric smelter. It passes visible daylight but blocks the sun's harsher rays — so a skylight glazed with it lights and warms a room exactly like clear glass, yet a body beneath it is shaded from true sun. Requires more advanced fabrication than a plain structural pane.</description>
     <graphicData>
       <!-- TODO(art): dedicated tinted-glass icon; reuses the structural-glass texture for now. -->
