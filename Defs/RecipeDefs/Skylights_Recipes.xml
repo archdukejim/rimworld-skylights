@@ -12,6 +12,98 @@
     <researchPrerequisite>Electricity</researchPrerequisite>
   </RecipeDef>
 
+  <!-- Pre-industrial route: hand-worked at a crafting spot, no smelter. -->
+  <RecipeDef Name="SkylightCraftSpotRecipeBase" Abstract="True">
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <workSkill>Crafting</workSkill>
+    <recipeUsers>
+      <li>CraftingSpot</li>
+    </recipeUsers>
+  </RecipeDef>
+
+  <!-- Basic pane: 1 steel -> 1 crude pane, hand-worked. Needs Smithing. -->
+  <RecipeDef ParentName="SkylightCraftSpotRecipeBase">
+    <defName>Make_BasicPane</defName>
+    <label>make basic pane x1</label>
+    <description>Hand-work one rough glass pane from one unit of steel.</description>
+    <jobString>Making basic pane.</jobString>
+    <workAmount>210</workAmount>
+    <researchPrerequisite>Smithing</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <BasicPane>1</BasicPane>
+    </products>
+  </RecipeDef>
+
+  <!-- Basic pane, bulk: 10 steel -> 10 panes, with a time discount. -->
+  <RecipeDef ParentName="SkylightCraftSpotRecipeBase">
+    <defName>Make_BasicPane_Bulk</defName>
+    <label>make basic pane x10</label>
+    <description>Hand-work ten rough glass panes from ten units of steel.</description>
+    <jobString>Making basic panes in bulk.</jobString>
+    <workAmount>1875</workAmount>
+    <researchPrerequisite>Smithing</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>10</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <BasicPane>10</BasicPane>
+    </products>
+  </RecipeDef>
+
+  <!-- Skylight dome, hand route: 2 steel -> 1 dome at a crafting spot. No research — pre-industrial. -->
+  <RecipeDef ParentName="SkylightCraftSpotRecipeBase">
+    <defName>Make_SkylightDome_Hand</defName>
+    <label>make skylight dome (by hand)</label>
+    <description>Hand-build a skylight dome from two units of steel, without a smelter. Slower than casting one at an electric smelter.</description>
+    <jobString>Building skylight dome by hand.</jobString>
+    <workAmount>1800</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>2</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <SkylightDome>1</SkylightDome>
+    </products>
+  </RecipeDef>
+
   <!-- Structural frames: 1 steel -> 4 frames. -->
   <RecipeDef ParentName="SkylightSmelterRecipeBase">
     <defName>Make_StructuralFrame</defName>
@@ -120,13 +212,74 @@
     </products>
   </RecipeDef>
 
+  <!-- Tinted glass: 1 steel -> 1 UV-filtering pane. Needs Complex Furniture (a step past structural glass). -->
+  <RecipeDef ParentName="SkylightSmelterRecipeBase">
+    <defName>Make_TintedGlass</defName>
+    <label>make tinted structural glass x1</label>
+    <description>Cast one UV-filtering tinted structural glass pane from one unit of steel.</description>
+    <jobString>Casting tinted structural glass.</jobString>
+    <workAmount>260</workAmount>
+    <!-- Base already requires Electricity; add Complex Furniture on top. -->
+    <researchPrerequisites>
+      <li>ComplexFurniture</li>
+    </researchPrerequisites>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <TintedGlass>1</TintedGlass>
+    </products>
+  </RecipeDef>
+
+  <!-- Tinted glass, bulk: 10 steel -> 10 panes, with a time discount. -->
+  <RecipeDef ParentName="SkylightSmelterRecipeBase">
+    <defName>Make_TintedGlass_Bulk</defName>
+    <label>make tinted structural glass x10</label>
+    <description>Cast ten UV-filtering tinted structural glass panes from ten units of steel.</description>
+    <jobString>Casting tinted structural glass in bulk.</jobString>
+    <workAmount>2300</workAmount>
+    <researchPrerequisites>
+      <li>ComplexFurniture</li>
+    </researchPrerequisites>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>10</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <TintedGlass>10</TintedGlass>
+    </products>
+  </RecipeDef>
+
   <!-- Skylight dome: 2 steel -> 1 prefab dome unit. -->
   <RecipeDef ParentName="SkylightSmelterRecipeBase">
     <defName>Make_SkylightDome</defName>
     <label>make skylight dome</label>
-    <description>Cast a prefabricated skylight dome from two units of steel.</description>
+    <description>Cast a prefabricated skylight dome from two units of steel — faster than hand-building one at a crafting spot.</description>
     <jobString>Making skylight dome.</jobString>
-    <workAmount>1250</workAmount>
+    <workAmount>1000</workAmount>
     <ingredients>
       <li>
         <filter>
@@ -154,6 +307,10 @@
     <description>Fabricate a mirror-lined reflection tube from five units of steel.</description>
     <jobString>Making reflection tube.</jobString>
     <workAmount>1250</workAmount>
+    <!-- Base already requires Electricity; the light tunnel is a Complex Furniture-tier fixture. -->
+    <researchPrerequisites>
+      <li>ComplexFurniture</li>
+    </researchPrerequisites>
     <ingredients>
       <li>
         <filter>

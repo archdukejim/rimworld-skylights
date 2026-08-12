@@ -4,4 +4,7 @@
   <Skylight_Dark>Channeling daylight: dark (night)</Skylight_Dark>
   <Skylight_NoRoof>No roof above — open sky already lights this spot</Skylight_NoRoof>
   <Skylight_ThickRoof>Blocked by overhead mountain — no daylight gets through solid rock</Skylight_ThickRoof>
+  <Skylight_NeedsSupport>Must be within {0} tiles of a wall or pillar to hold up the roof</Skylight_NeedsSupport>
+  <Skylights_DomeRadius>Dome skylight light radius: {0} tiles</Skylights_DomeRadius>
+  <Skylights_DomeRadiusDesc>How far the soft light from dome and mountain-dome skylights spreads. Takes effect immediately.</Skylights_DomeRadiusDesc>
 </LanguageData>

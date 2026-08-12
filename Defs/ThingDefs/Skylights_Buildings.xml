@@ -5,6 +5,9 @@
   <ThingDef Name="SkylightBase" ParentName="BuildingBase" Abstract="True">
     <thingClass>Building</thingClass>
     <category>Building</category>
+    <!-- Rare-tick so CompSkylight.CompTickRare runs: the dome glow tracks day/night, the paned cell's
+         sky/sun registration follows roof changes, and the weak-glass skylight collapses when unsupported. -->
+    <tickerType>Rare</tickerType>
     <graphicData>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(1,1)</drawSize>
@@ -23,9 +26,7 @@
     <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
     <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
     <designationCategory>Furniture</designationCategory>
-    <researchPrerequisites>
-      <li>Electricity</li>
-    </researchPrerequisites>
+    <!-- Research is set per skylight (Smithing / Electricity / Complex Furniture) — not shared here. -->
     <constructEffect>ConstructMetal</constructEffect>
     <building>
       <isEdifice>false</isEdifice>
@@ -37,14 +38,18 @@
     </statBases>
   </ThingDef>
 
-  <!-- Dome: small opening, spreads soft daylight over radius ~2, never bright enough to grow crops. -->
+  <!-- Dome: small opening, spreads soft daylight over a radius, never bright enough to grow crops.
+       Available at Smithing — the dome prefab can be hand-built at a crafting spot (a smelter just makes it cheaper). -->
   <ThingDef ParentName="SkylightBase">
     <defName>Skylight_Dome</defName>
     <label>dome skylight</label>
-    <description>A dome-style opening that spreads soft natural light across a small area. It is a prefabricated unit that simply drops into a roof, so it installs almost instantly. It brightens a room by real daylight — bright at midday, dark at night — but its light never concentrates enough to grow crops. It won't work under thick overhead mountain, which blocks the open sky.</description>
+    <description>A dome-style opening that spreads soft natural light across a small area. It is a prefabricated unit that simply drops into a roof, so it installs almost instantly. It brightens a room by real daylight — bright at midday, dark at night — but its light never concentrates enough to grow crops. The dome can be hand-built at a crafting spot or cast faster at an electric smelter. It won't work under thick overhead mountain, which blocks the open sky.</description>
     <graphicData>
       <texPath>Things/Building/Skylight_Dome</texPath>
     </graphicData>
+    <researchPrerequisites>
+      <li>Smithing</li>
+    </researchPrerequisites>
     <statBases>
       <MaxHitPoints>60</MaxHitPoints>
       <WorkToBuild>180</WorkToBuild>
@@ -70,14 +75,18 @@
     </comps>
   </ThingDef>
 
-  <!-- Paned: single glazed square that passes the full sky onto its own tile (growable). -->
+  <!-- Industrial: single cast-glass square that passes the full sky onto its own tile (growable).
+       (defName kept as Skylight_Paned for save compatibility with v1.) -->
   <ThingDef ParentName="SkylightBase">
     <defName>Skylight_Paned</defName>
-    <label>paned skylight</label>
-    <description>A single reinforced glass pane in a frame that glazes one square of roof. It lets the full strength of the sky pass straight down onto the tile below — bright enough to grow crops by daylight, and dark at night. Built from one structural frame and one structural glass pane. It won't work under thick overhead mountain, which blocks the open sky.</description>
+    <label>industrial skylight</label>
+    <description>A single reinforced structural-glass pane in a smelted frame that glazes one square of roof. It lets the full strength of the sky pass straight down onto the tile below — bright enough to grow crops by daylight, and dark at night. It passes true sunlight too: a pawn standing beneath it counts as being in the sun, so sun-loving genes gain their benefit indoors and sun-sensitive ones are exposed (glaze with tinted structural glass instead to filter that out). Built from four structural frames and one structural glass pane. It won't work under thick overhead mountain, which blocks the open sky.</description>
     <graphicData>
       <texPath>Things/Building/Skylight_Paned</texPath>
     </graphicData>
+    <researchPrerequisites>
+      <li>Electricity</li>
+    </researchPrerequisites>
     <statBases>
       <MaxHitPoints>50</MaxHitPoints>
       <WorkToBuild>210</WorkToBuild>
@@ -97,18 +106,62 @@
         <!-- Renders and lights the tile as if there were no roof: full sky light, sky colour,
              moonlight and shadows. Grows crops by day, dark at night, never brighter than outside. -->
         <renderAsSky>true</renderAsSky>
+        <!-- Clear glass: the cell counts as real sunlight for Biotech genes/stats/thoughts, so sun-loving
+             xenotypes gain their outdoor benefit indoors and sun-sensitive pawns are exposed. -->
+        <transmitsSun>true</transmitsSun>
       </li>
     </comps>
   </ThingDef>
 
-  <!-- Mountain dome: same soft daylight as the dome, but a reflection tube pierces thick overhead mountain. -->
+  <!-- Tinted: identical to the industrial skylight once installed, but UV-filtered — lights and grows
+       exactly the same, yet the tile registers no sun for Biotech genes (transmitsSun left false). -->
+  <ThingDef ParentName="SkylightBase">
+    <defName>Skylight_Tinted</defName>
+    <label>tinted skylight</label>
+    <description>A single reinforced tinted structural-glass pane in a frame that glazes one square of roof. Like the industrial skylight it lets full daylight pass onto the tile below — bright enough to grow crops, dark at night — but its UV-filtering tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed (and sun-loving ones gain nothing). Built from four structural frames and one tinted structural glass pane. It won't work under thick overhead mountain, which blocks the open sky.</description>
+    <graphicData>
+      <!-- Identical installed appearance to the clear pane. -->
+      <texPath>Things/Building/Skylight_Paned</texPath>
+    </graphicData>
+    <!-- Electricity for the smelter chain, plus Complex Furniture for the tinting process. -->
+    <researchPrerequisites>
+      <li>Electricity</li>
+      <li>ComplexFurniture</li>
+    </researchPrerequisites>
+    <statBases>
+      <MaxHitPoints>50</MaxHitPoints>
+      <WorkToBuild>210</WorkToBuild>
+      <Mass>3</Mass>
+      <Beauty>3</Beauty>
+    </statBases>
+    <costList>
+      <StructuralFrame>4</StructuralFrame>
+      <TintedGlass>1</TintedGlass>
+    </costList>
+    <specialDisplayRadius>2</specialDisplayRadius>
+    <drawStyleCategory>Floors</drawStyleCategory>
+    <comps>
+      <li Class="Skylights.CompProperties_Skylight">
+        <!-- Renders/lights as open sky (crops, moonlight, shadows), but transmitsSun stays false:
+             the tint filters the sun out for genes. -->
+        <renderAsSky>true</renderAsSky>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <!-- Light tunnel: same soft daylight as the dome, but a reflection tube pierces thick overhead mountain.
+       (defName kept as Skylight_MountainDome for save compatibility with v1.) -->
   <ThingDef ParentName="SkylightBase">
     <defName>Skylight_MountainDome</defName>
-    <label>mountain dome skylight</label>
-    <description>A dome skylight fitted to a reflection tube that channels daylight down through solid overhead rock. It spreads the same soft natural light as a dome skylight — bright at midday, dark at night — but unlike a plain dome it keeps working beneath thick overhead mountain. Installed from a prefabricated skylight dome and a reflection tube, so fitting it takes real work.</description>
+    <label>light tunnel</label>
+    <description>A skylight dome fitted to a reflection tube that channels daylight down through solid overhead rock. It spreads the same soft natural light as a dome skylight — bright at midday, dark at night — but unlike a plain dome it keeps working beneath thick overhead mountain. Installed from a prefabricated skylight dome and a mirror-lined reflection tube, so fitting it takes real work.</description>
     <graphicData>
       <texPath>Things/Building/Skylight_Dome</texPath>
     </graphicData>
+    <researchPrerequisites>
+      <li>Electricity</li>
+      <li>ComplexFurniture</li>
+    </researchPrerequisites>
     <constructionSkillPrerequisite>3</constructionSkillPrerequisite>
     <statBases>
       <MaxHitPoints>60</MaxHitPoints>
@@ -131,6 +184,52 @@
       <li Class="Skylights.CompProperties_Skylight">
         <worksUnderThickRoof>true</worksUnderThickRoof>
         <glowFactor>0.5</glowFactor>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <!-- Basic skylight: the pre-industrial pane. Full sky on its tile (crops + true sun for genes) like the
+       industrial one, but crude and weak — built from wood and a hand-worked basic pane, no smelter. It only
+       holds if a wall/pillar is within 3 tiles; lose that support and the roof caves in, destroying the
+       materials. (Was Skylight_Tribal in earlier v2 dev; renamed before release.) -->
+  <ThingDef ParentName="SkylightBase">
+    <defName>Skylight_Basic</defName>
+    <label>basic skylight</label>
+    <description>A crude glazed pane in a light timber frame, knocked together on the spot without a smelter or power. It opens one square of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight, so Biotech sun-genes register it (sun-lovers gain their benefit indoors, sun-sensitive pawns are exposed). The frame is weak: it only holds if a wall or pillar sits within three tiles to carry the roof. Remove that support and the roof caves in, shattering the pane. It won't work under thick overhead mountain, which blocks the open sky.</description>
+    <graphicData>
+      <texPath>Things/Building/Skylight_Paned</texPath>
+    </graphicData>
+    <!-- Low-tech: available to tribal/Smithing colonies, no Electricity. -->
+    <researchPrerequisites>
+      <li>Smithing</li>
+    </researchPrerequisites>
+    <!-- Weak glass: when it collapses (support lost, fire, raid) the materials are destroyed, not salvaged.
+         Normal deconstruction still refunds. -->
+    <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+    <statBases>
+      <MaxHitPoints>40</MaxHitPoints>
+      <WorkToBuild>350</WorkToBuild>
+      <Mass>3</Mass>
+      <Beauty>2</Beauty>
+    </statBases>
+    <!-- Built on-site: raw wood plus one hand-worked basic pane. No fabricated smelter components. -->
+    <costList>
+      <WoodLog>4</WoodLog>
+      <BasicPane>1</BasicPane>
+    </costList>
+    <!-- Drag out a filled grid when building, exactly like placing floors. -->
+    <drawStyleCategory>Floors</drawStyleCategory>
+    <placeWorkers>
+      <li>Skylights.PlaceWorker_NearRoofSupport</li>
+    </placeWorkers>
+    <comps>
+      <li Class="Skylights.CompProperties_Skylight">
+        <!-- Same true-sky lighting as the industrial pane (crops, moonlight, shadows, gene sun),
+             but with the weak-glass support rule. -->
+        <renderAsSky>true</renderAsSky>
+        <transmitsSun>true</transmitsSun>
+        <requiresNearbySupport>true</requiresNearbySupport>
+        <supportRadius>3</supportRadius>
       </li>
     </comps>
   </ThingDef>

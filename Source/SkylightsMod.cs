@@ -62,6 +62,59 @@ namespace Skylights
     }
 
     /// <summary>
+    /// Per-map set of cells that a *clear* paned skylight is channeling real sunlight into for Biotech
+    /// gene/stat/thought checks. Unlike <see cref="SkylightGrid"/> (which drives lighting for every pane,
+    /// clear and tinted), only sun-transmitting panes register here — the tinted pane lights the room but
+    /// filters the sun out for genes. Read by the <see cref="Patch_InSunlight"/> postfix. No mesh/glow
+    /// dirtying: InSunlight is queried live each call, so membership alone is enough.
+    /// </summary>
+    public static class SunlightGrid
+    {
+        private static readonly Dictionary<Map, HashSet<IntVec3>> byMap = new Dictionary<Map, HashSet<IntVec3>>();
+
+        public static void Set(Map map, IntVec3 c, bool on)
+        {
+            if (map == null) return;
+            if (on)
+            {
+                if (!byMap.TryGetValue(map, out HashSet<IntVec3> set))
+                {
+                    set = new HashSet<IntVec3>();
+                    byMap[map] = set;
+                }
+                set.Add(c);
+            }
+            else if (byMap.TryGetValue(map, out HashSet<IntVec3> set))
+            {
+                set.Remove(c);
+            }
+        }
+
+        public static bool Contains(Map map, IntVec3 c)
+        {
+            return map != null && byMap.TryGetValue(map, out HashSet<IntVec3> set) && set.Contains(c);
+        }
+    }
+
+    /// <summary>
+    /// Every Biotech sun-gene, "in sunlight" stat condition, and the in-sunlight mood thought funnels through
+    /// <c>SanguophageUtility.InSunlight</c>, which returns false for any roofed cell. Make a clear paned
+    /// skylight cell read as in sunlight — exactly as bright as the real sky — so those genes fire indoors
+    /// (sun-lovers benefit, sun-sensitive pawns are exposed), matching the mod's "as if there were no roof"
+    /// philosophy. Only fires for cells registered in <see cref="SunlightGrid"/> (clear panes), never tinted.
+    /// </summary>
+    [HarmonyPatch(typeof(SanguophageUtility), nameof(SanguophageUtility.InSunlight))]
+    public static class Patch_InSunlight
+    {
+        public static void Postfix(ref bool __result, IntVec3 cell, Map map)
+        {
+            if (__result || map == null) return;
+            if (SunlightGrid.Contains(map, cell))
+                __result = map.skyManager.CurSkyGlow > 0.1f;
+        }
+    }
+
+    /// <summary>
     /// Reimplements the indoor-mask baking so a channeling skylight cell is treated as "roofed
     /// outdoor": it goes to the RoofedOutdoorMask, which hides rain/snow/fog while leaving the cell
     /// open to the exterior sky lighting (day, dusk, moonlight, shadows). Non-skylight cells keep
