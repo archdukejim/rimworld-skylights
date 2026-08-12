@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -26,6 +27,21 @@ namespace Skylights
         /// moonlight, shadows) via the Harmony patches, instead of driving a CompGlower. Used by the paned skylight.</summary>
         public bool renderAsSky = false;
 
+        /// <summary>When true a channeling cell also counts as being in real sunlight for Biotech gene/stat/thought
+        /// checks (via the InSunlight patch): sun-loving xenotypes gain their outdoor benefit indoors, and
+        /// sun-sensitive pawns are exposed. The clear paned skylight sets this; the tinted one leaves it false
+        /// (UV-filtered — lights the room but registers no sun for genes).</summary>
+        public bool transmitsSun = false;
+
+        /// <summary>When true this skylight needs a roof-holding edifice (wall or pillar) within
+        /// <see cref="supportRadius"/> tiles: a PlaceWorker blocks installing it out of range, and if that
+        /// support is later removed the weak glass caves in (its own roof tile collapses and crushes it).
+        /// The reinforced electric panes leave this false; the low-tech tribal skylight sets it.</summary>
+        public bool requiresNearbySupport = false;
+
+        /// <summary>Radius (tiles) within which a wall/pillar must sit for a support-requiring skylight to hold.</summary>
+        public float supportRadius = 3f;
+
         public CompProperties_Skylight()
         {
             compClass = typeof(CompSkylight);
@@ -47,6 +63,9 @@ namespace Skylights
         private bool skyRegistered;   // renderAsSky: whether our cell is currently in the SkylightGrid
         private IntVec3 skyCell = IntVec3.Invalid;  // the cell we registered, so we can deregister on despawn
 
+        // Spawned glower-driven skylights (domes), so a mod-settings radius change can re-register them live.
+        private static readonly HashSet<CompSkylight> glowDriven = new HashSet<CompSkylight>();
+
         public CompProperties_Skylight Props => (CompProperties_Skylight)props;
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
@@ -61,17 +80,51 @@ namespace Skylights
             if (glower != null)
             {
                 fullColor = glower.Props.glowColor;
+                glowDriven.Add(this);
             }
             lastBucket = -1;
             UpdateGlow();
         }
 
+        /// <summary>Re-apply every spawned dome skylight's glow so a changed glow radius takes effect at once.
+        /// Setting GlowColor re-registers the glower, which re-reads the (now updated) glowRadius from its props.</summary>
+        public static void ForceGlowRefresh()
+        {
+            foreach (CompSkylight c in glowDriven)
+            {
+                c.lastBucket = -1;
+                c.UpdateGlow();
+            }
+        }
+
         public override void CompTickRare()
         {
+            if (Props.requiresNearbySupport && CollapseIfUnsupported())
+                return; // caved in; parent is gone
+
             if (Props.renderAsSky)
                 UpdateSkyChannel();
             else
                 UpdateGlow();
+        }
+
+        /// <summary>Weak-glass skylights are held up by a nearby wall or pillar. If that support has been
+        /// removed (deconstructed or destroyed) so none sits within the support radius, the roof over this
+        /// tile caves in — the falling roof crushes the weak glass. Returns true if it collapsed.</summary>
+        private bool CollapseIfUnsupported()
+        {
+            Map map = parent.Map;
+            if (map == null) return false;
+            if (SkylightSupport.HasSupportWithin(map, parent.Position, Props.supportRadius))
+                return false;
+
+            Thing p = parent;
+            IntVec3 pos = p.Position;
+            // Drop the roof on just this tile; the collapse damages whatever is beneath it.
+            RoofCollapserImmediate.DropRoofInCells(pos, map);
+            if (p.Spawned && !p.Destroyed)
+                p.Destroy(DestroyMode.KillFinalize);
+            return true;
         }
 
         public override void PostDeSpawn(Map map, DestroyMode mode = DestroyMode.Vanish)
@@ -79,8 +132,11 @@ namespace Skylights
             if (Props.renderAsSky && skyRegistered)
             {
                 SkylightGrid.Set(map, skyCell, false);
+                if (Props.transmitsSun)
+                    SunlightGrid.Set(map, skyCell, false);
                 skyRegistered = false;
             }
+            glowDriven.Remove(this);
             base.PostDeSpawn(map, mode);
         }
 
@@ -94,10 +150,16 @@ namespace Skylights
             if (shouldChannel && skyRegistered && cell == skyCell) return;
 
             if (skyRegistered)
+            {
                 SkylightGrid.Set(map, skyCell, false);
+                if (Props.transmitsSun)
+                    SunlightGrid.Set(map, skyCell, false);
+            }
             if (shouldChannel)
             {
                 SkylightGrid.Set(map, cell, true);
+                if (Props.transmitsSun)
+                    SunlightGrid.Set(map, cell, true);
                 skyCell = cell;
                 skyRegistered = true;
             }

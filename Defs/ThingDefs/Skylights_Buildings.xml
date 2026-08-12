@@ -5,6 +5,9 @@
   <ThingDef Name="SkylightBase" ParentName="BuildingBase" Abstract="True">
     <thingClass>Building</thingClass>
     <category>Building</category>
+    <!-- Rare-tick so CompSkylight.CompTickRare runs: the dome glow tracks day/night, the paned cell's
+         sky/sun registration follows roof changes, and the weak-glass skylight collapses when unsupported. -->
+    <tickerType>Rare</tickerType>
     <graphicData>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(1,1)</drawSize>
@@ -74,7 +77,7 @@
   <ThingDef ParentName="SkylightBase">
     <defName>Skylight_Paned</defName>
     <label>paned skylight</label>
-    <description>A single reinforced glass pane in a frame that glazes one square of roof. It lets the full strength of the sky pass straight down onto the tile below — bright enough to grow crops by daylight, and dark at night. Built from one structural frame and one structural glass pane. It won't work under thick overhead mountain, which blocks the open sky.</description>
+    <description>A single reinforced glass pane in a frame that glazes one square of roof. It lets the full strength of the sky pass straight down onto the tile below — bright enough to grow crops by daylight, and dark at night. It passes true sunlight too: a pawn standing beneath it counts as being in the sun, so sun-loving genes gain their benefit indoors and sun-sensitive ones are exposed (glaze with tinted glass instead to filter that out). Built from one structural frame and one structural glass pane. It won't work under thick overhead mountain, which blocks the open sky.</description>
     <graphicData>
       <texPath>Things/Building/Skylight_Paned</texPath>
     </graphicData>
@@ -96,6 +99,45 @@
       <li Class="Skylights.CompProperties_Skylight">
         <!-- Renders and lights the tile as if there were no roof: full sky light, sky colour,
              moonlight and shadows. Grows crops by day, dark at night, never brighter than outside. -->
+        <renderAsSky>true</renderAsSky>
+        <!-- Clear glass: the cell counts as real sunlight for Biotech genes/stats/thoughts, so sun-loving
+             xenotypes gain their outdoor benefit indoors and sun-sensitive pawns are exposed. -->
+        <transmitsSun>true</transmitsSun>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <!-- Tinted paned: identical to the paned skylight once installed, but UV-filtered — lights and grows
+       exactly the same, yet the tile registers no sun for Biotech genes (transmitsSun left false). -->
+  <ThingDef ParentName="SkylightBase">
+    <defName>Skylight_PanedTinted</defName>
+    <label>tinted paned skylight</label>
+    <description>A single reinforced tinted glass pane in a frame that glazes one square of roof. Like the clear paned skylight it lets full daylight pass onto the tile below — bright enough to grow crops, dark at night — but its UV-filtering tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed (and sun-loving ones gain nothing). Built from one structural frame and one tinted glass pane. It won't work under thick overhead mountain, which blocks the open sky.</description>
+    <graphicData>
+      <!-- Identical installed appearance to the clear pane. -->
+      <texPath>Things/Building/Skylight_Paned</texPath>
+    </graphicData>
+    <!-- Electricity for the smelter chain, plus Complex Furniture for the tinting process. -->
+    <researchPrerequisites>
+      <li>Electricity</li>
+      <li>ComplexFurniture</li>
+    </researchPrerequisites>
+    <statBases>
+      <MaxHitPoints>50</MaxHitPoints>
+      <WorkToBuild>210</WorkToBuild>
+      <Mass>3</Mass>
+      <Beauty>3</Beauty>
+    </statBases>
+    <costList>
+      <StructuralFrame>4</StructuralFrame>
+      <TintedGlass>1</TintedGlass>
+    </costList>
+    <specialDisplayRadius>2</specialDisplayRadius>
+    <drawStyleCategory>Floors</drawStyleCategory>
+    <comps>
+      <li Class="Skylights.CompProperties_Skylight">
+        <!-- Renders/lights as open sky (crops, moonlight, shadows), but transmitsSun stays false:
+             the tint filters the sun out for genes. -->
         <renderAsSky>true</renderAsSky>
       </li>
     </comps>
@@ -131,6 +173,51 @@
       <li Class="Skylights.CompProperties_Skylight">
         <worksUnderThickRoof>true</worksUnderThickRoof>
         <glowFactor>0.5</glowFactor>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <!-- Weak-glass (tribal) skylight: low-tech, built on-site from raw materials, no smelter or power.
+       Soft light like the dome, but the crude opening only holds if a wall/pillar is within 3 tiles;
+       lose that support and the roof caves in. Reads "weak glass skylight" on mouseover. -->
+  <ThingDef ParentName="SkylightBase">
+    <defName>Skylight_Tribal</defName>
+    <label>weak glass skylight</label>
+    <description>A crude skylight of thin, brittle panes set into a light timber-and-metal frame, knocked together on the spot without a smelter or power. It spreads soft natural daylight into a room — bright at midday, dark at night — but never enough to grow crops. The frame is weak: it only holds if a wall or pillar sits within three tiles to carry the roof. Remove that support and the roof above it collapses. It won't work under thick overhead mountain, which blocks the open sky.</description>
+    <graphicData>
+      <texPath>Things/Building/Skylight_Dome</texPath>
+    </graphicData>
+    <!-- Low-tech: available to tribal/smithing colonies, no Electricity. -->
+    <researchPrerequisites>
+      <li>Smithing</li>
+    </researchPrerequisites>
+    <statBases>
+      <MaxHitPoints>40</MaxHitPoints>
+      <!-- Twice the electric dome's build work (180): a low-tech penalty for the tribal, smelter-free path. -->
+      <WorkToBuild>360</WorkToBuild>
+      <Mass>2</Mass>
+      <Beauty>1</Beauty>
+    </statBases>
+    <!-- Built directly on-site from raw materials — no fabricated skylight-chain components. -->
+    <costList>
+      <WoodLog>8</WoodLog>
+      <Steel>10</Steel>
+    </costList>
+    <specialDisplayRadius>2</specialDisplayRadius>
+    <placeWorkers>
+      <li>Skylights.PlaceWorker_NearRoofSupport</li>
+    </placeWorkers>
+    <comps>
+      <li Class="CompProperties_Glower">
+        <!-- Weaker than the electric dome: smaller radius, softer light; still sky-proportional. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2.2</glowRadius>
+        <glowColor>(120, 118, 106, 0)</glowColor>
+      </li>
+      <li Class="Skylights.CompProperties_Skylight">
+        <glowFactor>0.4</glowFactor>
+        <requiresNearbySupport>true</requiresNearbySupport>
+        <supportRadius>3</supportRadius>
       </li>
     </comps>
   </ThingDef>
