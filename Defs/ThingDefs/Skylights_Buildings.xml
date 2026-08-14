@@ -25,8 +25,9 @@
     <clearBuildingArea>false</clearBuildingArea>
     <leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
     <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
-    <designationCategory>Furniture</designationCategory>
-    <!-- Research is set per skylight (Smithing / Electricity / Complex Furniture) — not shared here. -->
+    <designationCategory>Skylights</designationCategory>
+    <!-- Research is set per skylight. All skylights need Complex Furniture (glazing/carpentry); the
+         smelter-built ones (industrial, tinted, light tunnel) also need Electricity. -->
     <constructEffect>ConstructMetal</constructEffect>
     <building>
       <isEdifice>false</isEdifice>
@@ -48,7 +49,7 @@
       <texPath>Things/Building/Skylight_Dome</texPath>
     </graphicData>
     <researchPrerequisites>
-      <li>Smithing</li>
+      <li>ComplexFurniture</li>
     </researchPrerequisites>
     <statBases>
       <MaxHitPoints>60</MaxHitPoints>
@@ -75,6 +76,78 @@
     </comps>
   </ThingDef>
 
+  <!-- Dome variants: the same soft-light dome, but on a 2x1 or 2x2 footprint. An even-sized room has no
+       centre tile for a 1x1 dome to sit on, so these let the dome be placed dead-centre in a room whose
+       width and/or depth is even. Same cost, light and behaviour as the 1x1 dome. -->
+  <ThingDef ParentName="SkylightBase">
+    <defName>Skylight_Dome_Wide</defName>
+    <label>dome skylight (2x1)</label>
+    <description>A dome skylight on a two-by-one footprint, so it can be centred along an even-width (or even-depth) room. It spreads the same soft natural daylight as the standard dome — bright at midday, dark at night, never enough to grow crops — and installs just as quickly. It won't work under thick overhead mountain.</description>
+    <size>(1,2)</size>
+    <rotatable>true</rotatable>
+    <graphicData>
+      <texPath>Things/Building/Skylight_Dome</texPath>
+      <drawSize>(1,2)</drawSize>
+    </graphicData>
+    <researchPrerequisites>
+      <li>ComplexFurniture</li>
+    </researchPrerequisites>
+    <statBases>
+      <MaxHitPoints>60</MaxHitPoints>
+      <WorkToBuild>200</WorkToBuild>
+      <Mass>2</Mass>
+      <Beauty>1</Beauty>
+    </statBases>
+    <costList>
+      <SkylightDome>1</SkylightDome>
+    </costList>
+    <specialDisplayRadius>2</specialDisplayRadius>
+    <comps>
+      <li Class="CompProperties_Glower">
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2.6</glowRadius>
+        <glowColor>(120, 118, 106, 0)</glowColor>
+      </li>
+      <li Class="Skylights.CompProperties_Skylight">
+        <glowFactor>0.5</glowFactor>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="SkylightBase">
+    <defName>Skylight_Dome_Quad</defName>
+    <label>dome skylight (2x2)</label>
+    <description>A dome skylight on a two-by-two footprint, so it can be centred in a room whose width and depth are both even. It spreads the same soft natural daylight as the standard dome — bright at midday, dark at night, never enough to grow crops — and installs just as quickly. It won't work under thick overhead mountain.</description>
+    <size>(2,2)</size>
+    <graphicData>
+      <texPath>Things/Building/Skylight_Dome</texPath>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <researchPrerequisites>
+      <li>ComplexFurniture</li>
+    </researchPrerequisites>
+    <statBases>
+      <MaxHitPoints>60</MaxHitPoints>
+      <WorkToBuild>220</WorkToBuild>
+      <Mass>2</Mass>
+      <Beauty>1</Beauty>
+    </statBases>
+    <costList>
+      <SkylightDome>1</SkylightDome>
+    </costList>
+    <specialDisplayRadius>2</specialDisplayRadius>
+    <comps>
+      <li Class="CompProperties_Glower">
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2.6</glowRadius>
+        <glowColor>(120, 118, 106, 0)</glowColor>
+      </li>
+      <li Class="Skylights.CompProperties_Skylight">
+        <glowFactor>0.5</glowFactor>
+      </li>
+    </comps>
+  </ThingDef>
+
   <!-- Industrial: single cast-glass square that passes the full sky onto its own tile (growable).
        (defName kept as Skylight_Paned for save compatibility with v1.) -->
   <ThingDef ParentName="SkylightBase">
@@ -86,6 +159,7 @@
     </graphicData>
     <researchPrerequisites>
       <li>Electricity</li>
+      <li>ComplexFurniture</li>
     </researchPrerequisites>
     <statBases>
       <MaxHitPoints>50</MaxHitPoints>
@@ -199,9 +273,10 @@
     <graphicData>
       <texPath>Things/Building/Skylight_Paned</texPath>
     </graphicData>
-    <!-- Low-tech: available to tribal/Smithing colonies, no Electricity. -->
+    <!-- Complex Furniture (glazing/carpentry), but no Electricity: the crude pane is hand-worked, so this is
+         the pre-electric true-sky skylight. Complex Furniture has no prerequisites, so tribal starts can reach it. -->
     <researchPrerequisites>
-      <li>Smithing</li>
+      <li>ComplexFurniture</li>
     </researchPrerequisites>
     <!-- Weak glass: when it collapses (support lost, fire, raid) the materials are destroyed, not salvaged.
          Normal deconstruction still refunds. -->
