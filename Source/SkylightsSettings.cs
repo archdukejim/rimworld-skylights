@@ -114,7 +114,11 @@ namespace Skylights
     [StaticConstructorOnStartup]
     public static class DomeGlowRadius
     {
-        private static readonly string[] DomeDefNames = { "Skylight_Dome", "Skylight_MountainDome" };
+        // Skylight_DomeGlowNode drives the multi-cell variants' light, so it must track the same radius as the
+        // 1x1 dome. The Wide/Quad variants have no glower of their own — including them just fixes their build
+        // preview ring (specialDisplayRadius) to match.
+        private static readonly string[] DomeDefNames =
+            { "Skylight_Dome", "Skylight_MountainDome", "Skylight_DomeGlowNode", "Skylight_Dome_Wide", "Skylight_Dome_Quad" };
 
         static DomeGlowRadius()
         {

@@ -76,9 +76,45 @@
     </comps>
   </ThingDef>
 
+  <!-- Hidden glow emitter for the multi-cell dome variants. The parent dome spawns one of these on each of
+       its footprint cells and drives them together (see CompSkylight.glowNodeDef), so the pooled light is
+       centred on the footprint instead of leaning to the root corner. Not buildable, not drawn, not saved. -->
+  <ThingDef>
+    <defName>Skylight_DomeGlowNode</defName>
+    <label>skylight glow</label>
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <isSaveable>false</isSaveable>
+    <selectable>false</selectable>
+    <drawerType>None</drawerType>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <passability>Standable</passability>
+    <fillPercent>0</fillPercent>
+    <useHitPoints>false</useHitPoints>
+    <tickerType>Never</tickerType>
+    <rotatable>false</rotatable>
+    <graphicData>
+      <texPath>Things/Building/Skylight_Dome</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <building>
+      <isEdifice>false</isEdifice>
+      <isInert>true</isInert>
+      <ai_chillDestination>false</ai_chillDestination>
+      <claimable>false</claimable>
+    </building>
+    <comps>
+      <li Class="CompProperties_Glower">
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2.6</glowRadius>
+        <glowColor>(120, 118, 106, 0)</glowColor>
+      </li>
+    </comps>
+  </ThingDef>
+
   <!-- Dome variants: the same soft-light dome, but on a 2x1 or 2x2 footprint. An even-sized room has no
        centre tile for a 1x1 dome to sit on, so these let the dome be placed dead-centre in a room whose
-       width and/or depth is even. Same cost, light and behaviour as the 1x1 dome. -->
+       width and/or depth is even. Their light is pooled from hidden nodes so it stays centred. -->
   <ThingDef ParentName="SkylightBase">
     <defName>Skylight_Dome_Wide</defName>
     <label>dome skylight (2x1)</label>
@@ -103,13 +139,13 @@
     </costList>
     <specialDisplayRadius>2</specialDisplayRadius>
     <comps>
-      <li Class="CompProperties_Glower">
-        <overlightRadius>0</overlightRadius>
-        <glowRadius>2.6</glowRadius>
-        <glowColor>(120, 118, 106, 0)</glowColor>
-      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <glowFactor>0.5</glowFactor>
+        <!-- Centred pooled light: one hidden glower per footprint cell (each at the dome's own radius) instead
+             of a corner-mounted one. Half-strength per node; overlapping they pool to a dome-bright, dome-reach
+             pool centred on the footprint. Ground glow still caps at 0.5 (no crops). -->
+        <glowNodeDef>Skylight_DomeGlowNode</glowNodeDef>
+        <glowNodeStrength>0.5</glowNodeStrength>
       </li>
     </comps>
   </ThingDef>
@@ -137,13 +173,13 @@
     </costList>
     <specialDisplayRadius>2</specialDisplayRadius>
     <comps>
-      <li Class="CompProperties_Glower">
-        <overlightRadius>0</overlightRadius>
-        <glowRadius>2.6</glowRadius>
-        <glowColor>(120, 118, 106, 0)</glowColor>
-      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <glowFactor>0.5</glowFactor>
+        <!-- Centred pooled light: one hidden glower per footprint cell (each at the dome's own radius) instead
+             of a corner-mounted one. Half-strength per node; overlapping they pool to a dome-bright, dome-reach
+             pool centred on the footprint. Ground glow still caps at 0.5 (no crops). -->
+        <glowNodeDef>Skylight_DomeGlowNode</glowNodeDef>
+        <glowNodeStrength>0.5</glowNodeStrength>
       </li>
     </comps>
   </ThingDef>
