@@ -63,6 +63,22 @@ namespace Skylights
 
             if (changed)
                 AllRecipesCached(smelter) = null; // force ThingDef.AllRecipes to rebuild from recipeUsers
+
+            if (Prefs.DevMode)
+                Log.Message($"[Skylights] ReBuild glass interop: available=true, mode={mode}, "
+                    + $"smelter conversion recipes = {AttachedList(smelter)}");
+        }
+
+        /// <summary>Dev-only: which conversion recipes are currently on the smelter (for verifying the attach).</summary>
+        private static string AttachedList(ThingDef bench)
+        {
+            List<string> on = new List<string>();
+            foreach (string n in new[] { ToRBGlass, ToStructural, ToTinted })
+            {
+                RecipeDef r = DefDatabase<RecipeDef>.GetNamedSilentFail(n);
+                if (r?.recipeUsers != null && r.recipeUsers.Contains(bench)) on.Add(n);
+            }
+            return on.Count == 0 ? "(none)" : string.Join(", ", on);
         }
 
         /// <summary>Add or remove the smelter from a recipe's recipeUsers. Returns true if it changed anything.</summary>
