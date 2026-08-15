@@ -21,7 +21,6 @@ Two forms — [b]panes[/b] that open a roof tile to the full sky (crops + true s
 
 [h2]✨ New in v2.1[/h2]
 [list]
-[*][b]Inward roof-edge lighting[/b] — an optional setting that flips the roof's soft shadow edge from outward to [b]inward[/b], so a skylight's light reaches cleanly to the tile edge instead of bleeding onto the roof outside. Off by default (Vanilla); enable it for [b]skylights only[/b] or [b]all roof edges[/b].
 [*][b]Dedicated "Skylights" build tab[/b] — every skylight now lives in its own Architect category instead of Furniture.
 [*][b]Centred dome variants[/b] — 2×1 and 2×2 domes, because an even-sized room has no centre tile for a 1×1 to sit on.
 [*][b]Reworked tech tree[/b] — everything now unlocks at [b]Complex Furniture[/b] (reachable even on a Crashlanded start that skips Smithing); the smelter-built panes also need Electricity.
@@ -54,7 +53,6 @@ Two forms — [b]panes[/b] that open a roof tile to the full sky (crops + true s
 [h2]⚙️ Settings[/h2]
 [list]
 [*][b]Dome light radius[/b] — a 1–10 slider (default 4) for how far the dome and light-tunnel glow reaches.
-[*][b]Roof-edge lighting[/b] — Vanilla (unchanged) / Skylights only / All roofs.
 [/list]
 
 [b]>>> REPLACE THE LINE BELOW WITH YOUR IMGUR DIRECT LINK FOR ComingSoon_v3.png <<<[/b]

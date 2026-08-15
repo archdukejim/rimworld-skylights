@@ -7,11 +7,11 @@
   <Skylight_NeedsSupport>Must be within {0} tiles of a wall or pillar to hold up the roof</Skylight_NeedsSupport>
   <Skylights_DomeRadius>Dome skylight light radius: {0} tiles</Skylights_DomeRadius>
   <Skylights_DomeRadiusDesc>How far the soft light from dome and mountain-dome skylights spreads. Takes effect immediately.</Skylights_DomeRadiusDesc>
-  <Skylights_RoofEdgeMode>Roof edge lighting</Skylights_RoofEdgeMode>
-  <Skylights_RoofEdge_Vanilla>Vanilla — unchanged</Skylights_RoofEdge_Vanilla>
-  <Skylights_RoofEdge_SkylightsOnly>Skylights only — soft edge inward around skylights</Skylights_RoofEdge_SkylightsOnly>
-  <Skylights_RoofEdge_Full>All roofs — soft edge inward at every roof edge</Skylights_RoofEdge_Full>
-  <Skylights_RoofEdgeModeDesc>By default a roof's shadow fades outward onto the lit tiles just outside it. The inward modes keep those open tiles fully lit and instead soften the edge into the roofed tiles, so light appears to reach just past a skylight. Takes effect immediately.</Skylights_RoofEdgeModeDesc>
+  <Skylights_RoofEdgeMode>Roof edge lighting  —  ⚠ UNDER DEVELOPMENT</Skylights_RoofEdgeMode>
+  <Skylights_RoofEdge_Vanilla>Vanilla — unchanged (recommended)</Skylights_RoofEdge_Vanilla>
+  <Skylights_RoofEdge_SkylightsOnly>Skylights only — soft edge inward around skylights (experimental)</Skylights_RoofEdge_SkylightsOnly>
+  <Skylights_RoofEdge_Full>All roofs — soft edge inward at every roof edge (experimental)</Skylights_RoofEdge_Full>
+  <Skylights_RoofEdgeModeDesc>⚠ Under development. The idea: keep the tiles just outside a roof fully lit and soften the shadow edge inward instead, so light appears to reach just past a skylight. The inward modes currently have rendering bugs — dome skylights may not glow, and a bright artifact can appear near walls where the shadow should be darkest. Leave this on Vanilla for now; the inward modes are here for testing only.</Skylights_RoofEdgeModeDesc>
   <Skylights_GlassInterop>Glass sharing with ReBuild: Doors and Corners</Skylights_GlassInterop>
   <Skylights_GlassInterop_Separate>Keep separate — each mod uses its own glass</Skylights_GlassInterop_Separate>
   <Skylights_GlassInterop_ToReBuild>Make ReBuild glass from structural glass</Skylights_GlassInterop_ToReBuild>
