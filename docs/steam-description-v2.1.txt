@@ -1,0 +1,72 @@
+[h1]☀️ Skylights[/h1]
+Bring real daylight into a roofed room. [b]Powerless and cool[/b], skylights light a room by the actual sky above — bright at midday, fading through dusk, dark at night, dimmed by storms and eclipses. They never make a spot brighter than the day outside. The honest trade against a sun lamp: free and it never overheats a room, but it's only as bright as the day outside, and dark every night.
+
+Two forms — [b]panes[/b] that open a roof tile to the full sky (crops + true sunlight), and [b]domes[/b] that spread a soft glow over a radius — across a full tech progression.
+
+[b]>>> REPLACE THE LINE BELOW WITH YOUR IMGUR DIRECT LINK FOR Components.png <<<[/b]
+[img]PASTE_COMPONENTS_IMAGE_URL_HERE[/img]
+
+[h2]🏛️ Two forms, seven skylights[/h2]
+[b]PANES[/b] open roof tiles to the full sky — they grow crops, and clear ones pass true sunlight to Biotech genes:
+[list]
+[*][b]Basic Skylight[/b] — the pre-industrial pane. Hand-built on the spot from wood + a basic pane, no smelter or power. Full-sky lighting and crops, but the frame is weak: it needs a wall or pillar within 3 tiles to carry the roof — lose that support and the roof caves in and shatters the pane.
+[*][b]Industrial Skylight[/b] — the sturdy structural-glass pane, drag-placed like floors, no support limit.
+[*][b]Tinted Skylight[/b] — the same sturdy pane in UV-filtering tinted glass: lights and grows crops identically, but shades pawns from true sun (safe for sun-sensitive colonists; no benefit for sun-lovers).
+[/list]
+[b]DOMES[/b] spread a soft glow over a radius (never enough for crops):
+[list]
+[*][b]Dome Skylight[/b] — soft daylight over a small area; ideal for workshops, bedrooms and walkways. Hand-build the dome at a crafting spot, or cast it faster at an electric smelter. [b]NEW:[/b] also comes in [b]2×1 and 2×2[/b] footprints so the light sits dead-centre in an even-sized room.
+[*][b]Light Tunnel[/b] — a dome fitted to a mirror-lined reflection tube that pipes daylight down through solid overhead mountain.
+[/list]
+
+[h2]✨ New in v2.1[/h2]
+[list]
+[*][b]Inward roof-edge lighting[/b] — an optional setting that flips the roof's soft shadow edge from outward to [b]inward[/b], so a skylight's light reaches cleanly to the tile edge instead of bleeding onto the roof outside. Off by default (Vanilla); enable it for [b]skylights only[/b] or [b]all roof edges[/b].
+[*][b]Dedicated "Skylights" build tab[/b] — every skylight now lives in its own Architect category instead of Furniture.
+[*][b]Centred dome variants[/b] — 2×1 and 2×2 domes, because an even-sized room has no centre tile for a 1×1 to sit on.
+[*][b]Reworked tech tree[/b] — everything now unlocks at [b]Complex Furniture[/b] (reachable even on a Crashlanded start that skips Smithing); the smelter-built panes also need Electricity.
+[*][b]Redrawn item icons[/b] — clearer structural frames (steel angle beams) and stacked float-glass panes.
+[/list]
+
+[h2]🔨 Skylight breakdown[/h2]
+[table]
+[tr][th]Skylight[/th][th]Research[/th][th]Build cost[/th][th]Crops[/th][th]Gene sun[/th][/tr]
+[tr][td]Basic (pane)[/td][td]Complex Furniture[/td][td]4 wood + 1 basic pane[/td][td]Yes[/td][td]Yes[/td][/tr]
+[tr][td]Industrial (pane)[/td][td]Complex Furniture + Electricity[/td][td]4 frame + 1 structural glass[/td][td]Yes[/td][td]Yes[/td][/tr]
+[tr][td]Tinted (pane)[/td][td]Complex Furniture + Electricity[/td][td]4 frame + 1 tinted glass[/td][td]Yes[/td][td]No (filtered)[/td][/tr]
+[tr][td]Dome (1×1 / 2×1 / 2×2)[/td][td]Complex Furniture[/td][td]1 skylight dome[/td][td]No[/td][td]No[/td][/tr]
+[tr][td]Light tunnel[/td][td]Complex Furniture + Electricity[/td][td]1 dome + 1 reflection tube[/td][td]No[/td][td]No[/td][/tr]
+[/table]
+
+[h2]📋 Supply chain[/h2]
+[table]
+[tr][th]Item[/th][th]Made at[/th][th]Cost[/th][th]Research[/th][/tr]
+[tr][td]Basic pane[/td][td]Crafting spot[/td][td]1 steel → 1 (x10 bulk)[/td][td]Complex Furniture[/td][/tr]
+[tr][td]Skylight dome (by hand)[/td][td]Crafting spot[/td][td]2 steel → 1[/td][td]—[/td][/tr]
+[tr][td]Skylight dome (cast)[/td][td]Electric smelter[/td][td]2 steel → 1 (faster)[/td][td]Electricity[/td][/tr]
+[tr][td]Structural frame[/td][td]Electric smelter[/td][td]1 steel → 4 (x40 bulk)[/td][td]Electricity[/td][/tr]
+[tr][td]Structural glass[/td][td]Electric smelter[/td][td]1 steel → 1 (x10 bulk)[/td][td]Electricity[/td][/tr]
+[tr][td]Tinted structural glass[/td][td]Electric smelter[/td][td]1 steel → 1 (x10 bulk)[/td][td]Electricity + Complex Furniture[/td][/tr]
+[tr][td]Reflection tube[/td][td]Electric smelter[/td][td]5 steel → 1[/td][td]Electricity + Complex Furniture[/td][/tr]
+[/table]
+[i]Frames and glass are inert and never rot, even left outdoors.[/i]
+
+[h2]⚙️ Settings[/h2]
+[list]
+[*][b]Dome light radius[/b] — a 1–10 slider (default 4) for how far the dome and light-tunnel glow reaches.
+[*][b]Roof-edge lighting[/b] — Vanilla (unchanged) / Skylights only / All roofs.
+[/list]
+
+[b]>>> REPLACE THE LINE BELOW WITH YOUR IMGUR DIRECT LINK FOR ComingSoon_v3.png <<<[/b]
+[img]PASTE_V3_TEASER_IMAGE_URL_HERE[/img]
+
+[h2]🏛️ Coming in v3: Atrium Skylights[/h2]
+Grand domed glass ceilings — [b]2×2, 3×3, 4×4 and 5×5[/b] — built from panes and structural supports, in clear and tinted glass. [b]Including atrium skylights for Odyssey ships.[/b]
+
+[h2]📝 Notes & compatibility[/h2]
+[list]
+[*]Skylights sit up in the roof — they can't be clicked, and are removed with the Architect > Orders > Deconstruct tool.
+[*]Requires [b]Harmony[/b].
+[*][b]Safe to add or remove mid-save[/b] — your existing skylights keep working (only display names changed across updates, never their internal IDs).
+[*]RimWorld 1.6.
+[/list]
