@@ -6,8 +6,9 @@
     <label>structural frame</label>
     <description>A prefabricated metal frame used to mount panels and fixtures such as skylights. Fabricated in batches at an electric smelter.</description>
     <graphicData>
+      <!-- Folder of stack-count textures: _a single L-beam, _b two side by side. -->
       <texPath>Things/Item/Resource/StructuralFrame</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
+      <graphicClass>Graphic_StackCount</graphicClass>
       <drawSize>(0.85, 0.85)</drawSize>
     </graphicData>
     <soundInteract>Metal_Drop</soundInteract>
@@ -31,8 +32,9 @@
     <label>structural glass</label>
     <description>A reinforced, toughened transparent pane, cast at an electric smelter. Used to glaze skylights and other fixtures.</description>
     <graphicData>
+      <!-- Folder of stack-count textures: _a single pane, _b/_c stacked glass. -->
       <texPath>Things/Item/Resource/StructuralGlass</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
+      <graphicClass>Graphic_StackCount</graphicClass>
       <drawSize>(0.85, 0.85)</drawSize>
     </graphicData>
     <soundInteract>Standard_Drop</soundInteract>
@@ -57,11 +59,10 @@
     <label>basic pane</label>
     <description>A rough, hand-worked glass pane set in a light frame, knocked together at a crafting spot without a smelter. Not as clear or as strong as a cast structural pane, but enough to glaze a simple skylight and let daylight through.</description>
     <graphicData>
-      <!-- TODO(art): dedicated basic-pane icon; reuses the structural-glass texture for now. -->
-      <texPath>Things/Item/Resource/StructuralGlass</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
+      <!-- Crude greenish glass, its own stack-count folder (_a/_b/_c). -->
+      <texPath>Things/Item/Resource/BasicPane</texPath>
+      <graphicClass>Graphic_StackCount</graphicClass>
       <drawSize>(0.85, 0.85)</drawSize>
-      <color>(150, 140, 110)</color>
     </graphicData>
     <soundInteract>Standard_Drop</soundInteract>
     <soundDrop>Standard_Drop</soundDrop>
@@ -84,11 +85,10 @@
     <label>tinted structural glass</label>
     <description>A reinforced glass pane treated with a UV-filtering tint, cast at an electric smelter. It passes visible daylight but blocks the sun's harsher rays — so a skylight glazed with it lights and warms a room exactly like clear glass, yet a body beneath it is shaded from true sun. Requires more advanced fabrication than a plain structural pane.</description>
     <graphicData>
-      <!-- TODO(art): dedicated tinted-glass icon; reuses the structural-glass texture for now. -->
-      <texPath>Things/Item/Resource/StructuralGlass</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
+      <!-- Cool smoked-blue tinted glass, its own stack-count folder (_a/_b/_c). -->
+      <texPath>Things/Item/Resource/TintedGlass</texPath>
+      <graphicClass>Graphic_StackCount</graphicClass>
       <drawSize>(0.85, 0.85)</drawSize>
-      <color>(120, 145, 130)</color>
     </graphicData>
     <soundInteract>Standard_Drop</soundInteract>
     <soundDrop>Standard_Drop</soundDrop>
