@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SOFT-DEPENDENCY COMPAT: "ReBuild: Doors and Corners" (packageId ReBuild.COTR.DoorsAndCorners).
+
+  Determination (read from both mods' Defs, not guessed):
+    * Skylights glass  — StructuralGlass / TintedGlass / BasicPane are plain ResourceBase ThingDefs with NO
+      <stuffProps>. Skylight buildings consume them as a FIXED <costList> ingredient (e.g. Skylight_Paned =
+      4 StructuralFrame + 1 StructuralGlass). Skylights defines no StuffCategoryDef.
+    * ReBuild glass    — RB_Glass (and RB_BallisticGlass) are plain ResourceBase ThingDefs with NO <stuffProps>.
+      ReBuild's glass walls (e.g. RB_GlassWall) put their single STUFF slot on the frame material
+      (stuffCategories Metallic/Stony/Woody + costStuffCount) and consume RB_Glass as a FIXED <costList>
+      ingredient (RB_GlassWall = 4 RB_Glass). ReBuild defines no StuffCategoryDef.
+
+  => Both represent glass as a costList INGREDIENT, not a stuff. The "cross-register two stuff categories"
+     approach is impossible here: (1) building costLists have no ingredient-alternative mechanism, and
+     (2) ReBuild's walls have already spent their one stuff slot on the frame, so glass cannot become a stuff
+     for them. Minimal interchange we CAN do without touching either mod's buildings or balance: cheap 1:1
+     conversion recipes at the electric smelter so the two plain glasses swap freely.
+
+  Soft gate: each RecipeDef carries MayRequire="ReBuild.COTR.DoorsAndCorners" (packageId). When ReBuild is not
+  active these defs are discarded during XML loading, BEFORE cross-reference resolution — so RB_Glass is never
+  referenced and Skylights loads with zero errors. No hard modDependency; nothing else here touches ReBuild.
+  (PatchOperationFindMod was avoided on purpose: it matches by mod NAME, not packageId.)
+
+  Scope is deliberately limited to the two PLAIN structural glasses. TintedGlass (UV, higher tier) and
+  RB_BallisticGlass (armored) are intentionally excluded so conversion can't launder a cheap pane into a
+  higher-value one.
+-->
+<Defs>
+
+  <!-- ReBuild glass -> Skylights structural glass (build skylights from ReBuild glass). -->
+  <RecipeDef MayRequire="ReBuild.COTR.DoorsAndCorners">
+    <defName>Skylights_Convert_RBGlassToStructural</defName>
+    <label>rework glass into structural glass</label>
+    <description>Remelt one pane of glass into one structural glass pane at an electric smelter.</description>
+    <jobString>Reworking glass into structural glass.</jobString>
+    <workSpeedStat>SmeltingSpeed</workSpeedStat>
+    <effectWorking>Smelt</effectWorking>
+    <soundWorking>Recipe_Smelt</soundWorking>
+    <workSkill>Crafting</workSkill>
+    <workAmount>200</workAmount>
+    <recipeUsers>
+      <li>ElectricSmelter</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>RB_Glass</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>RB_Glass</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <StructuralGlass>1</StructuralGlass>
+    </products>
+  </RecipeDef>
+
+  <!-- Skylights structural glass -> ReBuild glass (build ReBuild glass walls from Skylights glass). -->
+  <RecipeDef MayRequire="ReBuild.COTR.DoorsAndCorners">
+    <defName>Skylights_Convert_StructuralToRBGlass</defName>
+    <label>rework structural glass into glass</label>
+    <description>Remelt one structural glass pane into one pane of glass at an electric smelter.</description>
+    <jobString>Reworking structural glass into glass.</jobString>
+    <workSpeedStat>SmeltingSpeed</workSpeedStat>
+    <effectWorking>Smelt</effectWorking>
+    <soundWorking>Recipe_Smelt</soundWorking>
+    <workSkill>Crafting</workSkill>
+    <workAmount>200</workAmount>
+    <recipeUsers>
+      <li>ElectricSmelter</li>
+    </recipeUsers>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>StructuralGlass</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>StructuralGlass</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <RB_Glass>1</RB_Glass>
+    </products>
+  </RecipeDef>
+
+</Defs>
