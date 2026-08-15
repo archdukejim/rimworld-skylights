@@ -123,7 +123,8 @@
     <rotatable>true</rotatable>
     <graphicData>
       <texPath>Things/Building/Skylight_Dome</texPath>
-      <drawSize>(1,2)</drawSize>
+      <!-- Normal 1x1 dome sprite, drawn centred on the 2x1 footprint (the footprint is only for light centring). -->
+      <drawSize>(1,1)</drawSize>
     </graphicData>
     <researchPrerequisites>
       <li>ComplexFurniture</li>
@@ -157,7 +158,8 @@
     <size>(2,2)</size>
     <graphicData>
       <texPath>Things/Building/Skylight_Dome</texPath>
-      <drawSize>(2,2)</drawSize>
+      <!-- Normal 1x1 dome sprite, drawn centred on the 2x2 footprint (the footprint is only for light centring). -->
+      <drawSize>(1,1)</drawSize>
     </graphicData>
     <researchPrerequisites>
       <li>ComplexFurniture</li>
