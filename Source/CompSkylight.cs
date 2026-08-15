@@ -71,9 +71,8 @@ namespace Skylights
         private CompGlower glower;
         private ColorInt fullColor;   // full-daylight colour, taken from the glower's props
         private int lastBucket = -1;  // last applied brightness step, so we only touch the grid on change
-        // renderAsSky: the footprint cells currently registered in the SkylightGrid. A 1x1 pane holds one cell;
-        // a multi-cell atrium holds its whole footprint, so every tile beneath it renders and lights as open sky.
-        private readonly HashSet<IntVec3> skyCells = new HashSet<IntVec3>();
+        private bool skyRegistered;   // renderAsSky: whether our cell is currently in the SkylightGrid
+        private IntVec3 skyCell = IntVec3.Invalid;  // the cell we registered, so we can deregister on despawn
 
         // glowNodeDef domes: one hidden glower per footprint cell, spawned fresh each time we spawn (the node
         // def is isSaveable=false, so they never persist and can't duplicate on load). Driven together below.
@@ -160,15 +159,12 @@ namespace Skylights
 
         public override void PostDeSpawn(Map map, DestroyMode mode = DestroyMode.Vanish)
         {
-            if (Props.renderAsSky && skyCells.Count > 0)
+            if (Props.renderAsSky && skyRegistered)
             {
-                foreach (IntVec3 c in skyCells)
-                {
-                    SkylightGrid.Set(map, c, false);
-                    if (Props.transmitsSun)
-                        SunlightGrid.Set(map, c, false);
-                }
-                skyCells.Clear();
+                SkylightGrid.Set(map, skyCell, false);
+                if (Props.transmitsSun)
+                    SunlightGrid.Set(map, skyCell, false);
+                skyRegistered = false;
             }
             DespawnGlowNodes();
             glowDriven.Remove(this);
@@ -198,59 +194,49 @@ namespace Skylights
             glowNodes = null;
         }
 
-        /// <summary>Keep our footprint's "as if no roof" registration in sync with which cells are channeling.
-        /// Works for a single-tile pane and for a multi-tile atrium alike: every occupied cell that has a roof
-        /// to channel through renders and lights as open sky.</summary>
+        /// <summary>Keep our cell's "as if no roof" registration in sync with whether we're channeling.</summary>
         private void UpdateSkyChannel()
         {
             Map map = parent.Map;
             if (map == null) return;
+            bool shouldChannel = RoofChannelsLight();
+            IntVec3 cell = parent.Position;
+            if (shouldChannel && skyRegistered && cell == skyCell) return;
 
-            HashSet<IntVec3> desired = new HashSet<IntVec3>();
-            foreach (IntVec3 c in parent.OccupiedRect())
-                if (RoofChannelsLightAt(map, c))
-                    desired.Add(c);
-
-            if (skyCells.SetEquals(desired)) return;
-
-            // Drop cells that no longer channel.
-            List<IntVec3> stale = new List<IntVec3>();
-            foreach (IntVec3 c in skyCells)
-                if (!desired.Contains(c)) stale.Add(c);
-            foreach (IntVec3 c in stale) SetSkyCell(map, c, false);
-
-            // Add newly channeling cells.
-            foreach (IntVec3 c in desired)
-                if (!skyCells.Contains(c)) SetSkyCell(map, c, true);
+            if (skyRegistered)
+            {
+                SkylightGrid.Set(map, skyCell, false);
+                if (Props.transmitsSun)
+                    SunlightGrid.Set(map, skyCell, false);
+            }
+            if (shouldChannel)
+            {
+                SkylightGrid.Set(map, cell, true);
+                if (Props.transmitsSun)
+                    SunlightGrid.Set(map, cell, true);
+                skyCell = cell;
+                skyRegistered = true;
+            }
+            else
+            {
+                skyRegistered = false;
+            }
         }
 
-        private void SetSkyCell(Map map, IntVec3 c, bool on)
+        /// <summary>True when the skylight should channel daylight down: there is a roof above to
+        /// channel through, and it isn't blocking. Open sky is excluded — it already lights the cell
+        /// directly, so adding glow there would make the spot brighter than the sun outside.</summary>
+        private bool RoofChannelsLight()
         {
-            SkylightGrid.Set(map, c, on);
-            if (Props.transmitsSun)
-                SunlightGrid.Set(map, c, on);
-            if (on) skyCells.Add(c);
-            else skyCells.Remove(c);
-        }
-
-        /// <summary>True when this cell should channel daylight down: there is a roof above to channel
-        /// through, and it isn't blocking. Open sky is excluded — it already lights the cell directly.</summary>
-        private bool RoofChannelsLightAt(Map map, IntVec3 cell)
-        {
-            RoofDef roof = map.roofGrid.RoofAt(cell);
+            Map map = parent.Map;
+            if (map == null) return false;
+            RoofDef roof = map.roofGrid.RoofAt(parent.Position);
             // Open sky already lights this spot directly — channel nothing.
             if (roof == null) return false;
             // Thick overhead rock seals off the sky, unless a reflection tube pierces it.
             if (roof.isThickRoof) return Props.worksUnderThickRoof;
             // Constructed or thin roof: channel the daylight through.
             return true;
-        }
-
-        /// <summary>Whether the building's root cell is channeling — used by the glow-dome path and inspect text.</summary>
-        private bool RoofChannelsLight()
-        {
-            Map map = parent.Map;
-            return map != null && RoofChannelsLightAt(map, parent.Position);
         }
 
         private void UpdateGlow()
