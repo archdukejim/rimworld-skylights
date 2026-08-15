@@ -12,4 +12,9 @@
   <Skylights_RoofEdge_SkylightsOnly>Skylights only — soft edge inward around skylights</Skylights_RoofEdge_SkylightsOnly>
   <Skylights_RoofEdge_Full>All roofs — soft edge inward at every roof edge</Skylights_RoofEdge_Full>
   <Skylights_RoofEdgeModeDesc>By default a roof's shadow fades outward onto the lit tiles just outside it. The inward modes keep those open tiles fully lit and instead soften the edge into the roofed tiles, so light appears to reach just past a skylight. Takes effect immediately.</Skylights_RoofEdgeModeDesc>
+  <Skylights_GlassInterop>Glass sharing with ReBuild: Doors and Corners</Skylights_GlassInterop>
+  <Skylights_GlassInterop_Separate>Keep separate — each mod uses its own glass</Skylights_GlassInterop_Separate>
+  <Skylights_GlassInterop_ToReBuild>Make ReBuild glass from structural glass</Skylights_GlassInterop_ToReBuild>
+  <Skylights_GlassInterop_ToSkylights>Make structural &amp; tinted glass from ReBuild glass</Skylights_GlassInterop_ToSkylights>
+  <Skylights_GlassInteropDesc>Adds glass-conversion recipes at the electric smelter so you can run one glass economy across both mods. Off by default. Takes effect immediately.</Skylights_GlassInteropDesc>
 </LanguageData>

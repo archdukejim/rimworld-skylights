@@ -32,10 +32,15 @@ namespace Skylights
         /// <summary>Roof-edge shading mode. Default keeps vanilla behaviour so nothing changes unless opted in.</summary>
         public RoofEdgeMode roofEdgeMode = RoofEdgeMode.Vanilla;
 
+        /// <summary>How glass interoperates with ReBuild: Doors and Corners. Default keeps the mods separate;
+        /// only meaningful when ReBuild is active. Applied by <see cref="ReBuildGlassInterop"/>.</summary>
+        public GlassInteropMode glassInterop = GlassInteropMode.Separate;
+
         public override void ExposeData()
         {
             Scribe_Values.Look(ref domeGlowRadius, "domeGlowRadius", DefaultDomeGlowRadius);
             Scribe_Values.Look(ref roofEdgeMode, "roofEdgeMode", RoofEdgeMode.Vanilla);
+            Scribe_Values.Look(ref glassInterop, "glassInterop", GlassInteropMode.Separate);
             base.ExposeData();
         }
     }
@@ -85,6 +90,25 @@ namespace Skylights
             list.Gap(6f);
             list.Label("Skylights_RoofEdgeModeDesc".Translate());
 
+            // Glass interop with ReBuild: Doors and Corners — only shown when that mod is active.
+            if (ReBuildGlassInterop.Available)
+            {
+                list.GapLine(12f);
+                list.Label("Skylights_GlassInterop".Translate());
+                list.Gap(2f);
+                if (list.RadioButton("Skylights_GlassInterop_Separate".Translate(),
+                        Settings.glassInterop == GlassInteropMode.Separate))
+                    Settings.glassInterop = GlassInteropMode.Separate;
+                if (list.RadioButton("Skylights_GlassInterop_ToReBuild".Translate(),
+                        Settings.glassInterop == GlassInteropMode.SkylightsToReBuild))
+                    Settings.glassInterop = GlassInteropMode.SkylightsToReBuild;
+                if (list.RadioButton("Skylights_GlassInterop_ToSkylights".Translate(),
+                        Settings.glassInterop == GlassInteropMode.ReBuildToSkylights))
+                    Settings.glassInterop = GlassInteropMode.ReBuildToSkylights;
+                list.Gap(6f);
+                list.Label("Skylights_GlassInteropDesc".Translate());
+            }
+
             list.End();
         }
 
@@ -94,6 +118,7 @@ namespace Skylights
             DomeGlowRadius.Apply();
             CompSkylight.ForceGlowRefresh();
             RepaintAllMapLighting();
+            ReBuildGlassInterop.Apply();
         }
 
         /// <summary>Rebuild every loaded map's lighting so a roof-edge mode change shows immediately.</summary>

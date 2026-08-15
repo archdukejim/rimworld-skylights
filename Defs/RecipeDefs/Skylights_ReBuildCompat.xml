@@ -2,33 +2,56 @@
 <!--
   SOFT-DEPENDENCY COMPAT: "ReBuild: Doors and Corners" (packageId ReBuild.COTR.DoorsAndCorners).
 
-  Determination (read from both mods' Defs, not guessed):
-    * Skylights glass  — StructuralGlass / TintedGlass / BasicPane are plain ResourceBase ThingDefs with NO
-      <stuffProps>. Skylight buildings consume them as a FIXED <costList> ingredient (e.g. Skylight_Paned =
-      4 StructuralFrame + 1 StructuralGlass). Skylights defines no StuffCategoryDef.
-    * ReBuild glass    — RB_Glass (and RB_BallisticGlass) are plain ResourceBase ThingDefs with NO <stuffProps>.
-      ReBuild's glass walls (e.g. RB_GlassWall) put their single STUFF slot on the frame material
-      (stuffCategories Metallic/Stony/Woody + costStuffCount) and consume RB_Glass as a FIXED <costList>
-      ingredient (RB_GlassWall = 4 RB_Glass). ReBuild defines no StuffCategoryDef.
+  Both mods represent glass as a fixed costList INGREDIENT, not a stuff (verified from both mods' Defs:
+  Skylights' StructuralGlass/TintedGlass and ReBuild's RB_Glass are plain ResourceBase ThingDefs with no
+  <stuffProps>; ReBuild's glass walls spend their single stuff slot on the frame material). So the glasses
+  can't be made directly interchangeable in build costs — the practical interchange is conversion recipes.
 
-  => Both represent glass as a costList INGREDIENT, not a stuff. The "cross-register two stuff categories"
-     approach is impossible here: (1) building costLists have no ingredient-alternative mechanism, and
-     (2) ReBuild's walls have already spent their one stuff slot on the frame, so glass cannot become a stuff
-     for them. Minimal interchange we CAN do without touching either mod's buildings or balance: cheap 1:1
-     conversion recipes at the electric smelter so the two plain glasses swap freely.
+  DEFAULT IS "SEPARATE": these recipes are defined but attached to NO workbench (no <recipeUsers>), so out of
+  the box the two mods stay independent. A mod setting (see ReBuildGlassInterop / SkylightsSettings) attaches
+  the relevant recipe(s) to the electric smelter at runtime:
+    * "Make ReBuild glass from structural glass"        -> enables Skylights_Convert_StructuralToRBGlass
+    * "Make structural & tinted glass from ReBuild glass" -> enables the two RBGlassTo* recipes
 
   Soft gate: each RecipeDef carries MayRequire="ReBuild.COTR.DoorsAndCorners" (packageId). When ReBuild is not
-  active these defs are discarded during XML loading, BEFORE cross-reference resolution — so RB_Glass is never
-  referenced and Skylights loads with zero errors. No hard modDependency; nothing else here touches ReBuild.
+  active these defs are discarded during XML loading, before cross-reference resolution, so RB_Glass is never
+  referenced and Skylights loads with no errors. No hard modDependency; no C# runs (Available == false).
   (PatchOperationFindMod was avoided on purpose: it matches by mod NAME, not packageId.)
-
-  Scope is deliberately limited to the two PLAIN structural glasses. TintedGlass (UV, higher tier) and
-  RB_BallisticGlass (armored) are intentionally excluded so conversion can't launder a cheap pane into a
-  higher-value one.
 -->
 <Defs>
 
-  <!-- ReBuild glass -> Skylights structural glass (build skylights from ReBuild glass). -->
+  <!-- ReBuild glass FROM Skylights structural glass. ("use my recipes for RB_Glass") -->
+  <RecipeDef MayRequire="ReBuild.COTR.DoorsAndCorners">
+    <defName>Skylights_Convert_StructuralToRBGlass</defName>
+    <label>rework structural glass into glass</label>
+    <description>Remelt one structural glass pane into one pane of glass at an electric smelter.</description>
+    <jobString>Reworking structural glass into glass.</jobString>
+    <workSpeedStat>SmeltingSpeed</workSpeedStat>
+    <effectWorking>Smelt</effectWorking>
+    <soundWorking>Recipe_Smelt</soundWorking>
+    <workSkill>Crafting</workSkill>
+    <workAmount>200</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>StructuralGlass</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>StructuralGlass</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <RB_Glass>1</RB_Glass>
+    </products>
+  </RecipeDef>
+
+  <!-- Skylights structural glass FROM ReBuild glass. ("use RB_Glass recipes for Structural glass") -->
   <RecipeDef MayRequire="ReBuild.COTR.DoorsAndCorners">
     <defName>Skylights_Convert_RBGlassToStructural</defName>
     <label>rework glass into structural glass</label>
@@ -39,9 +62,6 @@
     <soundWorking>Recipe_Smelt</soundWorking>
     <workSkill>Crafting</workSkill>
     <workAmount>200</workAmount>
-    <recipeUsers>
-      <li>ElectricSmelter</li>
-    </recipeUsers>
     <ingredients>
       <li>
         <filter>
@@ -62,25 +82,24 @@
     </products>
   </RecipeDef>
 
-  <!-- Skylights structural glass -> ReBuild glass (build ReBuild glass walls from Skylights glass). -->
+  <!-- Skylights tinted glass FROM ReBuild glass. ("use RB_Glass recipes for Tinted glass")
+       Keeps the tint tech gate (Complex Furniture), matching Skylights' own tinted-glass recipe. -->
   <RecipeDef MayRequire="ReBuild.COTR.DoorsAndCorners">
-    <defName>Skylights_Convert_StructuralToRBGlass</defName>
-    <label>rework structural glass into glass</label>
-    <description>Remelt one structural glass pane into one pane of glass at an electric smelter.</description>
-    <jobString>Reworking structural glass into glass.</jobString>
+    <defName>Skylights_Convert_RBGlassToTinted</defName>
+    <label>tint glass into tinted structural glass</label>
+    <description>Treat one pane of glass with a UV-filtering tint to make one tinted structural glass pane, at an electric smelter.</description>
+    <jobString>Tinting glass into tinted structural glass.</jobString>
     <workSpeedStat>SmeltingSpeed</workSpeedStat>
     <effectWorking>Smelt</effectWorking>
     <soundWorking>Recipe_Smelt</soundWorking>
     <workSkill>Crafting</workSkill>
-    <workAmount>200</workAmount>
-    <recipeUsers>
-      <li>ElectricSmelter</li>
-    </recipeUsers>
+    <workAmount>250</workAmount>
+    <researchPrerequisite>ComplexFurniture</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
           <thingDefs>
-            <li>StructuralGlass</li>
+            <li>RB_Glass</li>
           </thingDefs>
         </filter>
         <count>1</count>
@@ -88,11 +107,11 @@
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
-        <li>StructuralGlass</li>
+        <li>RB_Glass</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
-      <RB_Glass>1</RB_Glass>
+      <TintedGlass>1</TintedGlass>
     </products>
   </RecipeDef>
 
