@@ -23,6 +23,17 @@ namespace Skylights
         /// <summary>Fraction of the outdoor sky glow this skylight channels indoors (1 = full sky, 0.5 = half). A dome only passes soft, partial light.</summary>
         public float glowFactor = 1f;
 
+        /// <summary>If set, this (multi-cell) dome lights its room with hidden glow-emitter nodes — one per
+        /// footprint cell — instead of a single corner-mounted CompGlower, so the light is centred on an even
+        /// footprint. The named def must carry a <c>CompProperties_Glower</c> whose <c>glowColor</c> is the
+        /// full-daylight colour. Leave null for a normal single-cell glower dome.</summary>
+        public string glowNodeDef = null;
+
+        /// <summary>Per-node brightness for <see cref="glowNodeDef"/> domes, as a fraction of a full dome:
+        /// each footprint node emits <c>fullColor * skyFraction * glowNodeStrength</c>. The nodes overlap, so
+        /// e.g. 0.5 makes a 2x1 read like one dome and a 2x2 a little brighter. Tune to taste.</summary>
+        public float glowNodeStrength = 1f;
+
         /// <summary>When true the cell is rendered and lit as if there were no roof (full sky light, colour,
         /// moonlight, shadows) via the Harmony patches, instead of driving a CompGlower. Used by the paned skylight.</summary>
         public bool renderAsSky = false;
@@ -63,6 +74,11 @@ namespace Skylights
         private bool skyRegistered;   // renderAsSky: whether our cell is currently in the SkylightGrid
         private IntVec3 skyCell = IntVec3.Invalid;  // the cell we registered, so we can deregister on despawn
 
+        // glowNodeDef domes: one hidden glower per footprint cell, spawned fresh each time we spawn (the node
+        // def is isSaveable=false, so they never persist and can't duplicate on load). Driven together below.
+        private List<Thing> glowNodes;
+        private ThingDef glowNodeDefResolved;
+
         // Spawned glower-driven skylights (domes), so a mod-settings radius change can re-register them live.
         private static readonly HashSet<CompSkylight> glowDriven = new HashSet<CompSkylight>();
 
@@ -74,6 +90,20 @@ namespace Skylights
             if (Props.renderAsSky)
             {
                 UpdateSkyChannel();
+                return;
+            }
+            if (Props.glowNodeDef != null)
+            {
+                glowNodeDefResolved = DefDatabase<ThingDef>.GetNamedSilentFail(Props.glowNodeDef);
+                CompProperties_Glower nodeGlow = glowNodeDefResolved?.GetCompProperties<CompProperties_Glower>();
+                if (nodeGlow != null)
+                {
+                    fullColor = nodeGlow.glowColor;
+                    SpawnGlowNodes();
+                    glowDriven.Add(this);
+                }
+                lastBucket = -1;
+                UpdateGlow();
                 return;
             }
             glower = parent.GetComp<CompGlower>();
@@ -136,8 +166,32 @@ namespace Skylights
                     SunlightGrid.Set(map, skyCell, false);
                 skyRegistered = false;
             }
+            DespawnGlowNodes();
             glowDriven.Remove(this);
             base.PostDeSpawn(map, mode);
+        }
+
+        /// <summary>Spawn one hidden glower node on every cell of our footprint, so a multi-cell dome's light
+        /// is centred on the footprint instead of leaning to its root corner. Nodes are non-persistent.</summary>
+        private void SpawnGlowNodes()
+        {
+            Map map = parent.Map;
+            if (map == null || glowNodeDefResolved == null) return;
+            glowNodes = new List<Thing>();
+            foreach (IntVec3 c in parent.OccupiedRect())
+            {
+                Thing node = ThingMaker.MakeThing(glowNodeDefResolved);
+                GenSpawn.Spawn(node, c, map);
+                glowNodes.Add(node);
+            }
+        }
+
+        private void DespawnGlowNodes()
+        {
+            if (glowNodes == null) return;
+            foreach (Thing n in glowNodes)
+                if (n != null && !n.Destroyed) n.Destroy();
+            glowNodes = null;
         }
 
         /// <summary>Keep our cell's "as if no roof" registration in sync with whether we're channeling.</summary>
@@ -187,7 +241,8 @@ namespace Skylights
 
         private void UpdateGlow()
         {
-            if (glower == null) return;
+            bool hasNodes = glowNodes != null && glowNodes.Count > 0;
+            if (glower == null && !hasNodes) return;
             Map map = parent.Map;
             if (map == null) return;
 
@@ -206,6 +261,25 @@ namespace Skylights
             lastBucket = bucket;
 
             float b = (float)bucket / steps;
+
+            if (hasNodes)
+            {
+                // Each footprint node emits a fraction of a full dome; the nodes overlap into a pool that is
+                // centred on the footprint. Setting GlowColor re-registers each node's glower.
+                float per = b * Props.glowNodeStrength;
+                ColorInt nodeColor = new ColorInt(
+                    Mathf.RoundToInt(fullColor.r * per),
+                    Mathf.RoundToInt(fullColor.g * per),
+                    Mathf.RoundToInt(fullColor.b * per),
+                    fullColor.a);
+                foreach (Thing n in glowNodes)
+                {
+                    CompGlower g = n?.TryGetComp<CompGlower>();
+                    if (g != null) g.GlowColor = nodeColor;
+                }
+                return;
+            }
+
             // Setting GlowColor runs the game's RefreshGlower(), which re-registers the glower
             // and dirties the glow grid, so lighting and indoor plant growth both track the sun.
             glower.GlowColor = new ColorInt(

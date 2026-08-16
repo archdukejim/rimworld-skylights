@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- Dedicated Architect tab for all skylight buildings. Sits just below Furniture. -->
+  <DesignationCategoryDef>
+    <defName>Skylights</defName>
+    <label>skylights</label>
+    <order>480</order>
+    <specialDesignatorClasses>
+      <li>Designator_Cancel</li>
+      <li>Designator_Deconstruct</li>
+    </specialDesignatorClasses>
+  </DesignationCategoryDef>
+
+</Defs>

@@ -4,7 +4,22 @@ using Verse;
 
 namespace Skylights
 {
-    /// <summary>Player-tunable settings for the mod. Currently just the dome skylight light radius.</summary>
+    /// <summary>
+    /// How the lighting overlay shades the soft edge where a roof meets open sky. Vanilla lets the roof's
+    /// darkening bleed *outward* onto the lit tiles just outside the roof; the inward modes instead keep the
+    /// open tiles fully lit to their edge and push the soft falloff *into* the roofed tiles.
+    /// </summary>
+    public enum RoofEdgeMode
+    {
+        /// <summary>Leave RimWorld's roof-edge shading untouched (soft edge spreads outward).</summary>
+        Vanilla = 0,
+        /// <summary>Inward soft edge at every roof edge on the map.</summary>
+        Full = 1,
+        /// <summary>Inward soft edge only around the mod's own skylight tiles.</summary>
+        SkylightsOnly = 2,
+    }
+
+    /// <summary>Player-tunable settings for the mod.</summary>
     public class SkylightsSettings : ModSettings
     {
         public const int MinDomeGlowRadius = 1;
@@ -14,9 +29,13 @@ namespace Skylights
 
         public int domeGlowRadius = DefaultDomeGlowRadius;
 
+        /// <summary>Roof-edge shading mode. Default keeps vanilla behaviour so nothing changes unless opted in.</summary>
+        public RoofEdgeMode roofEdgeMode = RoofEdgeMode.Vanilla;
+
         public override void ExposeData()
         {
             Scribe_Values.Look(ref domeGlowRadius, "domeGlowRadius", DefaultDomeGlowRadius);
+            Scribe_Values.Look(ref roofEdgeMode, "roofEdgeMode", RoofEdgeMode.Vanilla);
             base.ExposeData();
         }
     }
@@ -34,17 +53,38 @@ namespace Skylights
             Settings = GetSettings<SkylightsSettings>();
         }
 
+        /// <summary>Fast, null-safe read of the active roof-edge mode for the lighting-overlay hot path.</summary>
+        public static RoofEdgeMode RoofEdge => Settings?.roofEdgeMode ?? RoofEdgeMode.Vanilla;
+
         public override string SettingsCategory() => "Skylights";
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
             Listing_Standard list = new Listing_Standard();
             list.Begin(inRect);
+
             list.Label("Skylights_DomeRadius".Translate(Settings.domeGlowRadius));
             Settings.domeGlowRadius = Mathf.RoundToInt(list.Slider(
                 Settings.domeGlowRadius, SkylightsSettings.MinDomeGlowRadius, SkylightsSettings.MaxDomeGlowRadius));
             list.Gap(6f);
             list.Label("Skylights_DomeRadiusDesc".Translate());
+
+            list.GapLine(12f);
+
+            list.Label("Skylights_RoofEdgeMode".Translate());
+            list.Gap(2f);
+            if (list.RadioButton("Skylights_RoofEdge_Vanilla".Translate(),
+                    Settings.roofEdgeMode == RoofEdgeMode.Vanilla))
+                Settings.roofEdgeMode = RoofEdgeMode.Vanilla;
+            if (list.RadioButton("Skylights_RoofEdge_SkylightsOnly".Translate(),
+                    Settings.roofEdgeMode == RoofEdgeMode.SkylightsOnly))
+                Settings.roofEdgeMode = RoofEdgeMode.SkylightsOnly;
+            if (list.RadioButton("Skylights_RoofEdge_Full".Translate(),
+                    Settings.roofEdgeMode == RoofEdgeMode.Full))
+                Settings.roofEdgeMode = RoofEdgeMode.Full;
+            list.Gap(6f);
+            list.Label("Skylights_RoofEdgeModeDesc".Translate());
+
             list.End();
         }
 
@@ -53,6 +93,16 @@ namespace Skylights
             base.WriteSettings();
             DomeGlowRadius.Apply();
             CompSkylight.ForceGlowRefresh();
+            RepaintAllMapLighting();
+        }
+
+        /// <summary>Rebuild every loaded map's lighting so a roof-edge mode change shows immediately.</summary>
+        public static void RepaintAllMapLighting()
+        {
+            if (Current.Game?.Maps == null) return;
+            foreach (Map map in Current.Game.Maps)
+                map.mapDrawer?.WholeMapChanged(
+                    (ulong)MapMeshFlagDefOf.Roofs | (ulong)MapMeshFlagDefOf.GroundGlow | (ulong)MapMeshFlagDefOf.Buildings);
         }
     }
 
@@ -64,7 +114,11 @@ namespace Skylights
     [StaticConstructorOnStartup]
     public static class DomeGlowRadius
     {
-        private static readonly string[] DomeDefNames = { "Skylight_Dome", "Skylight_MountainDome" };
+        // Skylight_DomeGlowNode drives the multi-cell variants' light, so it must track the same radius as the
+        // 1x1 dome. The Wide/Quad variants have no glower of their own — including them just fixes their build
+        // preview ring (specialDisplayRadius) to match.
+        private static readonly string[] DomeDefNames =
+            { "Skylight_Dome", "Skylight_MountainDome", "Skylight_DomeGlowNode", "Skylight_Dome_Wide", "Skylight_Dome_Quad" };
 
         static DomeGlowRadius()
         {

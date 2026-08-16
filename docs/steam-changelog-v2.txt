@@ -1,0 +1,66 @@
+[h1]Skylights v2 — Tech Tiers, Gene-Aware Sunlight & More[/h1]
+
+A big update: skylights are now a full progression from a crude tribal pane all the way up to UV-filtering tinted glass — plus real Biotech sun-gene support, a light-radius setting, and a fix that makes dome skylights track day and night properly.
+
+[i]Safe to add to an existing save. Your existing skylights keep working — only their display names changed, not their internal IDs.[/i]
+
+[h2]☀️ New: gene-aware sunlight[/h2]
+Clear glass panes now let the tile below count as [b]real sunlight[/b] for Biotech genes, stats, and thoughts. Sun-loving xenotypes finally get their outdoor benefits indoors — and sun-sensitive pawns will burn under an open pane, exactly as if they were standing outside. Want the daylight without the sunburn? Glaze with the new [b]tinted[/b] pane, which filters the sun out for genes.
+[i](Thanks to Rain on the Workshop for the request.)[/i]
+
+[h2]🏛️ Two forms, five skylights[/h2]
+[b]PANES[/b] open one roof tile to the full sky — they grow crops, and clear ones pass true sunlight to genes:
+[list]
+[*][b]Basic Skylight[/b] — NEW. The pre-industrial pane, unlocked at [b]Smithing[/b]. Hand-built from wood + a basic pane, no smelter or power. Full-sky lighting and crops — but the frame is weak: it needs a wall or pillar within 3 tiles, and if that support is ever lost the roof caves in and shatters the pane (the materials are destroyed).
+[*][b]Industrial Skylight[/b] — the sturdy structural-glass pane (Electricity). [i]This is the former "paned skylight".[/i]
+[*][b]Tinted Skylight[/b] — NEW. The same sturdy pane in UV-filtering tinted glass (Complex Furniture). Lights and grows crops identically, but blocks the sun for genes — safe for sun-sensitive colonists, no benefit for sun-lovers.
+[/list]
+[b]DOMES[/b] spread a soft glow over a radius (never enough for crops):
+[list]
+[*][b]Dome Skylight[/b] — now unlocked at [b]Smithing[/b] and [b]no longer requires a smelter[/b]: hand-build the dome at a crafting spot, or cast it faster once you have an electric smelter.
+[*][b]Light Tunnel[/b] — pipes daylight down through solid overhead mountain (Electricity + Complex Furniture). [i]This is the former "mountain dome skylight".[/i]
+[/list]
+
+[h2]🔧 New items & recipes[/h2]
+[list]
+[*][b]Basic pane[/b] — NEW item. Crude glazing hand-worked at a crafting spot. 1 steel → 1 (single or x10 bulk). Needs Smithing.
+[*][b]Skylight dome (by hand)[/b] — NEW recipe. 2 steel → 1 at a crafting spot, no research required.
+[*][b]Tinted structural glass[/b] — NEW item. Cast at an electric smelter (Electricity + Complex Furniture).
+[/list]
+
+[h2]📋 Full supply chain[/h2]
+[table]
+[tr][th]Item[/th][th]Made at[/th][th]Cost[/th][th]Research[/th][/tr]
+[tr][td]Basic pane[/td][td]Crafting spot[/td][td]1 steel → 1 (x10 bulk)[/td][td]Smithing[/td][/tr]
+[tr][td]Skylight dome (by hand)[/td][td]Crafting spot[/td][td]2 steel → 1[/td][td]—[/td][/tr]
+[tr][td]Skylight dome (cast)[/td][td]Electric smelter[/td][td]2 steel → 1 (faster)[/td][td]Electricity[/td][/tr]
+[tr][td]Structural frame[/td][td]Electric smelter[/td][td]1 steel → 4 (x40 bulk)[/td][td]Electricity[/td][/tr]
+[tr][td]Structural glass[/td][td]Electric smelter[/td][td]1 steel → 1 (x10 bulk)[/td][td]Electricity[/td][/tr]
+[tr][td]Tinted structural glass[/td][td]Electric smelter[/td][td]1 steel → 1 (x10 bulk)[/td][td]Electricity + Complex Furniture[/td][/tr]
+[tr][td]Reflection tube[/td][td]Electric smelter[/td][td]5 steel → 1[/td][td]Electricity + Complex Furniture[/td][/tr]
+[/table]
+
+[h2]🔨 Skylight breakdown[/h2]
+[table]
+[tr][th]Skylight[/th][th]Research[/th][th]Build cost[/th][th]Crops[/th][th]Gene sun[/th][/tr]
+[tr][td]Basic (pane)[/td][td]Smithing[/td][td]4 wood + 1 basic pane[/td][td]Yes[/td][td]Yes[/td][/tr]
+[tr][td]Industrial (pane)[/td][td]Electricity[/td][td]4 frame + 1 structural glass[/td][td]Yes[/td][td]Yes[/td][/tr]
+[tr][td]Tinted (pane)[/td][td]Electricity + Complex Furniture[/td][td]4 frame + 1 tinted glass[/td][td]Yes[/td][td]No (filtered)[/td][/tr]
+[tr][td]Dome[/td][td]Smithing[/td][td]1 skylight dome[/td][td]No[/td][td]No[/td][/tr]
+[tr][td]Light tunnel[/td][td]Electricity + Complex Furniture[/td][td]1 dome + 1 reflection tube[/td][td]No[/td][td]No[/td][/tr]
+[/table]
+
+[h2]⚙️ New setting[/h2]
+[b]Dome skylight light radius[/b] — a 1–10 slider (default 4) in Mod Settings, controlling how far the dome and light-tunnel glow reaches. Takes effect immediately.
+
+[h2]🐛 Fixes[/h2]
+[list]
+[*]Dome skylights now properly [b]track day and night[/b] — previously their brightness could stick at the level it had when installed.
+[/list]
+
+[h2]🌱 Low-tech friendly[/h2]
+You no longer need Electricity to enjoy skylights — the Basic Skylight and Dome Skylight are both available at [b]Smithing[/b] and build without a smelter.
+[i](Thanks to ne_propheta for the nudge toward a pre-industrial tier.)[/i]
+
+[hr][/hr]
+[i]Requires Harmony. Safe to add or remove mid-save.[/i]

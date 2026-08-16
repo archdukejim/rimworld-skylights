@@ -288,4 +288,164 @@ namespace Skylights
             return grid.Roofed(index);
         }
     }
+
+    /// <summary>
+    /// Reshapes the roof's soft edge from outward to inward when the player opts in (<see cref="RoofEdgeMode"/>).
+    /// Vanilla dilates the roof's darkening half a tile outward — a corner is darkened if *any* touching tile is
+    /// roofed — so the shadow bleeds onto the lit tiles just outside the roof. Here a boundary corner that touches
+    /// an open (or skylight) tile is instead left *uncovered*, and the adjacent roofed tile's forced-dark clamp is
+    /// skipped, which erodes the shadow half a tile inward: the open/skylight tile stays fully lit to its edge and
+    /// the soft falloff lands on the roofed ring. Only runs when a mode is active; Vanilla falls through to the
+    /// real (transpiled) method so nothing changes when the setting is off. A faithful reimplementation of
+    /// <c>SectionLayer_LightingOverlay.GenerateLightingOverlay</c> with those two rules made direction-aware.
+    /// </summary>
+    [HarmonyPatch(typeof(SectionLayer_LightingOverlay), "GenerateLightingOverlay")]
+    public static class Patch_LightingOverlay_Inward
+    {
+        private static readonly MethodInfo MakeBaseGeometryMI =
+            AccessTools.Method(typeof(SectionLayer_LightingOverlay), "MakeBaseGeometry");
+
+        public static bool Prefix(Map map, LayerSubMesh subMesh, CellRect rect, ref int firstCenterInd,
+            bool centered, System.Predicate<int> filter)
+        {
+            RoofEdgeMode mode = SkylightsSettingsMod.RoofEdge;
+            if (mode == RoofEdgeMode.Vanilla) return true;   // untouched: let the real method run.
+
+            rect.ClipInsideMap(map);
+            if (subMesh.verts.Count == 0)
+            {
+                object[] geoArgs = { map, subMesh, rect, 0, centered };
+                MakeBaseGeometryMI.Invoke(null, geoArgs);
+                firstCenterInd = (int)geoArgs[3];
+            }
+
+            int sizeX = map.Size.x, sizeZ = map.Size.z;
+            int minX = rect.minX, minZ = rect.minZ, maxX = rect.maxX, maxZ = rect.maxZ;
+            int W = rect.Width;
+            RoofGrid roofGrid = map.roofGrid;
+            CellIndices ci = map.cellIndices;
+            Thing[] edifice = map.edificeGrid.InnerArray;
+            GlowGrid glow = map.glowGrid;
+
+            Color32[] array = new Color32[subMesh.verts.Count];
+
+            // Corner pass: one vertex per tile corner, coloured from the (up to) 4 tiles meeting there.
+            for (int gz = minZ; gz <= maxZ + 1; gz++)
+            {
+                for (int gx = minX; gx <= maxX + 1; gx++)
+                {
+                    int vBotLeft = (gz - minZ) * (W + 1) + (gx - minX);
+
+                    if (filter != null && gx >= 0 && gx < sizeX && gz >= 0 && gz < sizeZ
+                        && !filter(ci.CellToIndex(gx, gz)))
+                    {
+                        array[vBotLeft] = new Color32(0, 0, 0, 0);
+                        continue;
+                    }
+
+                    int cr = 0, cg = 0, cb = 0, ca = 0, n = 0;
+                    bool covered = false;
+                    bool touchesInwardOpen = false;
+                    bool touchesBlocker = false;
+                    for (int k = 0; k < 4; k++)
+                    {
+                        int cx = gx - (k == 0 || k == 2 ? 1 : 0);
+                        int cz = gz - (k == 0 || k == 1 ? 1 : 0);
+                        if (cx < 0 || cx >= sizeX || cz < 0 || cz >= sizeZ) continue;
+                        int idx = ci.CellToIndex(cx, cz);
+                        Thing thing = edifice[idx];
+                        RoofDef roofDef = SkylightLightHelper.RoofAtForLight(roofGrid, idx);
+                        if (roofDef != null && (roofDef.isThickRoof || thing == null || !thing.def.holdsRoof
+                                || thing.def.altitudeLayer == AltitudeLayer.DoorMoveable))
+                            covered = true;
+                        if (IsInwardOpen(map, mode, idx, roofDef))
+                            touchesInwardOpen = true;
+                        if (thing != null && thing.def.blockLight)
+                            touchesBlocker = true;
+                        if (thing == null || !thing.def.blockLight)
+                        {
+                            Color32 g = glow.VisualGlowAt(idx);
+                            cr += g.r; cg += g.g; cb += g.b; ca += g.a; n++;
+                        }
+                    }
+
+                    Color32 col = n > 0
+                        ? new Color32((byte)(cr / n), (byte)(cg / n), (byte)(cb / n), (byte)(ca / n))
+                        : new Color32(0, 0, 0, 0);
+                    // Inward: leave a boundary corner uncovered so the roofed side lights up — but only at a clean
+                    // roof/open boundary. If a light-blocking wall meets at this corner, keep vanilla darkening so
+                    // outdoor light can't leak through the wall into a sealed room.
+                    bool uncover = touchesInwardOpen && !touchesBlocker;
+                    if (covered && !uncover && col.a < 100) col.a = 100;
+                    array[vBotLeft] = col;
+                }
+            }
+
+            // Center pass: one vertex per tile, averaged from its 4 corners, then the roof-dark clamp.
+            for (int tz = minZ; tz <= maxZ; tz++)
+            {
+                for (int tx = minX; tx <= maxX; tx++)
+                {
+                    int centerIdx = firstCenterInd + (tz - minZ) * W + (tx - minX);
+                    int tileIdx = ci.CellToIndex(tx, tz);
+
+                    if (filter != null && !filter(tileIdx))
+                    {
+                        array[centerIdx] = new Color32(0, 0, 0, 0);
+                        continue;
+                    }
+
+                    int bl = (tz - minZ) * (W + 1) + (tx - minX);
+                    Color32 a0 = array[bl], a1 = array[bl + 1], a2 = array[bl + W + 1], a3 = array[bl + W + 2];
+                    Color32 center = new Color32(
+                        (byte)((a0.r + a1.r + a2.r + a3.r) / 4),
+                        (byte)((a0.g + a1.g + a2.g + a3.g) / 4),
+                        (byte)((a0.b + a1.b + a2.b + a3.b) / 4),
+                        (byte)((a0.a + a1.a + a2.a + a3.a) / 4));
+
+                    if (center.a < 100 && SkylightLightHelper.RoofedForLight(roofGrid, tileIdx))
+                    {
+                        Thing thing = edifice[tileIdx];
+                        if ((thing == null || !thing.def.holdsRoof) && !NearInwardOpen(map, mode, tx, tz))
+                            center.a = 100;
+                    }
+                    array[centerIdx] = center;
+                }
+            }
+
+            subMesh.mesh.colors32 = array;
+            return false;
+        }
+
+        /// <summary>Is this tile the "open" side the soft edge should fall away from? In Full mode any tile the
+        /// overlay reads as unroofed (real sky or a skylight); in SkylightsOnly mode only the mod's skylight tiles,
+        /// so real roof edges keep vanilla shading.</summary>
+        private static bool IsInwardOpen(Map map, RoofEdgeMode mode, int idx, RoofDef roofDefForLight)
+        {
+            if (mode == RoofEdgeMode.Full) return roofDefForLight == null;
+            return SkylightGrid.Contains(map, map.cellIndices.IndexToCell(idx));
+        }
+
+        /// <summary>True if any of the tile's 8 neighbours is an inward-open tile — i.e. this roofed tile sits on
+        /// the boundary ring and should keep its soft (unclamped) center so the falloff lands inward on it.</summary>
+        private static bool NearInwardOpen(Map map, RoofEdgeMode mode, int tx, int tz)
+        {
+            int sizeX = map.Size.x, sizeZ = map.Size.z;
+            CellIndices ci = map.cellIndices;
+            RoofGrid roofGrid = map.roofGrid;
+            for (int dz = -1; dz <= 1; dz++)
+            {
+                for (int dx = -1; dx <= 1; dx++)
+                {
+                    if (dx == 0 && dz == 0) continue;
+                    int nx = tx + dx, nz = tz + dz;
+                    if (nx < 0 || nx >= sizeX || nz < 0 || nz >= sizeZ) continue;
+                    int nidx = ci.CellToIndex(nx, nz);
+                    if (IsInwardOpen(map, mode, nidx, SkylightLightHelper.RoofAtForLight(roofGrid, nidx)))
+                        return true;
+                }
+            }
+            return false;
+        }
+    }
 }

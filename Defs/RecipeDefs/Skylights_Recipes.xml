@@ -21,14 +21,14 @@
     </recipeUsers>
   </RecipeDef>
 
-  <!-- Basic pane: 1 steel -> 1 crude pane, hand-worked. Needs Smithing. -->
+  <!-- Basic pane: 1 steel -> 1 crude pane, hand-worked. Needs Complex Furniture (matches the basic skylight). -->
   <RecipeDef ParentName="SkylightCraftSpotRecipeBase">
     <defName>Make_BasicPane</defName>
     <label>make basic pane x1</label>
     <description>Hand-work one rough glass pane from one unit of steel.</description>
     <jobString>Making basic pane.</jobString>
     <workAmount>210</workAmount>
-    <researchPrerequisite>Smithing</researchPrerequisite>
+    <researchPrerequisite>ComplexFurniture</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -56,7 +56,7 @@
     <description>Hand-work ten rough glass panes from ten units of steel.</description>
     <jobString>Making basic panes in bulk.</jobString>
     <workAmount>1875</workAmount>
-    <researchPrerequisite>Smithing</researchPrerequisite>
+    <researchPrerequisite>ComplexFurniture</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
