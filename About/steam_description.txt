@@ -5,7 +5,7 @@ Bring real daylight into a roofed room. [b]Powerless and cool[/b], skylights lig
 
 Two forms — [b]panes[/b] that open a roof tile to the full sky (crops + true sunlight), and [b]domes[/b] that spread a soft glow over a radius — across a full tech progression.
 
-[img]PASTE_COMPONENTS_IMAGE_URL_HERE[/img]
+[img]https://i.imgur.com/VEccYPt.png[/img]
 
 [h2]🏛️ Two forms, seven skylights[/h2]
 [b]PANES[/b] open roof tiles to the full sky — they grow crops, and clear ones pass true sunlight to Biotech genes:
@@ -54,7 +54,7 @@ Two forms — [b]panes[/b] that open a roof tile to the full sky (crops + true s
 [*][b]ReBuild: Doors and Corners[/b] — glass is interchangeable both ways via free crafting-spot conversions when both mods are loaded.
 [/list]
 
-[img]PASTE_V3_TEASER_IMAGE_URL_HERE[/img]
+[img]https://i.imgur.com/Yslswc6.png[/img]
 
 [h2]🏛️ Coming in v3: Atrium Skylights[/h2]
 Grand domed glass ceilings — [b]2×2, 3×3, 4×4 and 5×5[/b] — built from panes and structural supports, in clear and tinted glass. [b]Including atrium skylights for Odyssey ships.[/b]
