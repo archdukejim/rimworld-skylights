@@ -19,28 +19,28 @@
   <loadAfter>
     <li>brrainz.harmony</li>
   </loadAfter>
-  <description>Bring real daylight into a roofed room. Powerless and cool, skylights light a room by the actual sky above — bright at midday, fading through dusk, dark at night, and dimmed by storms and eclipses. They never make a spot brighter than the day outside. A whole tech progression, from a crude tribal pane at Smithing up to UV-filtering tinted glass.
+  <description>Bring real daylight into a roofed room. Powerless and cool, skylights light a room by the actual sky above — bright at midday, fading through dusk, dark at night, and dimmed by storms and eclipses. They never make a spot brighter than the day outside. A whole tech progression, from a crude hand-built pane up to UV-filtering tinted glass — everything unlocks at Complex Furniture.
 
 There are two forms: PANES that open one roof tile to the full sky (they grow crops and, if clear, pass true sunlight to Biotech genes), and DOMES that spread a soft glow over a radius (no crops).
 
 --- BASIC SKYLIGHT (pane) ---
-The pre-industrial pane, unlocked at Smithing. A crude glazed square in a light timber frame, hand-built on the spot from wood and a basic pane — no smelter, no power. It opens the tile to the full sky: grows crops by daylight, dark at night, and passes true sunlight so sun-loving genes gain their benefit indoors and sun-sensitive pawns are exposed. But the frame is weak — it only holds if a wall or pillar sits within three tiles to carry the roof. Lose that support and the roof caves in and shatters the pane.
+The pre-industrial pane, unlocked at Complex Furniture. A crude glazed square in a light timber frame, hand-built on the spot from wood and a basic pane — no smelter, no power. It opens the tile to the full sky: grows crops by daylight, dark at night, and passes true sunlight so sun-loving genes gain their benefit indoors and sun-sensitive pawns are exposed. But the frame is weak — it only holds if a wall or pillar sits within three tiles to carry the roof. Lose that support and the roof caves in and shatters the pane.
 
 --- INDUSTRIAL SKYLIGHT (pane) ---
-The sturdy pane, unlocked with Electricity. Cast structural glass in a smelted frame, drag-placed like floors, with no support limit. Same full-sky lighting, crops and true sunlight as the basic pane — glaze with tinted glass instead to filter the sun out for genes.
+The sturdy pane, unlocked with Electricity and Complex Furniture. Cast structural glass in a smelted frame, drag-placed like floors, with no support limit. Same full-sky lighting, crops and true sunlight as the basic pane — glaze with tinted glass instead to filter the sun out for genes.
 
 --- TINTED SKYLIGHT (pane) ---
 The same sturdy pane glazed with UV-filtering tinted structural glass. It lights and grows crops exactly like the industrial pane, but filters the sun out for genes — so sun-sensitive colonists can stand beneath it unharmed (and sun-lovers gain nothing). The safe choice when the sky itself is the hazard. Needs Complex Furniture on top of Electricity.
 
 --- DOME SKYLIGHT (dome) ---
-A small dome that spreads soft daylight across a radius of a few tiles (adjustable in the mod settings). It lights a room by natural light but never concentrates enough to grow crops — ideal for workshops, bedrooms and walkways. Unlocked at Smithing: the dome unit can be hand-built at a crafting spot, or cast faster once you have an electric smelter. Blocked by thick overhead mountain.
+A small dome that spreads soft daylight across a radius of a few tiles (adjustable in the mod settings). It lights a room by natural light but never concentrates enough to grow crops — ideal for workshops, bedrooms and walkways. Unlocked at Complex Furniture: the dome unit can be hand-built at a crafting spot, or cast faster once you have an electric smelter. Blocked by thick overhead mountain.
 
 --- LIGHT TUNNEL (dome) ---
 A skylight dome fitted to a mirror-lined reflection tube that pipes daylight down through solid rock, so it keeps working even beneath thick overhead mountain. Spreads the same soft light as the dome. Needs Electricity and Complex Furniture; built from a skylight dome and a reflection tube.
 
 --- THE SUPPLY CHAIN ---
 Pre-industrial, at a crafting spot:
-  Basic pane — one steel makes one (single or bulk); needs Smithing.
+  Basic pane — one steel makes one (single or bulk); needs Complex Furniture.
   Skylight dome — two steel, hand-built (no research beyond a crafting spot).
 Industrial, at an electric smelter:
   Skylight dome — two steel, cast faster than by hand.
