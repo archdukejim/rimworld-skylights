@@ -4,6 +4,7 @@
   <author>archdukejim</author>
   <packageId>archdukejim.Skylights</packageId>
   <url>https://steamcommunity.com/sharedfiles/filedetails/?id=3780129860</url>
+  <modVersion>2.1.0</modVersion>
   <supportedVersions>
     <li>1.6</li>
   </supportedVersions>
@@ -49,8 +50,29 @@ Industrial, at an electric smelter:
   Reflection tube — five steel; needs Complex Furniture.
 Frames and glass are inert and never rot, even left outdoors.
 
+--- SETTINGS ---
+Dome light radius: a 1-10 slider (default 4) for how far the dome and light-tunnel glow reaches.
+Inward roof-edge lighting (UNDER DEVELOPMENT): reshapes the soft light at roof edges to bleed inward — choose Vanilla, Skylights-only, or All roofs. Experimental; known rendering quirks near domes and walls.
+
+--- MOD COMPATIBILITY ---
+ReBuild: Doors and Corners — glass is interchangeable both ways via free crafting-spot conversions when both mods are loaded.
+
 --- NOTES ---
 Skylights sit up in the roof — they can't be clicked, and are removed with the Architect &gt; Orders &gt; Deconstruct tool. An honest trade against a sun lamp: free and never overheats a room, but only as bright as the day outside and dark every night.
 
-Requires Harmony. Safe to add or remove mid-save.</description>
+Requires Harmony. Safe to add or remove mid-save.
+
+Source: https://github.com/archdukejim/rimworld-skylights
+Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3780129860
+Support development: https://ko-fi.com/archdukejim
+
+Version: 2.1.0
+
+--- CHANGELOG v2.1 ---
+- Dedicated "Skylights" Architect tab — all skylights moved out of Furniture.
+- Tech-tree rework: everything unlocks at Complex Furniture (Crashlanded-friendly); smelter-built panes also need Electricity.
+- Centered dome variants: 2x1 and 2x2 footprints so the glow sits dead-center in even-sized rooms.
+- Redrawn item icons: structural frames and stacked glass panes with stack-count art.
+- ReBuild: Doors and Corners interop — bidirectional glass conversions at the crafting spot.
+- New setting (experimental, under development): inward roof-edge lighting — Vanilla / Skylights-only / All roofs.</description>
 </ModMetaData>
