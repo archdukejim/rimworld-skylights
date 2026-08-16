@@ -2,117 +2,109 @@
 <!--
   SOFT-DEPENDENCY COMPAT: "ReBuild: Doors and Corners" (packageId ReBuild.COTR.DoorsAndCorners).
 
-  Both mods represent glass as a fixed costList INGREDIENT, not a stuff (verified from both mods' Defs:
-  Skylights' StructuralGlass/TintedGlass and ReBuild's RB_Glass are plain ResourceBase ThingDefs with no
-  <stuffProps>; ReBuild's glass walls spend their single stuff slot on the frame material). So the glasses
-  can't be made directly interchangeable in build costs — the practical interchange is conversion recipes.
+  Both mods represent glass as a fixed costList INGREDIENT (not a stuff), verified from both mods' Defs, so
+  the plain glasses can't be substituted in build costs. Instead: free, bidirectional conversion between the
+  two plain glasses (StructuralGlass <-> RB_Glass) at a crafting spot — no equipment or research, trivial
+  flat work time, in batches of 1 / 5 / 10 / 50 (a x50 batch takes the same time as a x1).
 
-  DEFAULT IS "SEPARATE": these recipes are defined but attached to NO workbench (no <recipeUsers>), so out of
-  the box the two mods stay independent. A mod setting (see ReBuildGlassInterop / SkylightsSettings) attaches
-  the relevant recipe(s) to the electric smelter at runtime:
-    * "Make ReBuild glass from structural glass"        -> enables Skylights_Convert_StructuralToRBGlass
-    * "Make structural & tinted glass from ReBuild glass" -> enables the two RBGlassTo* recipes
-
-  Soft gate: each RecipeDef carries MayRequire="ReBuild.COTR.DoorsAndCorners" (packageId). When ReBuild is not
+  Each RecipeDef is gated by MayRequire="ReBuild.COTR.DoorsAndCorners" (packageId). When ReBuild is not
   active these defs are discarded during XML loading, before cross-reference resolution, so RB_Glass is never
-  referenced and Skylights loads with no errors. No hard modDependency; no C# runs (Available == false).
-  (PatchOperationFindMod was avoided on purpose: it matches by mod NAME, not packageId.)
+  referenced and the mod loads with no errors and no crafting-spot clutter. No hard modDependency, no C#.
+  (Tinted structural glass is intentionally excluded — it's a UV specialty that needs the tint process, not a
+  trivial reshaping.)
 -->
 <Defs>
 
-  <!-- ReBuild glass FROM Skylights structural glass. ("use my recipes for RB_Glass") -->
-  <RecipeDef MayRequire="ReBuild.COTR.DoorsAndCorners">
-    <defName>Skylights_Convert_StructuralToRBGlass</defName>
-    <label>rework structural glass into glass</label>
-    <description>Remelt one structural glass pane into one pane of glass at an electric smelter.</description>
-    <jobString>Reworking structural glass into glass.</jobString>
-    <workSpeedStat>SmeltingSpeed</workSpeedStat>
-    <effectWorking>Smelt</effectWorking>
-    <soundWorking>Recipe_Smelt</soundWorking>
+  <!-- Shared base: crafting spot, no research, tiny FLAT work (same for every batch size). -->
+  <RecipeDef Name="Skylights_GlassConvertBase" Abstract="True">
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <workSkill>Crafting</workSkill>
-    <workAmount>200</workAmount>
-    <ingredients>
-      <li>
-        <filter>
-          <thingDefs>
-            <li>StructuralGlass</li>
-          </thingDefs>
-        </filter>
-        <count>1</count>
-      </li>
-    </ingredients>
-    <fixedIngredientFilter>
-      <thingDefs>
-        <li>StructuralGlass</li>
-      </thingDefs>
-    </fixedIngredientFilter>
-    <products>
-      <RB_Glass>1</RB_Glass>
-    </products>
+    <workAmount>60</workAmount>
+    <recipeUsers>
+      <li>CraftingSpot</li>
+    </recipeUsers>
   </RecipeDef>
 
-  <!-- Skylights structural glass FROM ReBuild glass. ("use RB_Glass recipes for Structural glass") -->
-  <RecipeDef MayRequire="ReBuild.COTR.DoorsAndCorners">
-    <defName>Skylights_Convert_RBGlassToStructural</defName>
+  <!-- ============ ReBuild glass -> structural glass ============ -->
+  <RecipeDef ParentName="Skylights_GlassConvertBase" MayRequire="ReBuild.COTR.DoorsAndCorners">
+    <defName>Skylights_ToStructural_1x</defName>
     <label>rework glass into structural glass</label>
-    <description>Remelt one pane of glass into one structural glass pane at an electric smelter.</description>
+    <description>Rework glass into structural glass at a crafting spot.</description>
     <jobString>Reworking glass into structural glass.</jobString>
-    <workSpeedStat>SmeltingSpeed</workSpeedStat>
-    <effectWorking>Smelt</effectWorking>
-    <soundWorking>Recipe_Smelt</soundWorking>
-    <workSkill>Crafting</workSkill>
-    <workAmount>200</workAmount>
-    <ingredients>
-      <li>
-        <filter>
-          <thingDefs>
-            <li>RB_Glass</li>
-          </thingDefs>
-        </filter>
-        <count>1</count>
-      </li>
-    </ingredients>
-    <fixedIngredientFilter>
-      <thingDefs>
-        <li>RB_Glass</li>
-      </thingDefs>
-    </fixedIngredientFilter>
-    <products>
-      <StructuralGlass>1</StructuralGlass>
-    </products>
+    <ingredients><li><filter><thingDefs><li>RB_Glass</li></thingDefs></filter><count>1</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>RB_Glass</li></thingDefs></fixedIngredientFilter>
+    <products><StructuralGlass>1</StructuralGlass></products>
   </RecipeDef>
 
-  <!-- Skylights tinted glass FROM ReBuild glass. ("use RB_Glass recipes for Tinted glass")
-       Keeps the tint tech gate (Complex Furniture), matching Skylights' own tinted-glass recipe. -->
-  <RecipeDef MayRequire="ReBuild.COTR.DoorsAndCorners">
-    <defName>Skylights_Convert_RBGlassToTinted</defName>
-    <label>tint glass into tinted structural glass</label>
-    <description>Treat one pane of glass with a UV-filtering tint to make one tinted structural glass pane, at an electric smelter.</description>
-    <jobString>Tinting glass into tinted structural glass.</jobString>
-    <workSpeedStat>SmeltingSpeed</workSpeedStat>
-    <effectWorking>Smelt</effectWorking>
-    <soundWorking>Recipe_Smelt</soundWorking>
-    <workSkill>Crafting</workSkill>
-    <workAmount>250</workAmount>
-    <researchPrerequisite>ComplexFurniture</researchPrerequisite>
-    <ingredients>
-      <li>
-        <filter>
-          <thingDefs>
-            <li>RB_Glass</li>
-          </thingDefs>
-        </filter>
-        <count>1</count>
-      </li>
-    </ingredients>
-    <fixedIngredientFilter>
-      <thingDefs>
-        <li>RB_Glass</li>
-      </thingDefs>
-    </fixedIngredientFilter>
-    <products>
-      <TintedGlass>1</TintedGlass>
-    </products>
+  <RecipeDef ParentName="Skylights_GlassConvertBase" MayRequire="ReBuild.COTR.DoorsAndCorners">
+    <defName>Skylights_ToStructural_5x</defName>
+    <label>rework glass into structural glass x5</label>
+    <description>Rework five glass into five structural glass at a crafting spot.</description>
+    <jobString>Reworking glass into structural glass.</jobString>
+    <ingredients><li><filter><thingDefs><li>RB_Glass</li></thingDefs></filter><count>5</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>RB_Glass</li></thingDefs></fixedIngredientFilter>
+    <products><StructuralGlass>5</StructuralGlass></products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="Skylights_GlassConvertBase" MayRequire="ReBuild.COTR.DoorsAndCorners">
+    <defName>Skylights_ToStructural_10x</defName>
+    <label>rework glass into structural glass x10</label>
+    <description>Rework ten glass into ten structural glass at a crafting spot.</description>
+    <jobString>Reworking glass into structural glass.</jobString>
+    <ingredients><li><filter><thingDefs><li>RB_Glass</li></thingDefs></filter><count>10</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>RB_Glass</li></thingDefs></fixedIngredientFilter>
+    <products><StructuralGlass>10</StructuralGlass></products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="Skylights_GlassConvertBase" MayRequire="ReBuild.COTR.DoorsAndCorners">
+    <defName>Skylights_ToStructural_50x</defName>
+    <label>rework glass into structural glass x50</label>
+    <description>Rework fifty glass into fifty structural glass at a crafting spot.</description>
+    <jobString>Reworking glass into structural glass.</jobString>
+    <ingredients><li><filter><thingDefs><li>RB_Glass</li></thingDefs></filter><count>50</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>RB_Glass</li></thingDefs></fixedIngredientFilter>
+    <products><StructuralGlass>50</StructuralGlass></products>
+  </RecipeDef>
+
+  <!-- ============ structural glass -> ReBuild glass ============ -->
+  <RecipeDef ParentName="Skylights_GlassConvertBase" MayRequire="ReBuild.COTR.DoorsAndCorners">
+    <defName>Skylights_ToRBGlass_1x</defName>
+    <label>rework structural glass into glass</label>
+    <description>Rework structural glass into glass at a crafting spot.</description>
+    <jobString>Reworking structural glass into glass.</jobString>
+    <ingredients><li><filter><thingDefs><li>StructuralGlass</li></thingDefs></filter><count>1</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>StructuralGlass</li></thingDefs></fixedIngredientFilter>
+    <products><RB_Glass>1</RB_Glass></products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="Skylights_GlassConvertBase" MayRequire="ReBuild.COTR.DoorsAndCorners">
+    <defName>Skylights_ToRBGlass_5x</defName>
+    <label>rework structural glass into glass x5</label>
+    <description>Rework five structural glass into five glass at a crafting spot.</description>
+    <jobString>Reworking structural glass into glass.</jobString>
+    <ingredients><li><filter><thingDefs><li>StructuralGlass</li></thingDefs></filter><count>5</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>StructuralGlass</li></thingDefs></fixedIngredientFilter>
+    <products><RB_Glass>5</RB_Glass></products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="Skylights_GlassConvertBase" MayRequire="ReBuild.COTR.DoorsAndCorners">
+    <defName>Skylights_ToRBGlass_10x</defName>
+    <label>rework structural glass into glass x10</label>
+    <description>Rework ten structural glass into ten glass at a crafting spot.</description>
+    <jobString>Reworking structural glass into glass.</jobString>
+    <ingredients><li><filter><thingDefs><li>StructuralGlass</li></thingDefs></filter><count>10</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>StructuralGlass</li></thingDefs></fixedIngredientFilter>
+    <products><RB_Glass>10</RB_Glass></products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="Skylights_GlassConvertBase" MayRequire="ReBuild.COTR.DoorsAndCorners">
+    <defName>Skylights_ToRBGlass_50x</defName>
+    <label>rework structural glass into glass x50</label>
+    <description>Rework fifty structural glass into fifty glass at a crafting spot.</description>
+    <jobString>Reworking structural glass into glass.</jobString>
+    <ingredients><li><filter><thingDefs><li>StructuralGlass</li></thingDefs></filter><count>50</count></li></ingredients>
+    <fixedIngredientFilter><thingDefs><li>StructuralGlass</li></thingDefs></fixedIngredientFilter>
+    <products><RB_Glass>50</RB_Glass></products>
   </RecipeDef>
 
 </Defs>
