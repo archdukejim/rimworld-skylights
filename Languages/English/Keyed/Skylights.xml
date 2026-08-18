@@ -9,4 +9,6 @@
   <Skylights_DomeRadiusDesc>How far the soft light from dome and mountain-dome skylights spreads. Takes effect immediately.</Skylights_DomeRadiusDesc>
   <Skylights_CustomRoofShadows>Custom roof shadows — crisp shadow line at roof edges</Skylights_CustomRoofShadows>
   <Skylights_CustomRoofShadowsDesc>Draws a hard, architectural shadow line where a roof meets open sky (a room's outer walls and skylight openings), instead of a diffuse glow. Turn off to revert to vanilla roof shading. Takes effect immediately.</Skylights_CustomRoofShadowsDesc>
+  <Skylights_OffsetSprite>Offset skylight sprite</Skylights_OffsetSprite>
+  <Skylights_OffsetSpriteDesc>Nudges the installed skylight's sprite so it lines up with the offset roof-edge shadow. Purely cosmetic — the tile it lights is unchanged. Takes effect immediately.</Skylights_OffsetSpriteDesc>
 </LanguageData>

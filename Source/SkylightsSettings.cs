@@ -19,10 +19,15 @@ namespace Skylights
         /// off reverts to vanilla roof shading.</summary>
         public bool customRoofShadows = true;
 
+        /// <summary>Cosmetically nudge the installed skylight sprite by the wall-top offset so it lines up with
+        /// the offset roof-edge shadow. Purely visual; the cell it occupies and lights is unchanged. Default off.</summary>
+        public bool offsetSkylightSprite = false;
+
         public override void ExposeData()
         {
             Scribe_Values.Look(ref domeGlowRadius, "domeGlowRadius", DefaultDomeGlowRadius);
             Scribe_Values.Look(ref customRoofShadows, "customRoofShadows", true);
+            Scribe_Values.Look(ref offsetSkylightSprite, "offsetSkylightSprite", false);
             base.ExposeData();
         }
     }
@@ -43,6 +48,9 @@ namespace Skylights
         /// <summary>Fast, null-safe read of the custom-roof-shadows toggle for the render layer's Visible check.</summary>
         public static bool CustomRoofShadows => Settings?.customRoofShadows ?? true;
 
+        /// <summary>Null-safe read of the skylight-sprite-offset toggle.</summary>
+        public static bool OffsetSkylightSprite => Settings?.offsetSkylightSprite ?? false;
+
         public override string SettingsCategory() => "Skylights";
 
         public override void DoSettingsWindowContents(Rect inRect)
@@ -62,6 +70,12 @@ namespace Skylights
             list.Gap(6f);
             list.Label("Skylights_CustomRoofShadowsDesc".Translate());
 
+            list.GapLine(12f);
+
+            list.CheckboxLabeled("Skylights_OffsetSprite".Translate(), ref Settings.offsetSkylightSprite);
+            list.Gap(6f);
+            list.Label("Skylights_OffsetSpriteDesc".Translate());
+
             list.End();
         }
 
@@ -69,6 +83,7 @@ namespace Skylights
         {
             base.WriteSettings();
             DomeGlowRadius.Apply();
+            SkylightSpriteOffset.Apply();
             CompSkylight.ForceGlowRefresh();
             RepaintAllMapLighting();
         }
@@ -112,6 +127,36 @@ namespace Skylights
                 CompProperties_Glower g = def.GetCompProperties<CompProperties_Glower>();
                 if (g != null) g.glowRadius = r;
                 def.specialDisplayRadius = r;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Applies the optional cosmetic sprite nudge to every skylight def (any ThingDef carrying
+    /// <see cref="CompProperties_Skylight"/>) by writing <c>graphicData.drawOffset</c>. Runs at startup and
+    /// whenever the setting changes; a mesh repaint (WriteSettings → RepaintAllMapLighting) makes it show at
+    /// once. When the toggle is off the offset is cleared back to zero.
+    /// </summary>
+    [StaticConstructorOnStartup]
+    public static class SkylightSpriteOffset
+    {
+        /// <summary>The nudge applied when enabled (world tiles; +z = visually "up"/north). Tunable.</summary>
+        private static readonly Vector3 Offset = new Vector3(0f, 0f, 0.35f);
+
+        static SkylightSpriteOffset()
+        {
+            Apply();
+        }
+
+        public static void Apply()
+        {
+            bool on = SkylightsSettingsMod.OffsetSkylightSprite;
+            Vector3 v = on ? Offset : Vector3.zero;
+            foreach (ThingDef def in DefDatabase<ThingDef>.AllDefsListForReading)
+            {
+                if (def.graphicData == null) continue;
+                if (def.GetCompProperties<CompProperties_Skylight>() == null) continue;
+                def.graphicData.drawOffset = v;
             }
         }
     }
