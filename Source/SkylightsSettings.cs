@@ -23,11 +23,32 @@ namespace Skylights
         /// the offset roof-edge shadow. Purely visual; the cell it occupies and lights is unchanged. Default off.</summary>
         public bool offsetSkylightSprite = false;
 
+        // --- Roof-shadow live tuning (issue #18). Exposed as sliders so the wall-top placement can be dialed
+        //     in-game; the final values get baked back into constants before release. ---
+        /// <summary>Depth the wall-top band covers, into the roofed cell (tiles).</summary>
+        public float rsDepth = 0.45f;
+        /// <summary>Shadow lip spilling onto the open side (tiles).</summary>
+        public float rsLip = 0.08f;
+        /// <summary>Band darkness as an EdgeShadow multiply grey (0=black, 255=none); lower = darker.</summary>
+        public float rsDark = 150f;
+        /// <summary>Per-orientation nudge of the band into the roofed cell (tiles), N/S/E/W.</summary>
+        public float rsOffN = 0f, rsOffS = 0f, rsOffE = 0f, rsOffW = 0f;
+        /// <summary>Vertical nudge (tiles, +z = up/north) applied to skylight sprites when the offset toggle is on.</summary>
+        public float spriteOffZ = 0.35f;
+
         public override void ExposeData()
         {
             Scribe_Values.Look(ref domeGlowRadius, "domeGlowRadius", DefaultDomeGlowRadius);
             Scribe_Values.Look(ref customRoofShadows, "customRoofShadows", true);
             Scribe_Values.Look(ref offsetSkylightSprite, "offsetSkylightSprite", false);
+            Scribe_Values.Look(ref rsDepth, "rsDepth", 0.45f);
+            Scribe_Values.Look(ref rsLip, "rsLip", 0.08f);
+            Scribe_Values.Look(ref rsDark, "rsDark", 150f);
+            Scribe_Values.Look(ref rsOffN, "rsOffN", 0f);
+            Scribe_Values.Look(ref rsOffS, "rsOffS", 0f);
+            Scribe_Values.Look(ref rsOffE, "rsOffE", 0f);
+            Scribe_Values.Look(ref rsOffW, "rsOffW", 0f);
+            Scribe_Values.Look(ref spriteOffZ, "spriteOffZ", 0.35f);
             base.ExposeData();
         }
     }
@@ -67,16 +88,37 @@ namespace Skylights
             list.GapLine(12f);
 
             list.CheckboxLabeled("Skylights_CustomRoofShadows".Translate(), ref Settings.customRoofShadows);
-            list.Gap(6f);
+            list.Gap(4f);
             list.Label("Skylights_CustomRoofShadowsDesc".Translate());
+
+            if (Settings.customRoofShadows)
+            {
+                list.Gap(4f);
+                Settings.rsDepth = TuneSlider(list, "Band depth", Settings.rsDepth, 0f, 1f);
+                Settings.rsLip = TuneSlider(list, "Lip (open side)", Settings.rsLip, 0f, 0.3f);
+                Settings.rsDark = Mathf.Round(TuneSlider(list, "Darkness (lower=darker)", Settings.rsDark, 60f, 255f));
+                Settings.rsOffN = TuneSlider(list, "Offset North", Settings.rsOffN, -1f, 1f);
+                Settings.rsOffS = TuneSlider(list, "Offset South", Settings.rsOffS, -1f, 1f);
+                Settings.rsOffE = TuneSlider(list, "Offset East", Settings.rsOffE, -1f, 1f);
+                Settings.rsOffW = TuneSlider(list, "Offset West", Settings.rsOffW, -1f, 1f);
+            }
 
             list.GapLine(12f);
 
             list.CheckboxLabeled("Skylights_OffsetSprite".Translate(), ref Settings.offsetSkylightSprite);
-            list.Gap(6f);
+            list.Gap(4f);
             list.Label("Skylights_OffsetSpriteDesc".Translate());
+            if (Settings.offsetSkylightSprite)
+                Settings.spriteOffZ = TuneSlider(list, "Sprite nudge (up)", Settings.spriteOffZ, -1f, 1f);
 
             list.End();
+        }
+
+        /// <summary>A labelled value slider for the live tuning controls.</summary>
+        private static float TuneSlider(Listing_Standard list, string label, float value, float min, float max)
+        {
+            list.Label($"{label}: {value:0.00}");
+            return list.Slider(value, min, max);
         }
 
         public override void WriteSettings()
@@ -140,9 +182,6 @@ namespace Skylights
     [StaticConstructorOnStartup]
     public static class SkylightSpriteOffset
     {
-        /// <summary>The nudge applied when enabled (world tiles; +z = visually "up"/north). Tunable.</summary>
-        private static readonly Vector3 Offset = new Vector3(0f, 0f, 0.35f);
-
         static SkylightSpriteOffset()
         {
             Apply();
@@ -151,7 +190,8 @@ namespace Skylights
         public static void Apply()
         {
             bool on = SkylightsSettingsMod.OffsetSkylightSprite;
-            Vector3 v = on ? Offset : Vector3.zero;
+            float z = SkylightsSettingsMod.Settings?.spriteOffZ ?? 0.35f;
+            Vector3 v = on ? new Vector3(0f, 0f, z) : Vector3.zero;
             foreach (ThingDef def in DefDatabase<ThingDef>.AllDefsListForReading)
             {
                 if (def.graphicData == null) continue;

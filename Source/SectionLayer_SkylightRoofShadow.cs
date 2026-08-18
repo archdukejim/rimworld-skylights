@@ -19,24 +19,26 @@ namespace Skylights
     /// </summary>
     public class SectionLayer_SkylightRoofShadow : SectionLayer
     {
-        // ---- Tunable geometry (tiles). Seeded from the wall-top measurement (~0.4–0.45); tuned live. ----
-        /// <summary>Depth the wall-top shadow band covers, from the boundary edge into the roofed (wall) cell.</summary>
-        private const float BandDepth = 0.45f;
-        /// <summary>Small shadow lip spilling onto the open side — the wall's cast roof edge.</summary>
-        private const float Lip = 0.08f;
         /// <summary>Thin rim width for skylight openings (no wall there).</summary>
         private const float RimWidth = 0.14f;
 
-        // Per-orientation nudge of the wall-top band, into the roofed cell (tiles). Lets N/S/E/W be tuned
-        // separately to sit on the wall-top for each side. Seeded 0.
-        private static readonly float OffNorth = 0f;
-        private static readonly float OffSouth = 0f;
-        private static readonly float OffEast = 0f;
-        private static readonly float OffWest = 0f;
+        // Live-tuning values are read from the mod settings each regenerate (sliders in the mod menu), so the
+        // wall-top placement can be dialed in-game. Defaults match the settings' seed values.
+        private static float BandDepth => SkylightsSettingsMod.Settings?.rsDepth ?? 0.45f;
+        private static float Lip => SkylightsSettingsMod.Settings?.rsLip ?? 0.08f;
+        private static float OffNorth => SkylightsSettingsMod.Settings?.rsOffN ?? 0f;
+        private static float OffSouth => SkylightsSettingsMod.Settings?.rsOffS ?? 0f;
+        private static float OffEast => SkylightsSettingsMod.Settings?.rsOffE ?? 0f;
+        private static float OffWest => SkylightsSettingsMod.Settings?.rsOffW ?? 0f;
 
-        // Shadow darkness via the EdgeShadow multiply material: lower = darker.
-        private static readonly Color32 BandCol = new Color32(150, 150, 150, byte.MaxValue); // wall-top band
-        private static readonly Color32 RimCol = new Color32(135, 135, 135, byte.MaxValue);  // skylight rim
+        private static Color32 BandCol
+        {
+            get { byte g = (byte)Mathf.Clamp(SkylightsSettingsMod.Settings?.rsDark ?? 150f, 0f, 255f); return new Color32(g, g, g, byte.MaxValue); }
+        }
+        private static Color32 RimCol
+        {
+            get { byte g = (byte)Mathf.Clamp((SkylightsSettingsMod.Settings?.rsDark ?? 150f) - 15f, 0f, 255f); return new Color32(g, g, g, byte.MaxValue); }
+        }
 
         public SectionLayer_SkylightRoofShadow(Section section)
             : base(section)
