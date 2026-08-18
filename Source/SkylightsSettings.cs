@@ -32,10 +32,16 @@ namespace Skylights
         /// <summary>Roof-edge shading mode. Default keeps vanilla behaviour so nothing changes unless opted in.</summary>
         public RoofEdgeMode roofEdgeMode = RoofEdgeMode.Vanilla;
 
+        /// <summary>When true, installed skylight building sprites are hidden (the pane/dome graphic is not
+        /// drawn); the skylight keeps functioning — it still channels light and renders its cell as sky.
+        /// Default off (skylights visible).</summary>
+        public bool hideSkylights = false;
+
         public override void ExposeData()
         {
             Scribe_Values.Look(ref domeGlowRadius, "domeGlowRadius", DefaultDomeGlowRadius);
             Scribe_Values.Look(ref roofEdgeMode, "roofEdgeMode", RoofEdgeMode.Vanilla);
+            Scribe_Values.Look(ref hideSkylights, "hideSkylights", false);
             base.ExposeData();
         }
     }
@@ -55,6 +61,9 @@ namespace Skylights
 
         /// <summary>Fast, null-safe read of the active roof-edge mode for the lighting-overlay hot path.</summary>
         public static RoofEdgeMode RoofEdge => Settings?.roofEdgeMode ?? RoofEdgeMode.Vanilla;
+
+        /// <summary>Fast, null-safe read of the hide-skylights toggle for the Thing.Print hot path.</summary>
+        public static bool HideSkylights => Settings?.hideSkylights ?? false;
 
         public override string SettingsCategory() => "Skylights";
 
@@ -84,6 +93,11 @@ namespace Skylights
                 Settings.roofEdgeMode = RoofEdgeMode.Full;
             list.Gap(6f);
             list.Label("Skylights_RoofEdgeModeDesc".Translate());
+
+            list.GapLine(12f);
+
+            list.CheckboxLabeled("Skylights_HideInstalled".Translate(), ref Settings.hideSkylights,
+                "Skylights_HideInstalledDesc".Translate());
 
             list.End();
         }
