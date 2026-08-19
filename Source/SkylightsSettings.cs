@@ -4,6 +4,18 @@ using Verse;
 
 namespace Skylights
 {
+    /// <summary>When the visual roof overlay (a soft dark tint over roofed cells) is drawn.</summary>
+    public enum RoofOverlayMode
+    {
+        /// <summary>No overlay — vanilla roof rendering only.</summary>
+        Vanilla = 0,
+        /// <summary>Interior tint appears only where the roof is dark (lit cells show through, like vanilla);
+        /// roofs over walls/doors are always shadowed. The default.</summary>
+        LitAware = 1,
+        /// <summary>Tint every roofed cell always.</summary>
+        AlwaysOn = 2,
+    }
+
     /// <summary>Player-tunable settings for the mod.</summary>
     public class SkylightsSettings : ModSettings
     {
@@ -14,10 +26,16 @@ namespace Skylights
 
         public int domeGlowRadius = DefaultDomeGlowRadius;
 
-        /// <summary>Draw the custom hard roof-edge shadow line (issue #18): a crisp architectural shadow
-        /// along roof→open boundaries and skylight rims, replacing the old soft roof-glow edge. Default on;
-        /// off reverts to vanilla roof shading.</summary>
-        public bool customRoofShadows = true;
+        /// <summary>Draw the roof-edge border LINES (issue #18). Now primarily a tuning tool for dialing the
+        /// vertical offset; the shipped visual is the roof overlay below. Default off.</summary>
+        public bool customRoofShadows = false;
+
+        /// <summary>Visual roof overlay (issue #19): a soft ~20% black tint over roofed cells so roofs read at a
+        /// glance. Skylight cells penetrate it (open sky shows through). Default LitAware.</summary>
+        public RoofOverlayMode roofOverlayMode = RoofOverlayMode.LitAware;
+
+        /// <summary>Overlay tint strength as an EdgeShadow multiply grey (0=black, 255=none). 204 ≈ 20% black.</summary>
+        public float roofOverlayDark = 204f;
 
         /// <summary>Cosmetically nudge the installed skylight sprite by the wall-top offset so it lines up with
         /// the offset roof-edge shadow. Purely visual; the cell it occupies and lights is unchanged. Default off.</summary>
@@ -31,24 +49,30 @@ namespace Skylights
         public float rsLip = 0.08f;
         /// <summary>Band darkness as an EdgeShadow multiply grey (0=black, 255=none); lower = darker.</summary>
         public float rsDark = 150f;
-        /// <summary>Uniform up-shift (+z / north) of the whole roof-shadow, to sit on the wall-top in
-        /// RimWorld's perspective. Default 0.37 tile (tuned in-game).</summary>
-        public float rsVertOffset = 0.37f;
+        /// <summary>Uniform up-shift (+z / north) of the whole roof-shadow/overlay, to sit on the wall-top in
+        /// RimWorld's perspective. Default 0.20 tile (tuned in-game). Shared by the border lines and overlay.</summary>
+        public float rsVertOffset = 0.20f;
         /// <summary>Deprecated per-orientation offsets (old model); retained for save compatibility.</summary>
         public float rsOffN = 0f, rsOffS = 0f, rsOffE = 0f, rsOffW = 0f;
         /// <summary>Vertical nudge (tiles, +z = up/north) applied to skylight sprites when the offset toggle is on.</summary>
         public float spriteOffZ = 0.35f;
 
+        /// <summary>Dev-only: tint every cell by its computed elevation (taller = darker) to verify the height field.</summary>
+        public bool showElevationDebug = false;
+
         public override void ExposeData()
         {
             Scribe_Values.Look(ref domeGlowRadius, "domeGlowRadius", DefaultDomeGlowRadius);
-            Scribe_Values.Look(ref customRoofShadows, "customRoofShadows", true);
+            Scribe_Values.Look(ref customRoofShadows, "customRoofShadows", false);
+            Scribe_Values.Look(ref roofOverlayMode, "roofOverlayMode", RoofOverlayMode.LitAware);
+            Scribe_Values.Look(ref roofOverlayDark, "roofOverlayDark", 204f);
             Scribe_Values.Look(ref offsetSkylightSprite, "offsetSkylightSprite", false);
             Scribe_Values.Look(ref rsDepth, "rsDepth", 0.2f);
             Scribe_Values.Look(ref rsLip, "rsLip", 0.08f);
             Scribe_Values.Look(ref rsDark, "rsDark", 150f);
-            Scribe_Values.Look(ref rsVertOffset, "rsVertOffset", 0.37f);
+            Scribe_Values.Look(ref rsVertOffset, "rsVertOffset", 0.20f);
             Scribe_Values.Look(ref spriteOffZ, "spriteOffZ", 0.35f);
+            Scribe_Values.Look(ref showElevationDebug, "showElevationDebug", false);
             base.ExposeData();
         }
     }
@@ -72,6 +96,12 @@ namespace Skylights
         /// <summary>Null-safe read of the skylight-sprite-offset toggle.</summary>
         public static bool OffsetSkylightSprite => Settings?.offsetSkylightSprite ?? false;
 
+        /// <summary>Null-safe read of the roof-overlay mode.</summary>
+        public static RoofOverlayMode RoofOverlay => Settings?.roofOverlayMode ?? RoofOverlayMode.LitAware;
+
+        /// <summary>Null-safe read of the elevation-debug toggle.</summary>
+        public static bool ShowElevationDebug => Settings?.showElevationDebug ?? false;
+
         public override string SettingsCategory() => "Skylights";
 
         public override void DoSettingsWindowContents(Rect inRect)
@@ -86,6 +116,24 @@ namespace Skylights
             list.Label("Skylights_DomeRadiusDesc".Translate());
 
             list.GapLine(12f);
+
+            // --- Roof overlay (issue #19): the shipped visual roof rendering. ---
+            list.Label("Skylights_RoofOverlay".Translate());
+            list.Gap(2f);
+            if (list.RadioButton("Skylights_RoofOverlay_LitAware".Translate(), Settings.roofOverlayMode == RoofOverlayMode.LitAware))
+                Settings.roofOverlayMode = RoofOverlayMode.LitAware;
+            if (list.RadioButton("Skylights_RoofOverlay_AlwaysOn".Translate(), Settings.roofOverlayMode == RoofOverlayMode.AlwaysOn))
+                Settings.roofOverlayMode = RoofOverlayMode.AlwaysOn;
+            if (list.RadioButton("Skylights_RoofOverlay_Vanilla".Translate(), Settings.roofOverlayMode == RoofOverlayMode.Vanilla))
+                Settings.roofOverlayMode = RoofOverlayMode.Vanilla;
+            list.Gap(4f);
+            list.Label("Skylights_RoofOverlayDesc".Translate());
+            if (Settings.roofOverlayMode != RoofOverlayMode.Vanilla)
+                Settings.roofOverlayDark = Mathf.Round(TuneSlider(list, "Overlay tint (lower=darker)", Settings.roofOverlayDark, 120f, 255f));
+
+            list.GapLine(12f);
+
+            list.CheckboxLabeled("Dev: show elevation (height debug tint)", ref Settings.showElevationDebug);
 
             list.CheckboxLabeled("Skylights_CustomRoofShadows".Translate(), ref Settings.customRoofShadows);
             list.Gap(4f);
