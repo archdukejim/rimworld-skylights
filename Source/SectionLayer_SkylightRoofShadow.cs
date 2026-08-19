@@ -5,39 +5,31 @@ using Verse;
 namespace Skylights
 {
     /// <summary>
-    /// Draws a crisp roof-edge shadow along every roof→open boundary — a room's outer walls and the rim of a
-    /// skylight opening (issue #18), replacing the old soft roof-glow edge.
+    /// Draws a crisp roof-edge shadow line along every roof→open boundary — a room's outer walls and the rim
+    /// of a skylight opening (issue #18), replacing the old soft roof-glow edge.
     ///
-    /// Approach ("yellow" / wall-top band): rather than computing the wall sprite's exact outer and inner top
-    /// edges (hard, and fighting RimWorld's inverted wall perspective), we offset a single shadow BAND onto the
-    /// wall-top area and draw it ABOVE the wall so it is not occluded, with a small lip spilling onto the open
-    /// side to read as the roof's cast edge. Skylight openings have no wall, so their rim is a thin ground-level
-    /// line instead of the full wall-top band.
+    /// Model (per user tuning): the line is drawn ON the tile edge between a roofed cell and an open one.
+    /// <b>Offset 0 = the line sits exactly on that edge.</b> The per-orientation offset then slides the line
+    /// perpendicular to the edge, from −1 tile (a full tile into the OPEN side) to +1 tile (a full tile into the
+    /// ROOFED side), so it can be placed wherever the roof graphic's edge should read — including outside the
+    /// cell it belongs to. Drawn above the wall (MoteOverhead) so it is never occluded by the wall sprite.
     ///
     /// The game auto-discovers every non-abstract SectionLayer subclass, so this registers and draws with no
     /// Harmony patch. It rebuilds on Roofs|Buildings changes and is gated by the "Custom roof shadows" setting.
+    /// Geometry (thickness, darkness, per-orientation offset) is read live from the mod-menu sliders.
     /// </summary>
     public class SectionLayer_SkylightRoofShadow : SectionLayer
     {
-        /// <summary>Thin rim width for skylight openings (no wall there).</summary>
-        private const float RimWidth = 0.14f;
-
-        // Live-tuning values are read from the mod settings each regenerate (sliders in the mod menu), so the
-        // wall-top placement can be dialed in-game. Defaults match the settings' seed values.
-        private static float BandDepth => SkylightsSettingsMod.Settings?.rsDepth ?? 0.45f;
-        private static float Lip => SkylightsSettingsMod.Settings?.rsLip ?? 0.08f;
+        // Live-tuning values, read from the mod settings each regenerate.
+        private static float Thickness => SkylightsSettingsMod.Settings?.rsDepth ?? 0.2f;
         private static float OffNorth => SkylightsSettingsMod.Settings?.rsOffN ?? 0f;
         private static float OffSouth => SkylightsSettingsMod.Settings?.rsOffS ?? 0f;
         private static float OffEast => SkylightsSettingsMod.Settings?.rsOffE ?? 0f;
         private static float OffWest => SkylightsSettingsMod.Settings?.rsOffW ?? 0f;
 
-        private static Color32 BandCol
+        private static Color32 ShadowCol
         {
             get { byte g = (byte)Mathf.Clamp(SkylightsSettingsMod.Settings?.rsDark ?? 150f, 0f, 255f); return new Color32(g, g, g, byte.MaxValue); }
-        }
-        private static Color32 RimCol
-        {
-            get { byte g = (byte)Mathf.Clamp((SkylightsSettingsMod.Settings?.rsDark ?? 150f) - 15f, 0f, 255f); return new Color32(g, g, g, byte.MaxValue); }
         }
 
         public SectionLayer_SkylightRoofShadow(Section section)
@@ -54,8 +46,6 @@ namespace Skylights
             sm.Clear(MeshParts.All);
 
             Map map = base.Map;
-            float yWall = AltitudeLayer.MoteOverhead.AltitudeFor(); // above the wall sprite
-            float yGround = AltitudeLayer.Shadows.AltitudeFor();    // ground rim for skylight openings
             CellRect rect = new CellRect(section.botLeft.x, section.botLeft.z, 17, 17);
             rect.ClipInsideMap(map);
 
@@ -77,59 +67,35 @@ namespace Skylights
                 sm.FinalizeMesh(MeshParts.Verts | MeshParts.Tris | MeshParts.Colors);
         }
 
-        /// <summary>Emit the shadow for one cardinal edge of roofed cell (x,z) toward neighbour (x+dx,z+dz).
-        /// <paramref name="edge"/> is the world coordinate of the shared boundary on the relevant axis.</summary>
+        /// <summary>Draw the shadow line for one cardinal edge of roofed cell (x,z) toward neighbour
+        /// (x+dx,z+dz). <paramref name="edge"/> is the boundary coordinate on the perpendicular axis; the line
+        /// is centred at edge shifted by <paramref name="off"/> tiles into the roofed side (off &gt; 0) or the
+        /// open side (off &lt; 0). Off 0 sits on the edge.</summary>
         private void Edge(Map map, LayerSubMesh sm, int x, int z, int dx, int dz, float edge, float off)
         {
             int nx = x + dx, nz = z + dz;
             if (nx < 0 || nz < 0 || nx >= map.Size.x || nz >= map.Size.z) return;
             IntVec3 n = new IntVec3(nx, 0, nz);
+            if (map.roofGrid.Roofed(n) && !SkylightGrid.Contains(map, n)) return; // neighbour also roofed: no boundary
 
-            bool nRoofed = map.roofGrid.Roofed(n);
-            bool nSkylight = SkylightGrid.Contains(map, n);
-            if (nRoofed && !nSkylight) return; // neighbour is also roof shadow-side: no boundary here
+            float y = AltitudeLayer.MoteOverhead.AltitudeFor();
+            float half = Mathf.Max(0.01f, Thickness) * 0.5f;
+            Color32 col = ShadowCol;
 
-            float yWall = AltitudeLayer.MoteOverhead.AltitudeFor();
-            float yGround = AltitudeLayer.Shadows.AltitudeFor();
-
-            if (nSkylight)
-            {
-                // Skylight opening: no wall — a thin rim on the roofed side of the boundary, at ground level.
-                if (dz != 0)
-                {
-                    float z0 = dz > 0 ? edge - RimWidth : edge;
-                    float z1 = dz > 0 ? edge : edge + RimWidth;
-                    AddQuad(sm, yGround, x, z0, x + 1, z1, RimCol);
-                }
-                else
-                {
-                    float x0 = dx > 0 ? edge - RimWidth : edge;
-                    float x1 = dx > 0 ? edge : edge + RimWidth;
-                    AddQuad(sm, yGround, x0, z, x1, z + 1, RimCol);
-                }
-                return;
-            }
-
-            // Exterior (unroofed) boundary: wall-top band drawn above the wall, plus a lip onto the open side.
+            // "into the roofed side" is opposite the open neighbour direction.
             if (dz != 0)
             {
-                // north/south wall: band runs east–west, spans one tile in x
-                float inner = dz > 0 ? edge - BandDepth - off : edge + BandDepth + off; // into the roofed cell
-                float outer = dz > 0 ? edge + Lip : edge - Lip;                          // onto the open side
-                float z0 = Mathf.Min(inner, outer), z1 = Mathf.Max(inner, outer);
-                AddQuad(sm, yWall, x, z0, x + 1, z1, BandCol);
+                float cz = edge + off * (-dz);
+                AddQuad(sm, y, x, cz - half, x + 1, cz + half, col);
             }
             else
             {
-                float inner = dx > 0 ? edge - BandDepth - off : edge + BandDepth + off;
-                float outer = dx > 0 ? edge + Lip : edge - Lip;
-                float x0 = Mathf.Min(inner, outer), x1 = Mathf.Max(inner, outer);
-                AddQuad(sm, yWall, x0, z, x1, z + 1, BandCol);
+                float cx = edge + off * (-dx);
+                AddQuad(sm, y, cx - half, z, cx + half, z + 1, col);
             }
         }
 
-        /// <summary>A cell is on the shadow-casting (roofed) side if it is roofed and is NOT a sky-rendered
-        /// skylight cell.</summary>
+        /// <summary>Roofed and not a sky-rendered skylight cell.</summary>
         private static bool IsShadowSide(Map map, IntVec3 c)
         {
             return map.roofGrid.Roofed(c) && !SkylightGrid.Contains(map, c);

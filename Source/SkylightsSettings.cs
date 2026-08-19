@@ -25,9 +25,9 @@ namespace Skylights
 
         // --- Roof-shadow live tuning (issue #18). Exposed as sliders so the wall-top placement can be dialed
         //     in-game; the final values get baked back into constants before release. ---
-        /// <summary>Depth the wall-top band covers, into the roofed cell (tiles).</summary>
-        public float rsDepth = 0.45f;
-        /// <summary>Shadow lip spilling onto the open side (tiles).</summary>
+        /// <summary>Thickness of the shadow line (tiles).</summary>
+        public float rsDepth = 0.2f;
+        /// <summary>Deprecated (old band model); retained for save compatibility.</summary>
         public float rsLip = 0.08f;
         /// <summary>Band darkness as an EdgeShadow multiply grey (0=black, 255=none); lower = darker.</summary>
         public float rsDark = 150f;
@@ -41,7 +41,7 @@ namespace Skylights
             Scribe_Values.Look(ref domeGlowRadius, "domeGlowRadius", DefaultDomeGlowRadius);
             Scribe_Values.Look(ref customRoofShadows, "customRoofShadows", true);
             Scribe_Values.Look(ref offsetSkylightSprite, "offsetSkylightSprite", false);
-            Scribe_Values.Look(ref rsDepth, "rsDepth", 0.45f);
+            Scribe_Values.Look(ref rsDepth, "rsDepth", 0.2f);
             Scribe_Values.Look(ref rsLip, "rsLip", 0.08f);
             Scribe_Values.Look(ref rsDark, "rsDark", 150f);
             Scribe_Values.Look(ref rsOffN, "rsOffN", 0f);
@@ -94,8 +94,8 @@ namespace Skylights
             if (Settings.customRoofShadows)
             {
                 list.Gap(4f);
-                Settings.rsDepth = TuneSlider(list, "Band depth", Settings.rsDepth, 0f, 1f);
-                Settings.rsLip = TuneSlider(list, "Lip (open side)", Settings.rsLip, 0f, 0.3f);
+                list.Label("Line on tile edge at offset 0; offset −1..+1 moves it a full tile (− = open side, + = into roof).");
+                Settings.rsDepth = TuneSlider(list, "Line thickness", Settings.rsDepth, 0.02f, 1f);
                 Settings.rsDark = Mathf.Round(TuneSlider(list, "Darkness (lower=darker)", Settings.rsDark, 60f, 255f));
                 Settings.rsOffN = TuneSlider(list, "Offset North", Settings.rsOffN, -1f, 1f);
                 Settings.rsOffS = TuneSlider(list, "Offset South", Settings.rsOffS, -1f, 1f);
