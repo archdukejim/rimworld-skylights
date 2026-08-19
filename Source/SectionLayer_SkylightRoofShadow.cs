@@ -22,10 +22,8 @@ namespace Skylights
     {
         // Live-tuning values, read from the mod settings each regenerate.
         private static float Thickness => SkylightsSettingsMod.Settings?.rsDepth ?? 0.2f;
-        private static float OffNorth => SkylightsSettingsMod.Settings?.rsOffN ?? 0f;
-        private static float OffSouth => SkylightsSettingsMod.Settings?.rsOffS ?? 0f;
-        private static float OffEast => SkylightsSettingsMod.Settings?.rsOffE ?? 0f;
-        private static float OffWest => SkylightsSettingsMod.Settings?.rsOffW ?? 0f;
+        /// <summary>Uniform up-shift (+z / north) applied to the whole shadow to match the wall-top perspective.</summary>
+        private static float VertOffset => SkylightsSettingsMod.Settings?.rsVertOffset ?? 0.37f;
 
         private static Color32 ShadowCol
         {
@@ -56,10 +54,10 @@ namespace Skylights
                     IntVec3 c = new IntVec3(x, 0, z);
                     if (!IsShadowSide(map, c)) continue;
 
-                    Edge(map, sm, x, z, 0, 1, z + 1, OffNorth);  // north neighbour
-                    Edge(map, sm, x, z, 0, -1, z, OffSouth);     // south neighbour
-                    Edge(map, sm, x, z, 1, 0, x + 1, OffEast);   // east neighbour
-                    Edge(map, sm, x, z, -1, 0, x, OffWest);      // west neighbour
+                    Edge(map, sm, x, z, 0, 1, z + 1);  // north neighbour
+                    Edge(map, sm, x, z, 0, -1, z);     // south neighbour
+                    Edge(map, sm, x, z, 1, 0, x + 1);  // east neighbour
+                    Edge(map, sm, x, z, -1, 0, x);     // west neighbour
                 }
             }
 
@@ -68,10 +66,9 @@ namespace Skylights
         }
 
         /// <summary>Draw the shadow line for one cardinal edge of roofed cell (x,z) toward neighbour
-        /// (x+dx,z+dz). <paramref name="edge"/> is the boundary coordinate on the perpendicular axis; the line
-        /// is centred at edge shifted by <paramref name="off"/> tiles into the roofed side (off &gt; 0) or the
-        /// open side (off &lt; 0). Off 0 sits on the edge.</summary>
-        private void Edge(Map map, LayerSubMesh sm, int x, int z, int dx, int dz, float edge, float off)
+        /// (x+dx,z+dz). The line sits on the boundary <paramref name="edge"/>, then the whole shadow is shifted
+        /// up (+z) by <see cref="VertOffset"/> to sit on the wall-top in RimWorld's perspective.</summary>
+        private void Edge(Map map, LayerSubMesh sm, int x, int z, int dx, int dz, float edge)
         {
             int nx = x + dx, nz = z + dz;
             if (nx < 0 || nz < 0 || nx >= map.Size.x || nz >= map.Size.z) return;
@@ -80,19 +77,13 @@ namespace Skylights
 
             float y = AltitudeLayer.MoteOverhead.AltitudeFor();
             float half = Mathf.Max(0.01f, Thickness) * 0.5f;
+            float vo = VertOffset;
             Color32 col = ShadowCol;
 
-            // "into the roofed side" is opposite the open neighbour direction.
-            if (dz != 0)
-            {
-                float cz = edge + off * (-dz);
-                AddQuad(sm, y, x, cz - half, x + 1, cz + half, col);
-            }
-            else
-            {
-                float cx = edge + off * (-dx);
-                AddQuad(sm, y, cx - half, z, cx + half, z + 1, col);
-            }
+            if (dz != 0)   // north/south edge: horizontal line at z = edge
+                AddQuad(sm, y, x, edge - half + vo, x + 1, edge + half + vo, col);
+            else           // east/west edge: vertical line at x = edge
+                AddQuad(sm, y, edge - half, z + vo, edge + half, z + 1 + vo, col);
         }
 
         /// <summary>Roofed and not a sky-rendered skylight cell.</summary>

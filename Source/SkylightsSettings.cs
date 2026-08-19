@@ -31,7 +31,10 @@ namespace Skylights
         public float rsLip = 0.08f;
         /// <summary>Band darkness as an EdgeShadow multiply grey (0=black, 255=none); lower = darker.</summary>
         public float rsDark = 150f;
-        /// <summary>Per-orientation nudge of the band into the roofed cell (tiles), N/S/E/W.</summary>
+        /// <summary>Uniform up-shift (+z / north) of the whole roof-shadow, to sit on the wall-top in
+        /// RimWorld's perspective. Default 0.37 tile (tuned in-game).</summary>
+        public float rsVertOffset = 0.37f;
+        /// <summary>Deprecated per-orientation offsets (old model); retained for save compatibility.</summary>
         public float rsOffN = 0f, rsOffS = 0f, rsOffE = 0f, rsOffW = 0f;
         /// <summary>Vertical nudge (tiles, +z = up/north) applied to skylight sprites when the offset toggle is on.</summary>
         public float spriteOffZ = 0.35f;
@@ -44,10 +47,7 @@ namespace Skylights
             Scribe_Values.Look(ref rsDepth, "rsDepth", 0.2f);
             Scribe_Values.Look(ref rsLip, "rsLip", 0.08f);
             Scribe_Values.Look(ref rsDark, "rsDark", 150f);
-            Scribe_Values.Look(ref rsOffN, "rsOffN", 0f);
-            Scribe_Values.Look(ref rsOffS, "rsOffS", 0f);
-            Scribe_Values.Look(ref rsOffE, "rsOffE", 0f);
-            Scribe_Values.Look(ref rsOffW, "rsOffW", 0f);
+            Scribe_Values.Look(ref rsVertOffset, "rsVertOffset", 0.37f);
             Scribe_Values.Look(ref spriteOffZ, "spriteOffZ", 0.35f);
             base.ExposeData();
         }
@@ -94,13 +94,9 @@ namespace Skylights
             if (Settings.customRoofShadows)
             {
                 list.Gap(4f);
-                list.Label("Line on tile edge at offset 0; offset −1..+1 moves it a full tile (− = open side, + = into roof).");
                 Settings.rsDepth = TuneSlider(list, "Line thickness", Settings.rsDepth, 0.02f, 1f);
                 Settings.rsDark = Mathf.Round(TuneSlider(list, "Darkness (lower=darker)", Settings.rsDark, 60f, 255f));
-                Settings.rsOffN = TuneSlider(list, "Offset North", Settings.rsOffN, -1f, 1f);
-                Settings.rsOffS = TuneSlider(list, "Offset South", Settings.rsOffS, -1f, 1f);
-                Settings.rsOffE = TuneSlider(list, "Offset East", Settings.rsOffE, -1f, 1f);
-                Settings.rsOffW = TuneSlider(list, "Offset West", Settings.rsOffW, -1f, 1f);
+                Settings.rsVertOffset = TuneSlider(list, "Vertical offset (up)", Settings.rsVertOffset, 0f, 1f);
             }
 
             list.GapLine(12f);
