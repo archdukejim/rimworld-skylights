@@ -60,7 +60,8 @@
     <costList>
       <SkylightDome>1</SkylightDome>
     </costList>
-    <specialDisplayRadius>2</specialDisplayRadius>
+    <!-- Ring matches the actual glowRadius below, so the placement preview shows the true lit reach. -->
+    <specialDisplayRadius>2.6</specialDisplayRadius>
     <comps>
       <li Class="CompProperties_Glower">
         <!-- Low magnitude, non-overlit: caps at 0.5 ground glow so it can never grow crops, and
@@ -138,7 +139,8 @@
     <costList>
       <SkylightDome>1</SkylightDome>
     </costList>
-    <specialDisplayRadius>2</specialDisplayRadius>
+    <!-- No specialDisplayRadius: vanilla centres that ring on the root cell, which reads off-centre on an
+         even footprint. PlaceWorker_ShowFootprint draws the true (footprint-centred) lit area instead. -->
     <!-- The installed sprite is a 1x1 dome centred on the footprint, so while placing, the footprint is
          invisible without help: outline the occupied tiles and bracket their corners. -->
     <placeWorkers>
@@ -178,7 +180,8 @@
     <costList>
       <SkylightDome>1</SkylightDome>
     </costList>
-    <specialDisplayRadius>2</specialDisplayRadius>
+    <!-- No specialDisplayRadius: vanilla centres that ring on the root cell, which reads off-centre on an
+         even footprint. PlaceWorker_ShowFootprint draws the true (footprint-centred) lit area instead. -->
     <!-- The installed sprite is a 1x1 dome centred on the footprint, so while placing, the footprint is
          invisible without help: outline the occupied tiles and bracket their corners. -->
     <placeWorkers>
@@ -295,7 +298,8 @@
       <SkylightDome>1</SkylightDome>
       <ReflectionTube>1</ReflectionTube>
     </costList>
-    <specialDisplayRadius>2</specialDisplayRadius>
+    <!-- Ring matches the actual glowRadius below, so the placement preview shows the true lit reach. -->
+    <specialDisplayRadius>2.6</specialDisplayRadius>
     <comps>
       <li Class="CompProperties_Glower">
         <!-- Same soft, sky-proportional light as the dome (never grows crops). -->
