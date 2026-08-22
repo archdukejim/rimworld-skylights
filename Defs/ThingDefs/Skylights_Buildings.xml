@@ -139,6 +139,11 @@
       <SkylightDome>1</SkylightDome>
     </costList>
     <specialDisplayRadius>2</specialDisplayRadius>
+    <!-- The installed sprite is a 1x1 dome centred on the footprint, so while placing, the footprint is
+         invisible without help: outline the occupied tiles and bracket their corners. -->
+    <placeWorkers>
+      <li>Skylights.PlaceWorker_ShowFootprint</li>
+    </placeWorkers>
     <comps>
       <li Class="Skylights.CompProperties_Skylight">
         <glowFactor>0.5</glowFactor>
@@ -174,6 +179,11 @@
       <SkylightDome>1</SkylightDome>
     </costList>
     <specialDisplayRadius>2</specialDisplayRadius>
+    <!-- The installed sprite is a 1x1 dome centred on the footprint, so while placing, the footprint is
+         invisible without help: outline the occupied tiles and bracket their corners. -->
+    <placeWorkers>
+      <li>Skylights.PlaceWorker_ShowFootprint</li>
+    </placeWorkers>
     <comps>
       <li Class="Skylights.CompProperties_Skylight">
         <glowFactor>0.5</glowFactor>
