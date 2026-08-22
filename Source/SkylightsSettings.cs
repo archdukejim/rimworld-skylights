@@ -115,10 +115,12 @@ namespace Skylights
     public static class DomeGlowRadius
     {
         // Skylight_DomeGlowNode drives the multi-cell variants' light, so it must track the same radius as the
-        // 1x1 dome. The Wide/Quad variants have no glower of their own — including them just fixes their build
-        // preview ring (specialDisplayRadius) to match.
+        // 1x1 dome. The Wide/Quad variants have no glower of their own and get NO specialDisplayRadius:
+        // vanilla pins that ring to the root cell, which reads off-centre on an even footprint, so
+        // PlaceWorker_ShowFootprint draws them a footprint-centred light circle from the node's live
+        // glowRadius instead.
         private static readonly string[] DomeDefNames =
-            { "Skylight_Dome", "Skylight_MountainDome", "Skylight_DomeGlowNode", "Skylight_Dome_Wide", "Skylight_Dome_Quad" };
+            { "Skylight_Dome", "Skylight_MountainDome", "Skylight_DomeGlowNode" };
 
         static DomeGlowRadius()
         {

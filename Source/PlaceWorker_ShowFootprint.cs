@@ -13,9 +13,10 @@ namespace Skylights
     /// footprint corners, every frame the placement ghost is being moved or rotated.
     ///
     /// It also replaces the def's specialDisplayRadius ring (which vanilla centres on the root cell, so it
-    /// sits off-centre on an even footprint) with the true lit area: the union of the glow-node radius
-    /// around every footprint cell — exactly the cells the pooled per-cell glowers will light, so the
-    /// outline is inherently centred on the footprint. The defs therefore declare no specialDisplayRadius.
+    /// sits off-centre on an even footprint) with a single circle around the true footprint centre — a
+    /// half-tile-offset point vanilla's cell-centred ring can't express. Its radius is the glow-node reach
+    /// plus the footprint half-extent, approximating how far the pooled per-cell glowers light once built.
+    /// The defs therefore declare no specialDisplayRadius.
     /// </summary>
     [StaticConstructorOnStartup]
     public class PlaceWorker_ShowFootprint : PlaceWorker
@@ -25,8 +26,6 @@ namespace Skylights
             MaterialPool.MatFrom("UI/Overlays/SelectionBracket", ShaderDatabase.MetaOverlay);
 
         private static readonly List<IntVec3> cellsTmp = new List<IntVec3>();
-        private static readonly List<IntVec3> litTmp = new List<IntVec3>();
-        private static readonly HashSet<IntVec3> litSeen = new HashSet<IntVec3>();
         private static readonly Vector3[] bracketLocs = new Vector3[4];
 
         /// <summary>The radius each footprint cell will actually glow at once built: the glow node's radius
@@ -54,27 +53,26 @@ namespace Skylights
                 cellsTmp.Add(c);
             GenDraw.DrawFieldEdges(cellsTmp, new Color(ghostCol.r, ghostCol.g, ghostCol.b, 1f));
 
-            // True light reach: once built, every footprint cell hosts a glow node, so the lit area is the
-            // union of the glow radius around each cell. Its outline is symmetric about the footprint centre —
-            // unlike vanilla's specialDisplayRadius ring, which pins to the root cell.
+            // The true footprint centre in world space — for even footprints this is a tile corner, the
+            // point vanilla's cell-centred radius ring can't centre on.
+            float cx = rect.minX + rect.Width / 2f;
+            float cz = rect.minZ + rect.Height / 2f;
+
+            // Light-reach circle: one smooth ring around the true centre (the same line style vanilla uses
+            // for mortar ranges), radius = per-cell glow reach plus the footprint half-extent. A single
+            // circle symmetric about the footprint — no overlapping per-node lobes, no cell stair-steps.
             float lightRadius = LightRadiusOf(def);
             if (lightRadius > 0f)
             {
-                litTmp.Clear();
-                litSeen.Clear();
-                foreach (IntVec3 c in rect)
-                    foreach (IntVec3 lit in GenRadial.RadialCellsAround(c, lightRadius, true))
-                        if (litSeen.Add(lit))
-                            litTmp.Add(lit);
-                GenDraw.DrawFieldEdges(litTmp, Color.white);
+                float reach = lightRadius + 0.5f * (Mathf.Max(rect.Width, rect.Height) - 1f);
+                GenDraw.DrawCircleOutline(
+                    new Vector3(cx, AltitudeLayer.MetaOverlays.AltitudeFor(), cz), reach, SimpleColor.White);
             }
 
             // Corner brackets, laid out exactly like SelectionDrawerUtility.CalculateSelectionBracketPositionsWorld
             // (a 1x1 bracket quad centred on each corner tile, rotated -90 degrees per corner) but without the
             // select-time jump animation, since the ghost is never "selected".
             float y = AltitudeLayer.MetaOverlays.AltitudeFor();
-            float cx = rect.minX + rect.Width / 2f;
-            float cz = rect.minZ + rect.Height / 2f;
             float dx = 0.5f * (rect.Width - 1f);
             float dz = 0.5f * (rect.Height - 1f);
             bracketLocs[0] = new Vector3(cx - dx, y, cz - dz);
