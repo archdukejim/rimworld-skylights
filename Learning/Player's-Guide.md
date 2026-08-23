@@ -1,6 +1,6 @@
 # Player's Guide
 
-Skylights (v2.2) brings real daylight into roofed rooms. This page covers every in-game mechanic, one section per mechanic.
+Skylights (v2.3) brings real daylight into roofed rooms. This page covers every in-game mechanic, one section per mechanic.
 
 ## Natural daylight
 
@@ -12,25 +12,25 @@ The mod's skylights come in two forms. Panes open one roof tile fully to the sky
 
 ## Basic Skylight
 
-The Basic Skylight is the pre-industrial pane: a crude glazed square in a light timber frame, hand-built on the spot from 4 wood and 1 basic pane — no smelter and no power needed. It unlocks with Complex Furniture research alone, so even a tribal start can reach it. It opens one roof tile to the full sky: crops grow under it by daylight, it is dark at night, and it passes true sunlight, so sun-loving Biotech genes get their benefit indoors and sun-sensitive pawns are exposed beneath it. It is drag-placed like flooring, so you can lay out a grid of them in one order.
+The Basic Skylight is the pre-industrial pane: a crude glazed square in a light timber frame, hand-built on the spot from 4 wood and 1 basic pane — no smelter and no power needed. It unlocks with Complex Furniture research alone, so even a tribal start can reach it. It opens one roof tile to the full sky: crops grow under it by daylight, it is dark at night, and it passes true sunlight, so sun-loving Biotech genes get their benefit indoors and sun-sensitive pawns are exposed beneath it. It is drag-placed like flooring, so you can lay out a grid of them in one order. The lit area now extends a little past the pane itself, a soft one-tile ring, a visual touch only — the ring doesn't grow crops or pass sunlight.
 
 Its frame is weak: a Basic Skylight only holds if a wall or pillar sits within 3 tiles to carry the roof. The game will not let you place one farther from support than that. If the support is later removed and the skylight is left holding roof on its own, the roof caves in and the pane shatters — and when a Basic Skylight is destroyed this way (or by fire or raiders), its materials are destroyed with it. Deconstructing it normally still refunds resources.
 
 ## Industrial Skylight
 
-The Industrial Skylight is the sturdy pane: cast structural glass in a smelted frame, costing 4 structural frames and 1 structural glass. It needs both Electricity and Complex Furniture research. It behaves exactly like the Basic Skylight — full sky on its tile, crops by daylight, true sunlight for genes — but has no support limit at all: place as many as you like, anywhere under a constructed roof. Like the other panes it is drag-placed like flooring. It does not work under thick overhead mountain, which blocks the open sky.
+The Industrial Skylight is the sturdy pane: cast structural glass in a smelted frame, costing 4 structural frames and 1 structural glass. It needs both Electricity and Complex Furniture research. It behaves exactly like the Basic Skylight — full sky on its tile, crops by daylight, true sunlight for genes — but has no support limit at all: place as many as you like, anywhere under a constructed roof. Like the other panes it is drag-placed like flooring. The lit area now reaches a little past the pane itself, a soft one-tile ring — a visual touch only; the ring doesn't grow crops or pass sunlight. It does not work under thick overhead mountain, which blocks the open sky.
 
 ## Tinted Skylight
 
-The Tinted Skylight is the same sturdy pane glazed with UV-filtering tinted structural glass (4 structural frames + 1 tinted structural glass; Electricity and Complex Furniture research). It lights the tile and grows crops exactly like the Industrial Skylight, but the tint filters the sun out for genes: the tile does not count as sunlight, so sun-sensitive colonists can stand beneath it unharmed, and sun-loving colonists gain nothing from it. It is the safe choice when the sky itself is the hazard.
+The Tinted Skylight is the same sturdy pane glazed with UV-filtering tinted structural glass (4 structural frames + 1 tinted structural glass; Electricity and Complex Furniture research). It lights the tile and grows crops exactly like the Industrial Skylight, but the tint filters the sun out for genes: the tile does not count as sunlight, so sun-sensitive colonists can stand beneath it unharmed, and sun-loving colonists gain nothing from it. It is the safe choice when the sky itself is the hazard. Like the other panes, its lit area now reaches a little past the pane in a soft one-tile ring — a visual touch only; the ring doesn't grow crops, and it passes no sunlight either.
 
 ## Dome Skylight
 
-The Dome Skylight is a small prefabricated dome that drops into a roof and spreads soft natural daylight across a radius of a few tiles (default 4, adjustable in the mod settings). It installs almost instantly and costs 1 skylight dome unit; it needs Complex Furniture research. The glow tracks the sky — bright at midday, dark at night — but it is capped low, so it can never grow crops. It is ideal for workshops, bedrooms, and walkways. A Dome Skylight does not work under thick overhead mountain, which blocks the open sky; for that you need a Light Tunnel.
+The Dome Skylight is a small prefabricated dome that drops into a roof and spreads soft natural daylight across a radius of a few tiles (default 4, adjustable in the mod settings). It installs almost instantly and costs 1 skylight dome unit; it needs Complex Furniture research. The glow tracks the sky — bright at midday, dark at night — but it is capped low, so it can never grow crops. It is ideal for workshops, bedrooms, and walkways. The dome's glow now appears as bright as the daylight outside, tracking dusk, night, and eclipses, out to the dome light radius set in the mod settings. This is a visual change only; the dome still never grows crops. A Dome Skylight does not work under thick overhead mountain, which blocks the open sky; for that you need a Light Tunnel.
 
 ## Centered dome variants (2x1 and 2x2)
 
-The dome also comes in 2x1 (Wide) and 2x2 (Quad) footprints. A room with an even width or depth has no single center tile for a 1x1 dome to sit on; these variants let the dome sit dead-center in such rooms. The 2x1 covers an even dimension in one direction (and can be rotated), while the 2x2 centers in a room whose width and depth are both even. Their light is pooled across the footprint so the glow is centered on the dome, not leaning to one corner. Otherwise they behave exactly like the standard dome: same soft light, same radius, same 1 skylight dome cost, same Complex Furniture research, no crops, blocked by thick mountain.
+The dome also comes in 2x1 (Wide) and 2x2 (Quad) footprints. A room with an even width or depth has no single center tile for a 1x1 dome to sit on; these variants let the dome sit dead-center in such rooms. The 2x1 covers an even dimension in one direction (and can be rotated), while the 2x2 centers in a room whose width and depth are both even. Their light is pooled across the footprint so the glow is centered on the dome, not leaning to one corner. Otherwise they behave exactly like the standard dome: same soft light, same radius, same 1 skylight dome cost, same Complex Furniture research, no crops, blocked by thick mountain. Like the 1x1 dome, their glow now appears as bright as the daylight outside — tracking dusk, night, and eclipses — out to the dome light radius set in the mod settings; this is a visual change only, and they still never grow crops.
 
 ## Placement preview for multi-cell domes
 
@@ -38,7 +38,7 @@ While placing or rotating a 2x1 or 2x2 dome, the game shows exactly where it wil
 
 ## Light Tunnel
 
-The Light Tunnel is a skylight dome fitted to a mirror-lined reflection tube that pipes daylight down through solid rock — it is the only skylight that keeps working beneath thick overhead mountain. It spreads the same soft glow as a Dome Skylight (same adjustable radius, never enough for crops). It costs 1 skylight dome plus 1 reflection tube, needs Electricity and Complex Furniture research, requires a builder with Construction skill 3, and takes substantial work to fit — this is a real construction project, not a drop-in prefab.
+The Light Tunnel is a skylight dome fitted to a mirror-lined reflection tube that pipes daylight down through solid rock — it is the only skylight that keeps working beneath thick overhead mountain. It spreads the same soft glow as a Dome Skylight (same adjustable radius, never enough for crops), and like the dome its glow now appears as bright as the daylight outside — tracking dusk, night, and eclipses — out to the dome light radius set in the mod settings; this is a visual change only, and it still never grows crops. It costs 1 skylight dome plus 1 reflection tube, needs Electricity and Complex Furniture research, requires a builder with Construction skill 3, and takes substantial work to fit — this is a real construction project, not a drop-in prefab.
 
 ## Gene-aware sunlight (Biotech)
 

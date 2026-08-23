@@ -23,6 +23,21 @@ namespace Skylights
         /// <summary>Fraction of the outdoor sky glow this skylight channels indoors (1 = full sky, 0.5 = half). A dome only passes soft, partial light.</summary>
         public float glowFactor = 1f;
 
+        /// <summary>Display-only: when true, this (glow-driven dome) skylight also renders its lit pool at full
+        /// open-sky brightness. Every roofed cell within the dome light radius that the dome can see is drawn as
+        /// if unroofed — matching the outdoors and tracking dawn, dusk and eclipses — via <c>VisualSkyGrid</c>,
+        /// so the pool no longer reads dimmer than the sky outside. Purely cosmetic: the glow grid that drives
+        /// plant growth and lit/dark checks stays at the dome's half-strength CompGlower, so gameplay is
+        /// unchanged. The bright reach follows the mod-menu dome radius. Set on the dome family.</summary>
+        public bool matchOutdoorGlow = false;
+
+        /// <summary>Display-only, for a <see cref="renderAsSky"/> pane: how many extra tiles of a cosmetic ring to
+        /// render as open sky around the pane's own sky-lit cell, so its lit patch reads a little wider than a
+        /// lone tile. A square box (1 = a 3x3 around a 1x1 pane), clipped to roofed cells the pane can see, so it
+        /// never spills through a wall. Purely visual: unlike the pane's own cell, the ring does NOT grow crops or
+        /// transmit sun for genes — it only brightens the look. 0 = off (just the single sky-lit tile).</summary>
+        public float glowHaloRadius = 0f;
+
         /// <summary>If set, this (multi-cell) dome lights its room with hidden glow-emitter nodes — one per
         /// footprint cell — instead of a single corner-mounted CompGlower, so the light is centred on an even
         /// footprint. The named def must carry a <c>CompProperties_Glower</c> whose <c>glowColor</c> is the
@@ -79,6 +94,13 @@ namespace Skylights
         private List<Thing> glowNodes;
         private ThingDef glowNodeDefResolved;
 
+        // matchOutdoorGlow domes: the display-only cells this dome currently has registered in VisualSkyGrid,
+        // so we can diff on change and drop them on despawn. Two static scratch containers, reused each recompute
+        // so the rare-tick refresh allocates nothing (the game is single-threaded, one comp recomputes at a time).
+        private readonly HashSet<IntVec3> visualCells = new HashSet<IntVec3>();
+        private static readonly HashSet<IntVec3> tmpDesired = new HashSet<IntVec3>();
+        private static readonly List<IntVec3> staleTmp = new List<IntVec3>();
+
         // Spawned glower-driven skylights (domes), so a mod-settings radius change can re-register them live.
         private static readonly HashSet<CompSkylight> glowDriven = new HashSet<CompSkylight>();
 
@@ -95,6 +117,7 @@ namespace Skylights
             if (Props.renderAsSky)
             {
                 UpdateSkyChannel();
+                UpdateSkyHalo();
                 return;
             }
             if (Props.glowNodeDef != null)
@@ -109,6 +132,7 @@ namespace Skylights
                 }
                 lastBucket = -1;
                 UpdateGlow();
+                UpdateDomeVisual();
                 return;
             }
             glower = parent.GetComp<CompGlower>();
@@ -119,6 +143,7 @@ namespace Skylights
             }
             lastBucket = -1;
             UpdateGlow();
+            UpdateDomeVisual();
         }
 
         /// <summary>Re-apply every spawned dome skylight's glow so a changed glow radius takes effect at once.
@@ -129,6 +154,8 @@ namespace Skylights
             {
                 c.lastBucket = -1;
                 c.UpdateGlow();
+                // The dome radius may have changed with the setting; re-fit the display-only bright pool to it.
+                c.UpdateDomeVisual();
             }
         }
 
@@ -138,9 +165,17 @@ namespace Skylights
                 return; // caved in; parent is gone
 
             if (Props.renderAsSky)
+            {
                 UpdateSkyChannel();
+                // Recompute the cosmetic sky-lit ring so it self-heals when a nearby wall or roof changes.
+                UpdateSkyHalo();
+            }
             else
+            {
                 UpdateGlow();
+                // Recompute the display-only bright pool so it self-heals when a nearby wall or roof changes.
+                UpdateDomeVisual();
+            }
         }
 
         /// <summary>Weak-glass skylights are held up by a nearby wall or pillar. If that support has been
@@ -170,6 +205,12 @@ namespace Skylights
                 if (Props.transmitsSun)
                     SunlightGrid.Set(map, skyCell, false);
                 skyRegistered = false;
+            }
+            if (visualCells.Count > 0)
+            {
+                foreach (IntVec3 c in visualCells)
+                    VisualSkyGrid.Set(map, c, false);
+                visualCells.Clear();
             }
             DespawnGlowNodes();
             glowDriven.Remove(this);
@@ -293,6 +334,101 @@ namespace Skylights
                 Mathf.RoundToInt(fullColor.g * b),
                 Mathf.RoundToInt(fullColor.b * b),
                 fullColor.a);
+        }
+
+        /// <summary>Keep this dome's display-only bright pool (see <c>VisualSkyGrid</c>) in sync with the mod-menu
+        /// radius and the surrounding walls and roofs. Every roofed cell within the dome light radius that the
+        /// dome can see (line of sight, so the brightness never leaks through a wall into a sealed neighbour) is
+        /// rendered at full open-sky brightness — matching the outdoors and tracking the sky — while the glow grid
+        /// that drives plant growth and lit/dark checks is left untouched. Recomputed each rare tick, so it
+        /// self-heals when a nearby wall or roof is built or removed. Only the dome family opts in
+        /// (<see cref="CompProperties_Skylight.matchOutdoorGlow"/>); the soft CompGlower still lights the room.</summary>
+        private void UpdateDomeVisual()
+        {
+            if (!Props.matchOutdoorGlow) return;
+            bool hasNodes = glowNodes != null && glowNodes.Count > 0;
+            if (glower == null && !hasNodes) return;   // no dome light source — nothing to brighten
+            Map map = parent.Map;
+            if (map == null) return;
+
+            tmpDesired.Clear();
+            // Only while the dome is actually channeling (open-facing roof above, or thick rock for the light
+            // tunnel). A dome sealed under thick mountain adds no glow, so it shows no bright pool either.
+            if (RoofChannelsLight())
+            {
+                float radius = SkylightsSettingsMod.Settings?.domeGlowRadius ?? SkylightsSettings.DefaultDomeGlowRadius;
+                foreach (IntVec3 src in parent.OccupiedRect())
+                {
+                    foreach (IntVec3 c in GenRadial.RadialCellsAround(src, radius, useCenter: true))
+                    {
+                        if (tmpDesired.Contains(c) || !c.InBounds(map)) continue;
+                        // Open-sky cells already light at the sky's brightness; only roofed (indoor) cells,
+                        // which the overlay would otherwise darken, need brightening to match the outdoors.
+                        if (!c.Roofed(map)) continue;
+                        // Respect walls: a clear straight line from the dome to the cell, so the bright pool
+                        // can't spill through a wall into an adjacent sealed room.
+                        if (!GenSight.LineOfSight(src, c, map, skipFirstCell: true)) continue;
+                        tmpDesired.Add(c);
+                    }
+                }
+            }
+
+            ApplyVisualCells(map, tmpDesired);
+        }
+
+        /// <summary>Keep a square pane's cosmetic sky-lit ring (see <c>VisualSkyGrid</c>) in sync with the
+        /// surrounding walls and roofs. Every roofed cell within <see cref="CompProperties_Skylight.glowHaloRadius"/>
+        /// tiles of the pane that the pane can see is rendered as open sky, so the lit patch reads a little wider
+        /// than the single tile — display only: the ring never grows crops or transmits sun (that stays the pane's
+        /// own cell in the SkylightGrid). Recomputed each rare tick, so it self-heals when a wall or roof changes.</summary>
+        private void UpdateSkyHalo()
+        {
+            if (Props.glowHaloRadius <= 0f) return;
+            Map map = parent.Map;
+            if (map == null) return;
+
+            tmpDesired.Clear();
+            // Only while the pane is actually channeling its own cell as open sky (skyRegistered): a sealed or
+            // roofless pane channels nothing, so it shows no ring either.
+            if (skyRegistered)
+            {
+                int r = Mathf.Max(1, Mathf.RoundToInt(Props.glowHaloRadius));
+                // Square box around the pane (r = 1 gives a 3x3 around a 1x1 pane), matching the square glass.
+                foreach (IntVec3 c in parent.OccupiedRect().ExpandedBy(r))
+                {
+                    if (tmpDesired.Contains(c) || !c.InBounds(map)) continue;
+                    // The pane's own tile (and any neighbouring pane's) already renders as full sky; skip it.
+                    if (SkylightGrid.Contains(map, c)) continue;
+                    // Only roofed (indoor) cells need brightening; respect walls so the ring can't spill through
+                    // one into an adjacent sealed room.
+                    if (!c.Roofed(map)) continue;
+                    if (!GenSight.LineOfSight(parent.Position, c, map, skipFirstCell: true)) continue;
+                    tmpDesired.Add(c);
+                }
+            }
+
+            ApplyVisualCells(map, tmpDesired);
+        }
+
+        /// <summary>Diff this skylight's display-only bright cells (<paramref name="desired"/>) against what it last
+        /// registered in <c>VisualSkyGrid</c>, touching the grid only where membership actually changed so an
+        /// unchanged frame costs nothing. Shared by the dome pool and the square-pane ring.</summary>
+        private void ApplyVisualCells(Map map, HashSet<IntVec3> desired)
+        {
+            if (visualCells.SetEquals(desired)) return;
+
+            // Drop cells that are no longer lit.
+            staleTmp.Clear();
+            foreach (IntVec3 c in visualCells)
+                if (!desired.Contains(c)) staleTmp.Add(c);
+            foreach (IntVec3 c in staleTmp)
+            {
+                VisualSkyGrid.Set(map, c, false);
+                visualCells.Remove(c);
+            }
+            // Register newly lit cells.
+            foreach (IntVec3 c in desired)
+                if (visualCells.Add(c)) VisualSkyGrid.Set(map, c, true);
         }
 
         public override string CompInspectStringExtra()
