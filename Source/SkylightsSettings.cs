@@ -37,17 +37,19 @@ namespace Skylights
         /// Default off (skylights visible).</summary>
         public bool hideSkylights = false;
 
-        /// <summary>Master switch for the skylight visibility HUD button (issue #20): the play-settings-row
-        /// toggle that shows/hides installed skylight sprites in play. Off removes the button (the mod-menu
-        /// hide checkbox still works). Default on.</summary>
-        public bool skylightVisibilityButton = true;
+        public const float MinOpacity = 0.1f;
+
+        /// <summary>How strongly installed skylight sprites are drawn, 0.1–1. Multiplies the sprite's own
+        /// baked alpha via the graphic colour, so 1 shows the art as authored and 0.1 is barely-there glass.
+        /// Adjustable from the Skylights architect tab's opacity button or the mod menu. Default full.</summary>
+        public float skylightOpacity = 1f;
 
         public override void ExposeData()
         {
             Scribe_Values.Look(ref domeGlowRadius, "domeGlowRadius", DefaultDomeGlowRadius);
             Scribe_Values.Look(ref roofEdgeMode, "roofEdgeMode", RoofEdgeMode.Vanilla);
             Scribe_Values.Look(ref hideSkylights, "hideSkylights", false);
-            Scribe_Values.Look(ref skylightVisibilityButton, "skylightVisibilityButton", true);
+            Scribe_Values.Look(ref skylightOpacity, "skylightOpacity", 1f);
             base.ExposeData();
         }
     }
@@ -108,8 +110,10 @@ namespace Skylights
 
             list.Gap(6f);
 
-            list.CheckboxLabeled("Skylights_VisibilityButton".Translate(), ref Settings.skylightVisibilityButton,
-                "Skylights_VisibilityButtonDesc".Translate());
+            list.Label("Skylights_OpacitySetting".Translate(Mathf.RoundToInt(Settings.skylightOpacity * 100f)));
+            Settings.skylightOpacity = list.Slider(Settings.skylightOpacity, SkylightsSettings.MinOpacity, 1f);
+            list.Gap(2f);
+            list.Label("Skylights_OpacitySettingDesc".Translate());
 
             list.End();
         }
@@ -118,11 +122,12 @@ namespace Skylights
         {
             base.WriteSettings();
             DomeGlowRadius.Apply();
+            SkylightOpacity.Apply();
             CompSkylight.ForceGlowRefresh();
             RepaintAllMapLighting();
             // The whole-map repaint above regenerates lazily; hit the skylight sections directly so a
-            // hide/show change is visible the moment the dialog closes.
-            SkylightVisibilityButton.DirtySkylightSections();
+            // hide/show or opacity change is visible the moment the dialog closes.
+            CompSkylight.DirtySkylightSections();
         }
 
         /// <summary>Rebuild every loaded map's lighting so a roof-edge mode change shows immediately.</summary>
@@ -132,6 +137,51 @@ namespace Skylights
             foreach (Map map in Current.Game.Maps)
                 map.mapDrawer?.WholeMapChanged(
                     (ulong)MapMeshFlagDefOf.Roofs | (ulong)MapMeshFlagDefOf.GroundGlow | (ulong)MapMeshFlagDefOf.Buildings);
+        }
+    }
+
+    /// <summary>
+    /// Pushes the configured sprite opacity onto every skylight building def — at startup and whenever the
+    /// setting changes. The opacity multiplies the graphic colour's alpha (the defs use the Transparent
+    /// shader, whose material colour scales the texture's own baked alpha), so the art fades smoothly from
+    /// as-authored down to barely-there glass. Cached graphics are rebuilt so a change shows immediately.
+    /// </summary>
+    [StaticConstructorOnStartup]
+    public static class SkylightOpacity
+    {
+        private static readonly System.Reflection.FieldInfo CachedGraphicField =
+            typeof(GraphicData).GetField("cachedGraphic",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+
+        static SkylightOpacity()
+        {
+            Apply();
+        }
+
+        public static void Apply()
+        {
+            float a = Mathf.Clamp(SkylightsSettingsMod.Settings?.skylightOpacity ?? 1f,
+                SkylightsSettings.MinOpacity, 1f);
+
+            foreach (ThingDef def in DefDatabase<ThingDef>.AllDefsListForReading)
+            {
+                if (def.GetCompProperties<CompProperties_Skylight>() == null || def.graphicData == null)
+                    continue;
+                Color c = def.graphicData.color;
+                if (Mathf.Approximately(c.a, a)) continue;
+                c.a = a;
+                def.graphicData.color = c;
+                // Drop the cached graphic so the next access rebuilds its material with the new colour.
+                CachedGraphicField?.SetValue(def.graphicData, null);
+                def.graphic = def.graphicData.Graphic;
+            }
+
+            // Spawned skylights cache a per-thing graphic; Notify_ColorChanged drops it and dirties their mesh.
+            for (int i = 0; i < CompSkylight.SpawnedSkylights.Count; i++)
+            {
+                Thing t = CompSkylight.SpawnedSkylights[i].parent;
+                if (t.Spawned) t.Notify_ColorChanged();
+            }
         }
     }
 

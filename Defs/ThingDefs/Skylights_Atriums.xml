@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-  <!-- ATRIUM SKYLIGHTS: grand domed glass ceilings that render their whole footprint as open sky (via the
-       multi-cell renderAsSky path in CompSkylight). Built from structural glass panes + structural frames,
-       scaling with size. Clear grows crops and passes true sun; tinted lights/warms the same but UV-filters
-       the sun (stained-glass look). Self-supporting (materials only) — the room walls carry the roof.
+  <!-- ATRIUM SKYLIGHTS: grand glass ceilings that render their whole footprint as open sky (via the
+       multi-cell renderAsSky path in CompSkylight). Two art styles — a domed geodesic ring-and-spoke
+       ceiling and a flat paned grid — in 2x2/3x3/4x4/5x5, each in clear (full daylight, growable, true
+       sun) and tinted (same light, UV-filtered) variants. Built from structural/tinted glass panes +
+       structural frames scaling with size; materials-only, self-supporting — the room walls carry the
+       roof. The sprites are translucent by design and respect the global skylight opacity slider
+       (Skylights architect tab), so players tune how visible the glasswork is. -->
 
-       PLACEHOLDER ART: these reuse the dome sprite scaled to the footprint. Swap texPath for real geodesic
-       glass-dome art (e.g. Things/Building/Skylight_Atrium) when it exists. -->
+  <!-- One architect-menu button per style+tint; the sizes live in the dropdown. -->
+  <DesignatorDropdownGroupDef>
+    <defName>SkylightAtriumsDomed</defName>
+  </DesignatorDropdownGroupDef>
+  <DesignatorDropdownGroupDef>
+    <defName>SkylightAtriumsDomedTinted</defName>
+  </DesignatorDropdownGroupDef>
+  <DesignatorDropdownGroupDef>
+    <defName>SkylightAtriumsPaned</defName>
+  </DesignatorDropdownGroupDef>
+  <DesignatorDropdownGroupDef>
+    <defName>SkylightAtriumsPanedTinted</defName>
+  </DesignatorDropdownGroupDef>
 
   <ThingDef Name="AtriumBase" ParentName="SkylightBase" Abstract="True">
     <researchPrerequisites>
@@ -15,10 +29,6 @@
       <li>ComplexFurniture</li>
     </researchPrerequisites>
     <constructionSkillPrerequisite>4</constructionSkillPrerequisite>
-    <graphicData>
-      <texPath>Things/Building/Skylight_Dome</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
-    </graphicData>
   </ThingDef>
 
   <ThingDef Name="AtriumClearBase" ParentName="AtriumBase" Abstract="True">
@@ -40,14 +50,16 @@
     </comps>
   </ThingDef>
 
-  <!-- ===================== CLEAR ATRIUMS ===================== -->
+  <!-- ===================== DOMED ATRIUMS (CLEAR) ===================== -->
 
   <ThingDef ParentName="AtriumClearBase">
     <defName>SkylightAtrium_Small</defName>
-    <label>atrium skylight (2x2)</label>
+    <label>domed atrium skylight (2x2)</label>
     <description>A small domed glass atrium ceiling. It opens a two-by-two span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Cast from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(2,2)</size>
+    <designatorDropdown>SkylightAtriumsDomed</designatorDropdown>
     <graphicData>
+      <texPath>Things/Building/Skylight_AtriumDome_2</texPath>
       <drawSize>(2,2)</drawSize>
     </graphicData>
     <statBases>
@@ -64,10 +76,12 @@
 
   <ThingDef ParentName="AtriumClearBase">
     <defName>SkylightAtrium_Medium</defName>
-    <label>atrium skylight (3x3)</label>
+    <label>domed atrium skylight (3x3)</label>
     <description>A domed glass atrium ceiling. It opens a three-by-three span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Cast from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(3,3)</size>
+    <designatorDropdown>SkylightAtriumsDomed</designatorDropdown>
     <graphicData>
+      <texPath>Things/Building/Skylight_AtriumDome_3</texPath>
       <drawSize>(3,3)</drawSize>
     </graphicData>
     <statBases>
@@ -84,10 +98,12 @@
 
   <ThingDef ParentName="AtriumClearBase">
     <defName>SkylightAtrium_Large</defName>
-    <label>atrium skylight (4x4)</label>
+    <label>domed atrium skylight (4x4)</label>
     <description>A large domed glass atrium ceiling. It opens a four-by-four span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Cast from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(4,4)</size>
+    <designatorDropdown>SkylightAtriumsDomed</designatorDropdown>
     <graphicData>
+      <texPath>Things/Building/Skylight_AtriumDome_4</texPath>
       <drawSize>(4,4)</drawSize>
     </graphicData>
     <statBases>
@@ -104,10 +120,12 @@
 
   <ThingDef ParentName="AtriumClearBase">
     <defName>SkylightAtrium_Grand</defName>
-    <label>atrium skylight (5x5)</label>
+    <label>domed atrium skylight (5x5)</label>
     <description>A grand domed glass atrium ceiling. It opens a five-by-five span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Cast from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(5,5)</size>
+    <designatorDropdown>SkylightAtriumsDomed</designatorDropdown>
     <graphicData>
+      <texPath>Things/Building/Skylight_AtriumDome_5</texPath>
       <drawSize>(5,5)</drawSize>
     </graphicData>
     <statBases>
@@ -122,14 +140,16 @@
     </costList>
   </ThingDef>
 
-  <!-- ===================== TINTED ATRIUMS ===================== -->
+  <!-- ===================== DOMED ATRIUMS (TINTED) ===================== -->
 
   <ThingDef ParentName="AtriumTintedBase">
     <defName>SkylightAtriumTinted_Small</defName>
-    <label>tinted atrium skylight (2x2)</label>
+    <label>tinted domed atrium skylight (2x2)</label>
     <description>A small domed glass atrium ceiling in UV-filtering tinted glass. It opens a two-by-two span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Cast from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(2,2)</size>
+    <designatorDropdown>SkylightAtriumsDomedTinted</designatorDropdown>
     <graphicData>
+      <texPath>Things/Building/Skylight_AtriumDome_2</texPath>
       <drawSize>(2,2)</drawSize>
     </graphicData>
     <statBases>
@@ -146,10 +166,12 @@
 
   <ThingDef ParentName="AtriumTintedBase">
     <defName>SkylightAtriumTinted_Medium</defName>
-    <label>tinted atrium skylight (3x3)</label>
+    <label>tinted domed atrium skylight (3x3)</label>
     <description>A domed glass atrium ceiling in UV-filtering tinted glass. It opens a three-by-three span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Cast from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(3,3)</size>
+    <designatorDropdown>SkylightAtriumsDomedTinted</designatorDropdown>
     <graphicData>
+      <texPath>Things/Building/Skylight_AtriumDome_3</texPath>
       <drawSize>(3,3)</drawSize>
     </graphicData>
     <statBases>
@@ -166,10 +188,12 @@
 
   <ThingDef ParentName="AtriumTintedBase">
     <defName>SkylightAtriumTinted_Large</defName>
-    <label>tinted atrium skylight (4x4)</label>
+    <label>tinted domed atrium skylight (4x4)</label>
     <description>A large domed glass atrium ceiling in UV-filtering tinted glass. It opens a four-by-four span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Cast from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(4,4)</size>
+    <designatorDropdown>SkylightAtriumsDomedTinted</designatorDropdown>
     <graphicData>
+      <texPath>Things/Building/Skylight_AtriumDome_4</texPath>
       <drawSize>(4,4)</drawSize>
     </graphicData>
     <statBases>
@@ -186,10 +210,192 @@
 
   <ThingDef ParentName="AtriumTintedBase">
     <defName>SkylightAtriumTinted_Grand</defName>
-    <label>tinted atrium skylight (5x5)</label>
+    <label>tinted domed atrium skylight (5x5)</label>
     <description>A grand domed glass atrium ceiling in UV-filtering tinted glass. It opens a five-by-five span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Cast from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(5,5)</size>
+    <designatorDropdown>SkylightAtriumsDomedTinted</designatorDropdown>
     <graphicData>
+      <texPath>Things/Building/Skylight_AtriumDome_5</texPath>
+      <drawSize>(5,5)</drawSize>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>400</MaxHitPoints>
+      <WorkToBuild>2500</WorkToBuild>
+      <Mass>45</Mass>
+      <Beauty>72</Beauty>
+    </statBases>
+    <costList>
+      <TintedGlass>25</TintedGlass>
+      <StructuralFrame>14</StructuralFrame>
+    </costList>
+  </ThingDef>
+
+  <!-- ===================== PANED ATRIUMS (CLEAR) ===================== -->
+
+  <ThingDef ParentName="AtriumClearBase">
+    <defName>SkylightAtriumPaned_Small</defName>
+    <label>paned atrium skylight (2x2)</label>
+    <description>A small flat glass atrium ceiling — a grid of structural panes in slender mullions. It opens a two-by-two span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Built from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <size>(2,2)</size>
+    <designatorDropdown>SkylightAtriumsPaned</designatorDropdown>
+    <graphicData>
+      <texPath>Things/Building/Skylight_AtriumPaned_2</texPath>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>180</MaxHitPoints>
+      <WorkToBuild>600</WorkToBuild>
+      <Mass>8</Mass>
+      <Beauty>15</Beauty>
+    </statBases>
+    <costList>
+      <StructuralGlass>4</StructuralGlass>
+      <StructuralFrame>4</StructuralFrame>
+    </costList>
+  </ThingDef>
+
+  <ThingDef ParentName="AtriumClearBase">
+    <defName>SkylightAtriumPaned_Medium</defName>
+    <label>paned atrium skylight (3x3)</label>
+    <description>A flat glass atrium ceiling — a grid of structural panes in slender mullions. It opens a three-by-three span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Built from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <size>(3,3)</size>
+    <designatorDropdown>SkylightAtriumsPaned</designatorDropdown>
+    <graphicData>
+      <texPath>Things/Building/Skylight_AtriumPaned_3</texPath>
+      <drawSize>(3,3)</drawSize>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>240</MaxHitPoints>
+      <WorkToBuild>1100</WorkToBuild>
+      <Mass>16</Mass>
+      <Beauty>25</Beauty>
+    </statBases>
+    <costList>
+      <StructuralGlass>9</StructuralGlass>
+      <StructuralFrame>6</StructuralFrame>
+    </costList>
+  </ThingDef>
+
+  <ThingDef ParentName="AtriumClearBase">
+    <defName>SkylightAtriumPaned_Large</defName>
+    <label>paned atrium skylight (4x4)</label>
+    <description>A large flat glass atrium ceiling — a grid of structural panes in slender mullions. It opens a four-by-four span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Built from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <size>(4,4)</size>
+    <designatorDropdown>SkylightAtriumsPaned</designatorDropdown>
+    <graphicData>
+      <texPath>Things/Building/Skylight_AtriumPaned_4</texPath>
+      <drawSize>(4,4)</drawSize>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>320</MaxHitPoints>
+      <WorkToBuild>1700</WorkToBuild>
+      <Mass>28</Mass>
+      <Beauty>40</Beauty>
+    </statBases>
+    <costList>
+      <StructuralGlass>16</StructuralGlass>
+      <StructuralFrame>10</StructuralFrame>
+    </costList>
+  </ThingDef>
+
+  <ThingDef ParentName="AtriumClearBase">
+    <defName>SkylightAtriumPaned_Grand</defName>
+    <label>paned atrium skylight (5x5)</label>
+    <description>A grand flat glass atrium ceiling — a grid of structural panes in slender mullions. It opens a five-by-five span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Built from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <size>(5,5)</size>
+    <designatorDropdown>SkylightAtriumsPaned</designatorDropdown>
+    <graphicData>
+      <texPath>Things/Building/Skylight_AtriumPaned_5</texPath>
+      <drawSize>(5,5)</drawSize>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>400</MaxHitPoints>
+      <WorkToBuild>2500</WorkToBuild>
+      <Mass>45</Mass>
+      <Beauty>60</Beauty>
+    </statBases>
+    <costList>
+      <StructuralGlass>25</StructuralGlass>
+      <StructuralFrame>14</StructuralFrame>
+    </costList>
+  </ThingDef>
+
+  <!-- ===================== PANED ATRIUMS (TINTED) ===================== -->
+
+  <ThingDef ParentName="AtriumTintedBase">
+    <defName>SkylightAtriumPanedTinted_Small</defName>
+    <label>tinted paned atrium skylight (2x2)</label>
+    <description>A small flat atrium ceiling of UV-filtering tinted glass panes in slender mullions. It opens a two-by-two span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Built from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <size>(2,2)</size>
+    <designatorDropdown>SkylightAtriumsPanedTinted</designatorDropdown>
+    <graphicData>
+      <texPath>Things/Building/Skylight_AtriumPaned_2</texPath>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>180</MaxHitPoints>
+      <WorkToBuild>600</WorkToBuild>
+      <Mass>8</Mass>
+      <Beauty>18</Beauty>
+    </statBases>
+    <costList>
+      <TintedGlass>4</TintedGlass>
+      <StructuralFrame>4</StructuralFrame>
+    </costList>
+  </ThingDef>
+
+  <ThingDef ParentName="AtriumTintedBase">
+    <defName>SkylightAtriumPanedTinted_Medium</defName>
+    <label>tinted paned atrium skylight (3x3)</label>
+    <description>A flat atrium ceiling of UV-filtering tinted glass panes in slender mullions. It opens a three-by-three span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Built from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <size>(3,3)</size>
+    <designatorDropdown>SkylightAtriumsPanedTinted</designatorDropdown>
+    <graphicData>
+      <texPath>Things/Building/Skylight_AtriumPaned_3</texPath>
+      <drawSize>(3,3)</drawSize>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>240</MaxHitPoints>
+      <WorkToBuild>1100</WorkToBuild>
+      <Mass>16</Mass>
+      <Beauty>30</Beauty>
+    </statBases>
+    <costList>
+      <TintedGlass>9</TintedGlass>
+      <StructuralFrame>6</StructuralFrame>
+    </costList>
+  </ThingDef>
+
+  <ThingDef ParentName="AtriumTintedBase">
+    <defName>SkylightAtriumPanedTinted_Large</defName>
+    <label>tinted paned atrium skylight (4x4)</label>
+    <description>A large flat atrium ceiling of UV-filtering tinted glass panes in slender mullions. It opens a four-by-four span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Built from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <size>(4,4)</size>
+    <designatorDropdown>SkylightAtriumsPanedTinted</designatorDropdown>
+    <graphicData>
+      <texPath>Things/Building/Skylight_AtriumPaned_4</texPath>
+      <drawSize>(4,4)</drawSize>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>320</MaxHitPoints>
+      <WorkToBuild>1700</WorkToBuild>
+      <Mass>28</Mass>
+      <Beauty>48</Beauty>
+    </statBases>
+    <costList>
+      <TintedGlass>16</TintedGlass>
+      <StructuralFrame>10</StructuralFrame>
+    </costList>
+  </ThingDef>
+
+  <ThingDef ParentName="AtriumTintedBase">
+    <defName>SkylightAtriumPanedTinted_Grand</defName>
+    <label>tinted paned atrium skylight (5x5)</label>
+    <description>A grand flat atrium ceiling of UV-filtering tinted glass panes in slender mullions. It opens a five-by-five span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Built from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <size>(5,5)</size>
+    <designatorDropdown>SkylightAtriumsPanedTinted</designatorDropdown>
+    <graphicData>
+      <texPath>Things/Building/Skylight_AtriumPaned_5</texPath>
       <drawSize>(5,5)</drawSize>
     </graphicData>
     <statBases>

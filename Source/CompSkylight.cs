@@ -109,6 +109,21 @@ namespace Skylights
         // that actually hold a skylight (a whole-map repaint regenerates lazily and lags for seconds).
         public static readonly List<CompSkylight> SpawnedSkylights = new List<CompSkylight>();
 
+        /// <summary>Dirty just the map-mesh sections that hold a skylight, so a visibility or opacity flip
+        /// shows the moment those sections redraw. Building sprites are printed by SectionLayer_ThingsGeneral,
+        /// whose relevantChangeTypes is the Things flag — Buildings would regenerate the wrong layers. A
+        /// whole-map repaint is also avoided: it regenerates lazily and can lag seconds on a large map.</summary>
+        public static void DirtySkylightSections()
+        {
+            for (int i = 0; i < SpawnedSkylights.Count; i++)
+            {
+                Thing t = SpawnedSkylights[i].parent;
+                if (t.Spawned)
+                    t.Map.mapDrawer.MapMeshDirty(t.Position, (ulong)MapMeshFlagDefOf.Things,
+                        regenAdjacentCells: true, regenAdjacentSections: true);
+            }
+        }
+
         public CompProperties_Skylight Props => (CompProperties_Skylight)props;
 
         public override void PostSpawnSetup(bool respawningAfterLoad)

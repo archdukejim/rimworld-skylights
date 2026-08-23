@@ -10,6 +10,9 @@
     <tickerType>Rare</tickerType>
     <graphicData>
       <graphicClass>Graphic_Single</graphicClass>
+      <!-- Transparent (not the default Cutout): the material colour's alpha then scales the sprite, which
+           is what the global opacity slider (Skylights.SkylightOpacity) adjusts at runtime. -->
+      <shaderType>Transparent</shaderType>
       <drawSize>(1,1)</drawSize>
     </graphicData>
     <!-- A skylight sits up in the roof, so it draws over pretty much everything below it (plants, items, pawns). -->

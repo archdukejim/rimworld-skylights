@@ -9,6 +9,9 @@
     <specialDesignatorClasses>
       <li>Designator_Cancel</li>
       <li>Designator_Deconstruct</li>
+      <!-- Skylight display controls (v3): show/hide installed skylight sprites and a global opacity slider. -->
+      <li>Skylights.Designator_SkylightVisibility</li>
+      <li>Skylights.Designator_SkylightOpacity</li>
     </specialDesignatorClasses>
   </DesignationCategoryDef>
 
