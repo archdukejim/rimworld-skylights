@@ -82,11 +82,16 @@ namespace Skylights
         // Spawned glower-driven skylights (domes), so a mod-settings radius change can re-register them live.
         private static readonly HashSet<CompSkylight> glowDriven = new HashSet<CompSkylight>();
 
+        // Every spawned skylight of any kind, so the visibility toggle can dirty just the map-mesh sections
+        // that actually hold a skylight (a whole-map repaint regenerates lazily and lags for seconds).
+        public static readonly List<CompSkylight> SpawnedSkylights = new List<CompSkylight>();
+
         public CompProperties_Skylight Props => (CompProperties_Skylight)props;
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
+            SpawnedSkylights.Add(this);
             if (Props.renderAsSky)
             {
                 UpdateSkyChannel();
@@ -168,6 +173,7 @@ namespace Skylights
             }
             DespawnGlowNodes();
             glowDriven.Remove(this);
+            SpawnedSkylights.Remove(this);
             base.PostDeSpawn(map, mode);
         }
 

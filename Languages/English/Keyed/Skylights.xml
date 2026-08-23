@@ -14,4 +14,7 @@
   <Skylights_RoofEdgeModeDesc>⚠ Under development. The idea: keep the tiles just outside a roof fully lit and soften the shadow edge inward instead, so light appears to reach just past a skylight. The inward modes currently have rendering bugs — dome skylights may not glow, and a bright artifact can appear near walls where the shadow should be darkest. Leave this on Vanilla for now; the inward modes are here for testing only.</Skylights_RoofEdgeModeDesc>
   <Skylights_HideInstalled>Hide installed skylights</Skylights_HideInstalled>
   <Skylights_HideInstalledDesc>Hides the skylight's frame/glass sprite so it sits flush and out of sight. The skylight still works exactly the same — it keeps channeling daylight and lighting the room. Takes effect immediately.</Skylights_HideInstalledDesc>
+  <Skylights_VisibilityButton>Skylight visibility button</Skylights_VisibilityButton>
+  <Skylights_VisibilityButtonDesc>Adds a toggle button to the bottom-right overlay row that shows or hides every installed skylight's sprite in play (the same setting as "hide installed skylights" above, one click away). Hidden skylights keep working — they still channel daylight and light the room. Turning this off removes the button.</Skylights_VisibilityButtonDesc>
+  <Skylights_VisibilityToggle>Show installed skylights\n\nOff hides every installed skylight's frame/glass sprite so roofs sit flush. Hidden skylights keep channeling daylight exactly the same.</Skylights_VisibilityToggle>
 </LanguageData>

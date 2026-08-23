@@ -37,11 +37,17 @@ namespace Skylights
         /// Default off (skylights visible).</summary>
         public bool hideSkylights = false;
 
+        /// <summary>Master switch for the skylight visibility HUD button (issue #20): the play-settings-row
+        /// toggle that shows/hides installed skylight sprites in play. Off removes the button (the mod-menu
+        /// hide checkbox still works). Default on.</summary>
+        public bool skylightVisibilityButton = true;
+
         public override void ExposeData()
         {
             Scribe_Values.Look(ref domeGlowRadius, "domeGlowRadius", DefaultDomeGlowRadius);
             Scribe_Values.Look(ref roofEdgeMode, "roofEdgeMode", RoofEdgeMode.Vanilla);
             Scribe_Values.Look(ref hideSkylights, "hideSkylights", false);
+            Scribe_Values.Look(ref skylightVisibilityButton, "skylightVisibilityButton", true);
             base.ExposeData();
         }
     }
@@ -64,6 +70,7 @@ namespace Skylights
 
         /// <summary>Fast, null-safe read of the hide-skylights toggle for the Thing.Print hot path.</summary>
         public static bool HideSkylights => Settings?.hideSkylights ?? false;
+
 
         public override string SettingsCategory() => "Skylights";
 
@@ -99,6 +106,11 @@ namespace Skylights
             list.CheckboxLabeled("Skylights_HideInstalled".Translate(), ref Settings.hideSkylights,
                 "Skylights_HideInstalledDesc".Translate());
 
+            list.Gap(6f);
+
+            list.CheckboxLabeled("Skylights_VisibilityButton".Translate(), ref Settings.skylightVisibilityButton,
+                "Skylights_VisibilityButtonDesc".Translate());
+
             list.End();
         }
 
@@ -108,6 +120,9 @@ namespace Skylights
             DomeGlowRadius.Apply();
             CompSkylight.ForceGlowRefresh();
             RepaintAllMapLighting();
+            // The whole-map repaint above regenerates lazily; hit the skylight sections directly so a
+            // hide/show change is visible the moment the dialog closes.
+            SkylightVisibilityButton.DirtySkylightSections();
         }
 
         /// <summary>Rebuild every loaded map's lighting so a roof-edge mode change shows immediately.</summary>
