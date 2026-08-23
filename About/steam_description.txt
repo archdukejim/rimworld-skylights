@@ -16,7 +16,7 @@ Two forms — [b]panes[/b] that open a roof tile to the full sky (crops + true s
 [/list]
 [b]DOMES[/b] spread a soft glow over a radius (never enough for crops):
 [list]
-[*][b]Dome Skylight[/b] — soft daylight over a small area; ideal for workshops, bedrooms and walkways. Hand-build the dome at a crafting spot, or cast it faster at an electric smelter. [b]NEW:[/b] also comes in [b]2×1 and 2×2[/b] footprints so the light sits dead-centre in an even-sized room.
+[*][b]Dome Skylight[/b] — soft daylight over a small area; ideal for workshops, bedrooms and walkways. Hand-build the dome at a crafting spot, or cast it faster at an electric smelter. Also comes in [b]2×1 and 2×2[/b] footprints so the light sits dead-centre in an even-sized room — [b]NEW:[/b] while placing them, the footprint is outlined with corner markers plus a circle showing the true light reach, centred on the footprint.
 [*][b]Light Tunnel[/b] — a dome fitted to a mirror-lined reflection tube that pipes daylight down through solid overhead mountain.
 [/list]
 
@@ -45,7 +45,9 @@ Two forms — [b]panes[/b] that open a roof tile to the full sky (crops + true s
 
 [h2]⚙️ Settings[/h2]
 [list]
-[*][b]Dome light radius[/b] — a 1–10 slider (default 4) for how far the dome and light-tunnel glow reaches.
+[*][b]Dome light radius[/b] — a 1–10 slider (default 4) for how far the dome and light-tunnel glow reaches; the placement previews follow it.
+[*][b]Hide installed skylights[/b] — hides the frame/glass sprite so roofs sit flush; the skylight keeps channeling daylight exactly the same.
+[*][b]Skylight visibility button[/b] — a toggle on the bottom-right overlay row that shows/hides installed skylights in one click (same setting as the mod menu, applies instantly); a master switch here can remove the button.
 [*][b]Inward roof-edge lighting[/b] ([i]experimental, under development[/i]) — reshapes the soft light at roof edges to bleed inward: Vanilla / Skylights-only / All roofs. Known rendering quirks near domes and walls.
 [/list]
 
@@ -67,15 +69,13 @@ Grand domed glass ceilings — [b]2×2, 3×3, 4×4 and 5×5[/b] — built from p
 [*]RimWorld 1.6.
 [/list]
 
-[h2]Version: 2.1.0[/h2]
-[h3]Changelog v2.1[/h3]
+[b]Version:[/b] v2.2.0
+[h3]Changelog v2.2[/h3]
 [list]
-[*][b]Dedicated "Skylights" build tab[/b] — every skylight now lives in its own Architect category instead of Furniture.
-[*][b]Tech-tree rework[/b] — everything unlocks at [b]Complex Furniture[/b] (reachable even on a Crashlanded start that skips Smithing); smelter-built panes also need Electricity.
-[*][b]Centred dome variants[/b] — 2×1 and 2×2 domes, because an even-sized room has no centre tile for a 1×1 to sit on.
-[*][b]Redrawn item icons[/b] — clearer structural frames (steel angle beams) and stacked float-glass panes with stack-count art.
-[*][b]ReBuild: Doors and Corners interop[/b] — bidirectional glass conversions at the crafting spot.
-[*][b]New experimental setting[/b] — inward roof-edge lighting (Vanilla / Skylights-only / All roofs); under development.
+[*][b]Placement preview for the 2×1/2×2 domes[/b] — the footprint tiles are outlined with corner markers while placing or rotating, plus a single smooth circle showing the true light reach, dead-centred on the footprint (it tracks the dome light radius setting).
+[*][b]Honest placement rings[/b] — the dome and light tunnel preview rings now match their actual glow radius instead of a fixed guess.
+[*][b]New setting: hide installed skylights[/b] — drops the frame/glass sprite so roofs sit flush, while the skylight keeps channeling daylight exactly the same.
+[*][b]New HUD button[/b] — show/hide installed skylights in one click from the bottom-right overlay row (same setting as the mod menu, applies instantly); a mod-menu master switch can remove the button.
 [/list]
 
 [b]Source:[/b] https://github.com/archdukejim/rimworld-skylights

@@ -4,7 +4,7 @@
   <author>archdukejim</author>
   <packageId>archdukejim.Skylights</packageId>
   <url>https://steamcommunity.com/sharedfiles/filedetails/?id=3780129860</url>
-  <modVersion>2.1.0</modVersion>
+  <modVersion>2.2.0</modVersion>
   <supportedVersions>
     <li>1.6</li>
   </supportedVersions>
@@ -33,7 +33,7 @@ The sturdy pane, unlocked with Electricity and Complex Furniture. Cast structura
 The same sturdy pane glazed with UV-filtering tinted structural glass. It lights and grows crops exactly like the industrial pane, but filters the sun out for genes — so sun-sensitive colonists can stand beneath it unharmed (and sun-lovers gain nothing). The safe choice when the sky itself is the hazard. Needs Complex Furniture on top of Electricity.
 
 --- DOME SKYLIGHT (dome) ---
-A small dome that spreads soft daylight across a radius of a few tiles (adjustable in the mod settings). It lights a room by natural light but never concentrates enough to grow crops — ideal for workshops, bedrooms and walkways. Unlocked at Complex Furniture: the dome unit can be hand-built at a crafting spot, or cast faster once you have an electric smelter. Blocked by thick overhead mountain.
+A small dome that spreads soft daylight across a radius of a few tiles (adjustable in the mod settings). It lights a room by natural light but never concentrates enough to grow crops — ideal for workshops, bedrooms and walkways. Unlocked at Complex Furniture: the dome unit can be hand-built at a crafting spot, or cast faster once you have an electric smelter. Blocked by thick overhead mountain. The 2x1 and 2x2 variants centre their glow on an even-sized room, and while placing them the footprint is outlined with corner markers plus a single circle showing the true light reach, centred on the footprint.
 
 --- LIGHT TUNNEL (dome) ---
 A skylight dome fitted to a mirror-lined reflection tube that pipes daylight down through solid rock, so it keeps working even beneath thick overhead mountain. Spreads the same soft light as the dome. Needs Electricity and Complex Furniture; built from a skylight dome and a reflection tube.
@@ -51,7 +51,9 @@ Industrial, at an electric smelter:
 Frames and glass are inert and never rot, even left outdoors.
 
 --- SETTINGS ---
-Dome light radius: a 1-10 slider (default 4) for how far the dome and light-tunnel glow reaches.
+Dome light radius: a 1-10 slider (default 4) for how far the dome and light-tunnel glow reaches; placement previews follow it.
+Hide installed skylights: hides the frame/glass sprite so roofs sit flush — the skylight keeps channeling daylight exactly the same.
+Skylight visibility button: a toggle on the bottom-right overlay row that shows/hides installed skylights in play (same setting, one click away); the button itself can be removed here.
 Inward roof-edge lighting (UNDER DEVELOPMENT): reshapes the soft light at roof edges to bleed inward — choose Vanilla, Skylights-only, or All roofs. Experimental; known rendering quirks near domes and walls.
 
 --- MOD COMPATIBILITY ---
@@ -66,13 +68,11 @@ Source: https://github.com/archdukejim/rimworld-skylights
 Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3780129860
 Support development: https://ko-fi.com/archdukejim
 
-Version: 2.1.0
+Version: v2.2.0
 
---- CHANGELOG v2.1 ---
-- Dedicated "Skylights" Architect tab — all skylights moved out of Furniture.
-- Tech-tree rework: everything unlocks at Complex Furniture (Crashlanded-friendly); smelter-built panes also need Electricity.
-- Centered dome variants: 2x1 and 2x2 footprints so the glow sits dead-center in even-sized rooms.
-- Redrawn item icons: structural frames and stacked glass panes with stack-count art.
-- ReBuild: Doors and Corners interop — bidirectional glass conversions at the crafting spot.
-- New setting (experimental, under development): inward roof-edge lighting — Vanilla / Skylights-only / All roofs.</description>
+--- CHANGELOG v2.2 ---
+- Placement preview for the 2x1/2x2 domes: the footprint tiles are outlined with corner markers while placing or rotating, plus a single smooth circle showing the true light reach, dead-centred on the footprint (it tracks the dome light radius setting).
+- Dome and light tunnel placement rings now match their actual glow radius instead of a fixed guess.
+- New setting: hide installed skylights — drops the frame/glass sprite so roofs sit flush, while the skylight keeps channeling daylight exactly the same.
+- New HUD button on the bottom-right overlay row: show/hide installed skylights in one click (same setting as the mod menu, applies instantly); a mod-menu master switch can remove the button.</description>
 </ModMetaData>
