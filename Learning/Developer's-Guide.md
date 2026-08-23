@@ -1,6 +1,6 @@
 # Developer's Guide
 
-Interop reference for **Skylights v2.1** (packageId `archdukejim.Skylights`, RimWorld 1.6). Everything on this page is a surface another mod can reference, patch, or order around.
+Interop reference for **Skylights v2.2** (packageId `archdukejim.Skylights`, RimWorld 1.6). Everything on this page is a surface another mod can reference, patch, or order around.
 
 **Quick facts**
 
@@ -200,6 +200,45 @@ Blocks placement unless `HasSupportWithin` passes, and draws the support radius 
 
 Rejection report uses the translation key `Skylight_NeedsSupport` (one `{0}` = radius). Pair it with `requiresNearbySupport` on the comp if you also want the built thing to cave in when support is removed — `CompSkylight.CompTickRare` calls `RoofCollapserImmediate.DropRoofInCells` on its own tile and destroys the parent (`DestroyMode.KillFinalize`).
 
+### `PlaceWorker_ShowFootprint`
+
+```csharp
+public class PlaceWorker_ShowFootprint : PlaceWorker
+```
+
+Placement-time overlay for buildings whose installed graphic hides their true footprint (the 2x1/2x2 domes draw a centred 1x1 sprite). While the build designator is active it draws: the occupied tiles' field edges in the ghost's valid/blocked colour, vanilla-style selection brackets on the footprint corners, and — when a light radius can be resolved — one smooth `GenDraw.DrawCircleOutline` circle around the **true footprint centre** (a half-tile-offset point on even footprints that vanilla's cell-centred `specialDisplayRadius` ring cannot express). The circle radius = resolved glow radius + half the footprint extent.
+
+Light radius resolution order: the `CompProperties_Glower.glowRadius` of the def named by `CompProperties_Skylight.glowNodeDef`, else the def's own `CompProperties_Glower.glowRadius`, else no circle. Reusable on your own defs:
+
+```xml
+<placeWorkers>
+  <li>Skylights.PlaceWorker_ShowFootprint</li>
+</placeWorkers>
+```
+
+Defs using it should declare **no** `specialDisplayRadius` (the off-centre vanilla ring would draw on top).
+
+### `CompSkylight.SpawnedSkylights`
+
+```csharp
+public static readonly List<CompSkylight> CompSkylight.SpawnedSkylights
+```
+
+Every currently-spawned skylight comp, across all maps (registered in `PostSpawnSetup`, removed in `PostDeSpawn`). Read-only iteration is safe from the main thread; filter by `comp.parent.Map`. Used by the visibility toggle to dirty only skylight-holding map-mesh sections.
+
+### `SkylightVisibilityButton`
+
+```csharp
+[StaticConstructorOnStartup]
+public static class SkylightVisibilityButton
+{
+    public static readonly Texture2D ToggleIcon;   // the play-settings row button art
+    public static void DirtySkylightSections();    // regen the Things map-mesh layer under every spawned skylight
+}
+```
+
+`DirtySkylightSections()` marks the map-mesh section under each spawned skylight dirty with the **Things** flag (`MapMeshDirty(pos, Things, regenAdjacentCells: true, regenAdjacentSections: true)`), so a sprite show/hide applies the moment those sections redraw. Call it after changing anything that alters whether `Thing.Print` emits a skylight's sprite. Note the flag: building sprites are printed by `SectionLayer_ThingsGeneral` (`relevantChangeTypes = Things`) — dirtying `Buildings` regenerates the wrong layers.
+
 ### Settings types
 
 See section 8 for `RoofEdgeMode`, `SkylightsSettings`, `SkylightsSettingsMod`, and `DomeGlowRadius`.
@@ -280,6 +319,8 @@ All patches live in Harmony instance **`archdukejim.skylights`**, applied at sta
 | 3 | `Verse.GlowGrid.GroundGlowAt(IntVec3 c, bool ignoreSky)` | **Postfix** | `Skylights.Patch_GlowGrid_GroundGlowAt` | For `SkylightGrid` cells (and `ignoreSky == false`), raises `__result` to `CurSkyGlow` if that is higher — so plants grow and the cell counts as lit, matching but never exceeding the sky. |
 | 4 | `Verse.SectionLayer_LightingOverlay.GenerateLightingOverlay(...)` (non-public) | **Transpiler** | `Skylights.Patch_LightingOverlay_Generate` | Rewrites every call to `RoofGrid.RoofAt(int)` → `SkylightLightHelper.RoofAtForLight` and `RoofGrid.Roofed(int)` → `SkylightLightHelper.RoofedForLight`, so the overlay's roofed-darkness clamp treats skylight cells as open sky. Lighting only — roof, weather, temperature untouched. |
 | 5 | `Verse.SectionLayer_LightingOverlay.GenerateLightingOverlay(...)` (same method) | **Prefix**, conditional | `Skylights.Patch_LightingOverlay_Inward` | Only when the `roofEdgeMode` setting ≠ `Vanilla`: returns `false` and runs a faithful, direction-aware reimplementation that erodes the roof's soft shadow edge *inward* instead of outward. In `Vanilla` mode it returns `true` immediately and the (transpiled) original runs. |
+| 6 | `Verse.Thing.Print(SectionLayer)` | **Prefix**, conditional skip | `Skylights.Patch_Thing_Print_HideSkylight` | Only when the `hideSkylights` setting is on: returns `false` for things carrying `CompSkylight`, so their sprite is omitted from the Things map-mesh. Off = a single bool read, then vanilla. |
+| 7 | `RimWorld.PlaySettings.DoPlaySettingsGlobalControls(WidgetRow, bool)` | **Postfix** | `Skylights.Patch_PlaySettings_SkylightVisibility` | Adds the "show installed skylights" toggle to the play-settings row (map view only; removable via the `skylightVisibilityButton` setting). Flipping it writes `hideSkylights`, persists settings, and calls `SkylightVisibilityButton.DirtySkylightSections()`. |
 
 **Interaction notes for other modders**
 
@@ -342,7 +383,7 @@ All buildable skylights inherit the internal abstract parent `SkylightBase` (in 
 | defName | Label | Size | Kind | Key comp settings | Cost | Research |
 |---|---|---|---|---|---|---|
 | `Skylight_Dome` | dome skylight | 1x1 | glower dome | `glowFactor 0.5`; `CompProperties_Glower` radius 2.6, `overlightRadius 0` (never grows crops) | 1 `SkylightDome` | ComplexFurniture |
-| `Skylight_Dome_Wide` | dome skylight (2x1) | 1x2 | node-pooled dome | `glowNodeDef Skylight_DomeGlowNode`, `glowNodeStrength 0.5`, `glowFactor 0.5` | 1 `SkylightDome` | ComplexFurniture |
+| `Skylight_Dome_Wide` | dome skylight (2x1) | 1x2 | node-pooled dome | `glowNodeDef Skylight_DomeGlowNode`, `glowNodeStrength 0.5`, `glowFactor 0.5`; `PlaceWorker_ShowFootprint`; no `specialDisplayRadius` | 1 `SkylightDome` | ComplexFurniture |
 | `Skylight_Dome_Quad` | dome skylight (2x2) | 2x2 | node-pooled dome | same as Wide | 1 `SkylightDome` | ComplexFurniture |
 | `Skylight_Paned` | industrial skylight | 1x1 | sky pane | `renderAsSky`, `transmitsSun` | 4 `StructuralFrame` + 1 `StructuralGlass` | Electricity + ComplexFurniture |
 | `Skylight_Tinted` | tinted skylight | 1x1 | sky pane (UV-filtered) | `renderAsSky` only — no `transmitsSun` | 4 `StructuralFrame` + 1 `TintedGlass` | Electricity + ComplexFurniture |
@@ -475,17 +516,21 @@ public class SkylightsSettings : ModSettings
 
     public int domeGlowRadius = DefaultDomeGlowRadius;     // 1–10 slider
     public RoofEdgeMode roofEdgeMode = RoofEdgeMode.Vanilla;
+    public bool hideSkylights = false;                     // hide installed skylight sprites (v2.2)
+    public bool skylightVisibilityButton = true;           // show the play-settings HUD button (v2.2)
 
     public override void ExposeData()
     {
         Scribe_Values.Look(ref domeGlowRadius, "domeGlowRadius", DefaultDomeGlowRadius);
         Scribe_Values.Look(ref roofEdgeMode, "roofEdgeMode", RoofEdgeMode.Vanilla);
+        Scribe_Values.Look(ref hideSkylights, "hideSkylights", false);
+        Scribe_Values.Look(ref skylightVisibilityButton, "skylightVisibilityButton", true);
         base.ExposeData();
     }
 }
 ```
 
-Scribed with `Scribe_Values.Look` under keys `domeGlowRadius` and `roofEdgeMode` into RimWorld's standard per-mod config XML (`Config/Mod_..._SkylightsSettings.xml` in the save-data folder). Both fields fall back to their defaults when absent, so the mod is safe to add mid-save.
+Scribed with `Scribe_Values.Look` under keys `domeGlowRadius`, `roofEdgeMode`, `hideSkylights`, and `skylightVisibilityButton` into RimWorld's standard per-mod config XML (`Config/Mod_..._SkylightsSettings.xml` in the save-data folder). All fields fall back to their defaults when absent, so the mod is safe to add mid-save.
 
 ### `SkylightsSettingsMod : Mod`
 
@@ -494,8 +539,9 @@ public class SkylightsSettingsMod : Mod
 {
     public static SkylightsSettings Settings;              // live settings instance
     public static RoofEdgeMode RoofEdge { get; }           // null-safe hot-path read, used by patch 5
+    public static bool HideSkylights { get; }              // null-safe hot-path read, used by patch 6 (v2.2)
     public static void RepaintAllMapLighting()             // WholeMapChanged(Roofs|GroundGlow|Buildings) on every map
-    public override void WriteSettings()                   // applies radius, ForceGlowRefresh, repaints lighting
+    public override void WriteSettings()                   // applies radius, ForceGlowRefresh, repaints lighting + skylight sections
 }
 ```
 
@@ -516,8 +562,8 @@ public static class DomeGlowRadius
 }
 ```
 
-`Apply()` (no parameters, returns `void`) writes `Settings.domeGlowRadius` into `CompProperties_Glower.glowRadius` and `specialDisplayRadius` of `Skylight_Dome`, `Skylight_MountainDome`, `Skylight_DomeGlowNode`, `Skylight_Dome_Wide`, `Skylight_Dome_Quad`. Runs once at startup and again from `WriteSettings()`. **Heads-up:** if your mod patches a dome's glow radius, this applier overwrites it at startup and on any settings save — patch *after* startup or adjust the setting instead.
+`Apply()` (no parameters, returns `void`) writes `Settings.domeGlowRadius` into `CompProperties_Glower.glowRadius` and `specialDisplayRadius` of `Skylight_Dome`, `Skylight_MountainDome`, and `Skylight_DomeGlowNode`. The multi-cell `Skylight_Dome_Wide` / `Skylight_Dome_Quad` deliberately get **no** `specialDisplayRadius` — their placement circle is drawn footprint-centred by `PlaceWorker_ShowFootprint` from the node's live `glowRadius` (v2.2). Runs once at startup and again from `WriteSettings()`. **Heads-up:** if your mod patches a dome's glow radius, this applier overwrites it at startup and on any settings save — patch *after* startup or adjust the setting instead.
 
 ---
 
-*Page generated from the `development` branch source of Skylights v2.1. File an issue at [archdukejim/rimworld-skylights](https://github.com/archdukejim/rimworld-skylights/issues) if a surface documented here changes.*
+*Page generated from the `release/2.2.0` branch source of Skylights v2.2. File an issue at [archdukejim/rimworld-skylights](https://github.com/archdukejim/rimworld-skylights/issues) if a surface documented here changes.*

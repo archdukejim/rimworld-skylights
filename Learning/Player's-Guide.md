@@ -1,6 +1,6 @@
 # Player's Guide
 
-Skylights (v2.1) brings real daylight into roofed rooms. This page covers every in-game mechanic, one section per mechanic.
+Skylights (v2.2) brings real daylight into roofed rooms. This page covers every in-game mechanic, one section per mechanic.
 
 ## Natural daylight
 
@@ -31,6 +31,10 @@ The Dome Skylight is a small prefabricated dome that drops into a roof and sprea
 ## Centered dome variants (2x1 and 2x2)
 
 The dome also comes in 2x1 (Wide) and 2x2 (Quad) footprints. A room with an even width or depth has no single center tile for a 1x1 dome to sit on; these variants let the dome sit dead-center in such rooms. The 2x1 covers an even dimension in one direction (and can be rotated), while the 2x2 centers in a room whose width and depth are both even. Their light is pooled across the footprint so the glow is centered on the dome, not leaning to one corner. Otherwise they behave exactly like the standard dome: same soft light, same radius, same 1 skylight dome cost, same Complex Furniture research, no crops, blocked by thick mountain.
+
+## Placement preview for multi-cell domes
+
+While placing or rotating a 2x1 or 2x2 dome, the game shows exactly where it will sit and what it will light. The occupied tiles are outlined in the ghost's color (green when placeable, red when blocked) with selection-style markers on the footprint corners, and a single smooth circle shows the light reach, centered on the true middle of the footprint. The circle's size follows the dome light radius mod setting, so what you see while placing is what the built dome will actually light. The 1x1 dome and Light Tunnel show the standard placement ring, also matched to their actual glow radius.
 
 ## Light Tunnel
 
@@ -66,10 +70,16 @@ All skylights live in their own "Skylights" category in the Architect menu, just
 
 ## Mod settings
 
-The mod settings (Options > Mod Settings > Skylights) offer two controls:
+The mod settings (Options > Mod Settings > Skylights) offer these controls:
 
-- **Dome skylight light radius** — a slider from 1 to 10 tiles (default 4) that sets how far the soft glow of Dome Skylights and Light Tunnels reaches. It takes effect immediately, including on domes already built.
+- **Dome skylight light radius** — a slider from 1 to 10 tiles (default 4) that sets how far the soft glow of Dome Skylights and Light Tunnels reaches. It takes effect immediately, including on domes already built, and the placement previews follow it.
+- **Hide installed skylights** — hides the frame/glass sprite of every installed skylight so roofs sit flush and out of sight. Hidden skylights keep working exactly the same: they still channel daylight, grow crops (panes), and light the room. Takes effect immediately.
+- **Skylight visibility button** — a master switch (default on) for the show/hide button on the bottom-right overlay row; turn it off to remove the button. The mod-menu hide checkbox keeps working either way.
 - **Roof edge lighting** — UNDER DEVELOPMENT. Vanilla RimWorld lets a roof's shadow bleed outward onto the lit tiles just outside it; the experimental inward modes instead keep those open tiles fully lit and soften the shadow inward, so light appears to reach just past a skylight. Three options: Vanilla (unchanged, recommended), Skylights only (inward soft edge around skylight tiles), and All roofs (inward soft edge at every roof edge). The inward modes currently have known rendering bugs — dome skylights may not glow, and a bright artifact can appear near walls where the shadow should be darkest. Leave this on Vanilla for now; the inward modes are there for testing only.
+
+## Hiding installed skylights
+
+If you prefer your roofs to look clean, you can hide the sprites of all installed skylights without losing any function. The quick way is the skylight toggle button on the bottom-right overlay row (next to roof and zone visibility): button on shows skylights, button off hides them, and the change applies instantly. The same state is available as the "hide installed skylights" checkbox in the mod settings — the button and the checkbox always agree, and the choice persists between sessions. Hidden skylights still channel daylight, still grow crops under panes, and are still removed the normal way with the Deconstruct tool.
 
 ## Removing a skylight
 
