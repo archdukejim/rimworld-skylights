@@ -1,6 +1,6 @@
 # Developer's Guide
 
-Interop reference for **Skylights v2.2** (packageId `archdukejim.Skylights`, RimWorld 1.6). Everything on this page is a surface another mod can reference, patch, or order around.
+Interop reference for **Skylights v2.3** (packageId `archdukejim.Skylights`, RimWorld 1.6). Everything on this page is a surface another mod can reference, patch, or order around.
 
 **Quick facts**
 
@@ -22,7 +22,7 @@ To soft-reference any def on this page from your own mod, gate it with the packa
 
 ## Contents
 
-1. [Core concept: the two grids](#1-core-concept-the-two-grids)
+1. [Core concept: the grids](#1-core-concept-the-grids)
 2. [C# API](#2-c-api)
 3. [`CompProperties_Skylight` (XML-configurable comp)](#3-compproperties_skylight-xml-configurable-comp)
 4. [Harmony patches (ordering reference)](#4-harmony-patches-ordering-reference)
@@ -33,16 +33,19 @@ To soft-reference any def on this page from your own mod, gate it with the packa
 
 ---
 
-## 1. Core concept: the two grids
+## 1. Core concept: the grids
 
-Skylights keeps two static per-map cell sets. All of the mod's Harmony patches are just consumers of these sets, so they are the primary interop point: **register a cell in these grids and the game lights it (and, optionally, counts it as sunlit) as if it had no roof — while the real roof stays in place for weather and temperature.**
+Skylights keeps a few static per-map cell sets. All of the mod's Harmony patches are just consumers of these sets, so they are the primary interop point: **register a cell in these grids and the game lights it (and, optionally, counts it as sunlit) as if it had no roof — while the real roof stays in place for weather and temperature.**
 
 | Grid | Registered by | Consumed by | Effect |
 |---|---|---|---|
 | `SkylightGrid` | every pane with `renderAsSky` | indoor-mask prefix, `GroundGlowAt` postfix, lighting-overlay transpiler/prefix | cell is lit and rendered as open sky (brightness, colour, moonlight, shadows, plant growth); rain/snow/fog overlays stay hidden |
 | `SunlightGrid` | only panes with `transmitsSun` (clear glass) | `SanguophageUtility.InSunlight` postfix | cell counts as real sunlight for Biotech genes/stats/thoughts |
+| `VisualSkyGrid` | domes with `matchOutdoorGlow`, panes with `glowHaloRadius` | lighting-overlay transpiler/prefix only (via `SkylightLightHelper`) | cell RENDERS as open sky (brightness/colour/shadows) but nothing else — no plant growth, no lit/dark change, no gene-sun. Purely visual. |
 
 Membership is maintained live by `CompSkylight` (registered on spawn/roof-change via `CompTickRare`, deregistered on despawn). Nothing is saved — the grids rebuild themselves from spawned comps after load.
+
+`VisualSkyGrid` is the display-only counterpart to `SkylightGrid`: it never touches the glow grid or the gene checks, so a cell registered there brightens in the lighting overlay only.
 
 ---
 
@@ -118,6 +121,24 @@ Skylights.SunlightGrid.Set(map, cell, true);
 // later: SanguophageUtility.InSunlight(cell, map) now returns true while CurSkyGlow > 0.1
 ```
 
+### `VisualSkyGrid.Set` / `VisualSkyGrid.Contains`
+
+```csharp
+public static void VisualSkyGrid.Set(Map map, IntVec3 c, bool on)
+public static bool VisualSkyGrid.Contains(Map map, IntVec3 c)
+```
+
+Same signatures as `SkylightGrid`, but **display-only**. On an actual state change `Set` dirties only the lighting overlay (`Roofs | GroundGlow` mesh flags) — it deliberately does **not** dirty the glow grid, so the change is purely visual. `VisualSkyGrid` is consulted only by the lighting-overlay path (`SkylightLightHelper.RoofAtForLight` / `RoofedForLight`), never by the `GroundGlowAt` postfix, the `InSunlight` postfix, or the indoor-mask prefix. Registering a cell here brightens its RENDER only — no plant growth, no lit/dark change, no gene-visible sun.
+
+`CompSkylight` already populates it for `matchOutdoorGlow` domes and `glowHaloRadius` panes (section 3), so most mods should prefer those props over calling `Set` directly.
+
+**Example** — brighten a roofed cell's render without any gameplay effect:
+
+```csharp
+Skylights.VisualSkyGrid.Set(map, cell, true);
+// the lighting overlay now draws this cell as open sky; crops, lit/dark, and genes are untouched
+```
+
 ### `SkylightLightHelper.RoofAtForLight` / `RoofedForLight`
 
 ```csharp
@@ -130,7 +151,7 @@ public static bool    SkylightLightHelper.RoofedForLight(RoofGrid grid, int inde
 | `grid` | `Verse.RoofGrid` | The map's roof grid (its private `map` field is read via `FieldRef`). |
 | `index` | `int` | Cell index (`map.cellIndices` order). |
 
-**Returns:** the vanilla `RoofAt(int)` / `Roofed(int)` result, **except** a `SkylightGrid` cell reads as `null` / `false` (open sky). These are the redirect targets of the lighting-overlay transpiler; they are public so another lighting mod can call the same "roof as the lighting overlay sees it" lookup and agree with Skylights about which cells are open.
+**Returns:** the vanilla `RoofAt(int)` / `Roofed(int)` result, **except** a cell in `SkylightGrid` **or** `VisualSkyGrid` reads as `null` / `false` (open sky). These are the redirect targets of the lighting-overlay transpiler; they are public so another lighting mod can call the same "roof as the lighting overlay sees it" lookup and agree with Skylights about which cells are open.
 
 **Example:**
 
@@ -270,6 +291,8 @@ The parent def needs `<tickerType>Rare</tickerType>` for the comp to update.
 | `transmitsSun` | `bool` | `false` | Sky mode add-on: also register in `SunlightGrid` so the cell counts as true sun for Biotech (clear panes yes, tinted no). |
 | `requiresNearbySupport` | `bool` | `false` | Needs a `holdsRoof` edifice within `supportRadius`; loses it and the tile's roof is dropped, destroying the parent. |
 | `supportRadius` | `float` | `3` | Radius for the support rule (and for `PlaceWorker_NearRoofSupport`). |
+| `matchOutdoorGlow` | `bool` | `false` | Display-only. Glower dome: render the lit pool at full open-sky brightness out to the mod-menu dome radius (via `VisualSkyGrid`), matching the outdoors. Gameplay light (the CompGlower) is unchanged — no crops, same half-strength glow. |
+| `glowHaloRadius` | `float` | `0` | Display-only. `renderAsSky` pane: render a square ring of this many tiles around the pane's own sky cell as open sky (1 = a 3x3), so the lit patch reads wider than one tile. The ring never grows crops or transmits sun. |
 
 Channeling condition (all modes): the cell must have a roof (`RoofAt != null`) that is not thick — open sky channels nothing (it already lights the cell), thick rock blocks unless `worksUnderThickRoof`.
 
@@ -382,13 +405,13 @@ All buildable skylights inherit the internal abstract parent `SkylightBase` (in 
 
 | defName | Label | Size | Kind | Key comp settings | Cost | Research |
 |---|---|---|---|---|---|---|
-| `Skylight_Dome` | dome skylight | 1x1 | glower dome | `glowFactor 0.5`; `CompProperties_Glower` radius 2.6, `overlightRadius 0` (never grows crops) | 1 `SkylightDome` | ComplexFurniture |
-| `Skylight_Dome_Wide` | dome skylight (2x1) | 1x2 | node-pooled dome | `glowNodeDef Skylight_DomeGlowNode`, `glowNodeStrength 0.5`, `glowFactor 0.5`; `PlaceWorker_ShowFootprint`; no `specialDisplayRadius` | 1 `SkylightDome` | ComplexFurniture |
-| `Skylight_Dome_Quad` | dome skylight (2x2) | 2x2 | node-pooled dome | same as Wide | 1 `SkylightDome` | ComplexFurniture |
-| `Skylight_Paned` | industrial skylight | 1x1 | sky pane | `renderAsSky`, `transmitsSun` | 4 `StructuralFrame` + 1 `StructuralGlass` | Electricity + ComplexFurniture |
-| `Skylight_Tinted` | tinted skylight | 1x1 | sky pane (UV-filtered) | `renderAsSky` only — no `transmitsSun` | 4 `StructuralFrame` + 1 `TintedGlass` | Electricity + ComplexFurniture |
-| `Skylight_MountainDome` | light tunnel | 1x1 | glower dome | `worksUnderThickRoof`, `glowFactor 0.5` | 1 `SkylightDome` + 1 `ReflectionTube` | Electricity + ComplexFurniture |
-| `Skylight_Basic` | basic skylight | 1x1 | sky pane (weak glass) | `renderAsSky`, `transmitsSun`, `requiresNearbySupport`, `supportRadius 3`; `PlaceWorker_NearRoofSupport`; `leaveResourcesWhenKilled false` | 4 `WoodLog` + 1 `BasicPane` | ComplexFurniture |
+| `Skylight_Dome` | dome skylight | 1x1 | glower dome | `glowFactor 0.5`, `matchOutdoorGlow`; `CompProperties_Glower` radius 2.6, `overlightRadius 0` (never grows crops) | 1 `SkylightDome` | ComplexFurniture |
+| `Skylight_Dome_Wide` | dome skylight (2x1) | 1x2 | node-pooled dome | `glowNodeDef Skylight_DomeGlowNode`, `glowNodeStrength 0.5`, `glowFactor 0.5`, `matchOutdoorGlow`; `PlaceWorker_ShowFootprint`; no `specialDisplayRadius` | 1 `SkylightDome` | ComplexFurniture |
+| `Skylight_Dome_Quad` | dome skylight (2x2) | 2x2 | node-pooled dome | same as Wide, `matchOutdoorGlow` | 1 `SkylightDome` | ComplexFurniture |
+| `Skylight_Paned` | industrial skylight | 1x1 | sky pane | `renderAsSky`, `transmitsSun`, `glowHaloRadius 1` | 4 `StructuralFrame` + 1 `StructuralGlass` | Electricity + ComplexFurniture |
+| `Skylight_Tinted` | tinted skylight | 1x1 | sky pane (UV-filtered) | `renderAsSky` only — no `transmitsSun`; `glowHaloRadius 1` | 4 `StructuralFrame` + 1 `TintedGlass` | Electricity + ComplexFurniture |
+| `Skylight_MountainDome` | light tunnel | 1x1 | glower dome | `worksUnderThickRoof`, `glowFactor 0.5`, `matchOutdoorGlow` | 1 `SkylightDome` + 1 `ReflectionTube` | Electricity + ComplexFurniture |
+| `Skylight_Basic` | basic skylight | 1x1 | sky pane (weak glass) | `renderAsSky`, `transmitsSun`, `glowHaloRadius 1`, `requiresNearbySupport`, `supportRadius 3`; `PlaceWorker_NearRoofSupport`; `leaveResourcesWhenKilled false` | 4 `WoodLog` + 1 `BasicPane` | ComplexFurniture |
 | `Skylight_DomeGlowNode` | skylight glow | 1x1 | hidden glow emitter | not buildable, `isSaveable false`, `drawerType None`, `tickerType Never`; spawned one-per-footprint-cell by multi-cell domes | — | — |
 
 Legacy naming (save compat with v1): `Skylight_Paned` is the *industrial* skylight; `Skylight_MountainDome` is the *light tunnel*.
@@ -566,4 +589,4 @@ public static class DomeGlowRadius
 
 ---
 
-*Page generated from the `release/2.2.0` branch source of Skylights v2.2. File an issue at [archdukejim/rimworld-skylights](https://github.com/archdukejim/rimworld-skylights/issues) if a surface documented here changes.*
+*Page generated from the `release/2.3.0` branch source of Skylights v2.3. File an issue at [archdukejim/rimworld-skylights](https://github.com/archdukejim/rimworld-skylights/issues) if a surface documented here changes.*

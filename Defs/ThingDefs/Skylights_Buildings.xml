@@ -73,6 +73,9 @@
       </li>
       <li Class="Skylights.CompProperties_Skylight">
         <glowFactor>0.5</glowFactor>
+        <!-- Display-only: render the lit pool at full open-sky brightness (matching outdoors, tracking the sky)
+             out to the mod-menu dome radius. Gameplay light stays at the half-strength glower above. -->
+        <matchOutdoorGlow>true</matchOutdoorGlow>
       </li>
     </comps>
   </ThingDef>
@@ -154,6 +157,9 @@
              pool centred on the footprint. Ground glow still caps at 0.5 (no crops). -->
         <glowNodeDef>Skylight_DomeGlowNode</glowNodeDef>
         <glowNodeStrength>0.5</glowNodeStrength>
+        <!-- Display-only: render the pooled lit area at full open-sky brightness (matching outdoors) out to the
+             mod-menu dome radius. Gameplay light stays at the half-strength pooled nodes above. -->
+        <matchOutdoorGlow>true</matchOutdoorGlow>
       </li>
     </comps>
   </ThingDef>
@@ -195,6 +201,9 @@
              pool centred on the footprint. Ground glow still caps at 0.5 (no crops). -->
         <glowNodeDef>Skylight_DomeGlowNode</glowNodeDef>
         <glowNodeStrength>0.5</glowNodeStrength>
+        <!-- Display-only: render the pooled lit area at full open-sky brightness (matching outdoors) out to the
+             mod-menu dome radius. Gameplay light stays at the half-strength pooled nodes above. -->
+        <matchOutdoorGlow>true</matchOutdoorGlow>
       </li>
     </comps>
   </ThingDef>
@@ -234,6 +243,9 @@
         <!-- Clear glass: the cell counts as real sunlight for Biotech genes/stats/thoughts, so sun-loving
              xenotypes gain their outdoor benefit indoors and sun-sensitive pawns are exposed. -->
         <transmitsSun>true</transmitsSun>
+        <!-- Display-only: a 1-tile ring around the pane also renders as open sky, so the lit patch reads a
+             little wider than the single tile. Cosmetic only — the ring doesn't grow crops or transmit sun. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -270,6 +282,9 @@
         <!-- Renders/lights as open sky (crops, moonlight, shadows), but transmitsSun stays false:
              the tint filters the sun out for genes. -->
         <renderAsSky>true</renderAsSky>
+        <!-- Display-only 1-tile ring rendered as open sky, so the lit patch reads a little wider than the
+             single tile. Cosmetic only — the ring doesn't grow crops. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -310,6 +325,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <worksUnderThickRoof>true</worksUnderThickRoof>
         <glowFactor>0.5</glowFactor>
+        <!-- Display-only: render the lit pool at full open-sky brightness out to the mod-menu dome radius, even
+             under thick mountain. Gameplay light stays at the half-strength glower above. -->
+        <matchOutdoorGlow>true</matchOutdoorGlow>
       </li>
     </comps>
   </ThingDef>
@@ -357,6 +375,9 @@
         <transmitsSun>true</transmitsSun>
         <requiresNearbySupport>true</requiresNearbySupport>
         <supportRadius>3</supportRadius>
+        <!-- Display-only 1-tile ring rendered as open sky, so the lit patch reads a little wider than the
+             single tile. Cosmetic only — the ring doesn't grow crops or transmit sun. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>

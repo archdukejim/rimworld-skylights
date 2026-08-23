@@ -16,7 +16,7 @@ Two forms — [b]panes[/b] that open a roof tile to the full sky (crops + true s
 [/list]
 [b]DOMES[/b] spread a soft glow over a radius (never enough for crops):
 [list]
-[*][b]Dome Skylight[/b] — soft daylight over a small area; ideal for workshops, bedrooms and walkways. Hand-build the dome at a crafting spot, or cast it faster at an electric smelter. Also comes in [b]2×1 and 2×2[/b] footprints so the light sits dead-centre in an even-sized room — [b]NEW:[/b] while placing them, the footprint is outlined with corner markers plus a circle showing the true light reach, centred on the footprint.
+[*][b]Dome Skylight[/b] — soft daylight over a small area; ideal for workshops, bedrooms and walkways. Hand-build the dome at a crafting spot, or cast it faster at an electric smelter. Also comes in [b]2×1 and 2×2[/b] footprints so the light sits dead-centre in an even-sized room, with a placement preview that outlines the footprint and shows the true light reach.
 [*][b]Light Tunnel[/b] — a dome fitted to a mirror-lined reflection tube that pipes daylight down through solid overhead mountain.
 [/list]
 
@@ -69,13 +69,11 @@ Grand domed glass ceilings — [b]2×2, 3×3, 4×4 and 5×5[/b] — built from p
 [*]RimWorld 1.6.
 [/list]
 
-[b]Version:[/b] v2.2.0
-[h3]Changelog v2.2[/h3]
+[b]Version:[/b] v2.3.0
+[h3]Changelog v2.3[/h3]
 [list]
-[*][b]Placement preview for the 2×1/2×2 domes[/b] — the footprint tiles are outlined with corner markers while placing or rotating, plus a single smooth circle showing the true light reach, dead-centred on the footprint (it tracks the dome light radius setting).
-[*][b]Honest placement rings[/b] — the dome and light tunnel preview rings now match their actual glow radius instead of a fixed guess.
-[*][b]New setting: hide installed skylights[/b] — drops the frame/glass sprite so roofs sit flush, while the skylight keeps channeling daylight exactly the same.
-[*][b]New HUD button[/b] — show/hide installed skylights in one click from the bottom-right overlay row (same setting as the mod menu, applies instantly); a mod-menu master switch can remove the button.
+[*][b]Dome glow matches the daylight outside[/b] — the dome, light tunnel and 2×1/2×2 domes now render their lit pool at full outdoor brightness out to the dome light-radius setting, tracking dusk, night and eclipses. Purely visual — the dome's soft gameplay light (still no crops) is unchanged.
+[*][b]Panes light a little wider[/b] — the industrial, tinted and basic skylights now cast their sky-light over a one-tile ring around the pane (a soft 3×3), so the lit patch reads wider than a single tile. Purely visual — the ring doesn't grow crops or pass true sunlight.
 [/list]
 
 [b]Source:[/b] https://github.com/archdukejim/rimworld-skylights

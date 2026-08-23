@@ -4,7 +4,7 @@
   <author>archdukejim</author>
   <packageId>archdukejim.Skylights</packageId>
   <url>https://steamcommunity.com/sharedfiles/filedetails/?id=3780129860</url>
-  <modVersion>2.2.0</modVersion>
+  <modVersion>2.3.0</modVersion>
   <supportedVersions>
     <li>1.6</li>
   </supportedVersions>
@@ -68,11 +68,9 @@ Source: https://github.com/archdukejim/rimworld-skylights
 Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3780129860
 Support development: https://ko-fi.com/archdukejim
 
-Version: v2.2.0
+Version: v2.3.0
 
---- CHANGELOG v2.2 ---
-- Placement preview for the 2x1/2x2 domes: the footprint tiles are outlined with corner markers while placing or rotating, plus a single smooth circle showing the true light reach, dead-centred on the footprint (it tracks the dome light radius setting).
-- Dome and light tunnel placement rings now match their actual glow radius instead of a fixed guess.
-- New setting: hide installed skylights — drops the frame/glass sprite so roofs sit flush, while the skylight keeps channeling daylight exactly the same.
-- New HUD button on the bottom-right overlay row: show/hide installed skylights in one click (same setting as the mod menu, applies instantly); a mod-menu master switch can remove the button.</description>
+--- CHANGELOG v2.3 ---
+- Dome glow now matches the daylight outside: the dome, light tunnel and 2x1/2x2 domes render their lit pool at full outdoor brightness out to the dome light-radius setting, tracking dusk, night and eclipses. Purely visual — the dome's soft gameplay light (still no crops) is unchanged.
+- Panes light a little wider: the industrial, tinted and basic skylights now cast their sky-light over a one-tile ring around the pane (a soft 3x3), so the lit patch reads wider than a single tile. Purely visual — the ring doesn't grow crops or pass true sunlight.</description>
 </ModMetaData>

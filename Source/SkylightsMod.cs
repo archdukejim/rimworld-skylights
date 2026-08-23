@@ -97,6 +97,51 @@ namespace Skylights
     }
 
     /// <summary>
+    /// Per-map set of cells a skylight brightens for <em>display only</em>. Unlike <see cref="SkylightGrid"/>
+    /// (which also feeds the glow grid and the sun-gene checks), these cells are read by the lighting <em>overlay</em>
+    /// alone — via <see cref="SkylightLightHelper"/> — so they render at full open-sky brightness, matching the
+    /// outdoors and tracking dawn, dusk and eclipses. Nothing here touches gameplay:
+    /// <see cref="Patch_GlowGrid_GroundGlowAt"/> and <see cref="Patch_InSunlight"/> never consult this grid, so plant
+    /// growth, lit/dark checks and Biotech genes are all left exactly as they were. Maintained by
+    /// <see cref="CompSkylight"/> for two cases: a dome's lit pool (<c>matchOutdoorGlow</c>) and the cosmetic ring
+    /// around a square pane (<c>glowHaloRadius</c>), which reads a little wider than the single sky-lit tile.
+    /// </summary>
+    public static class VisualSkyGrid
+    {
+        private static readonly Dictionary<Map, HashSet<IntVec3>> byMap = new Dictionary<Map, HashSet<IntVec3>>();
+
+        public static void Set(Map map, IntVec3 c, bool on)
+        {
+            if (map == null) return;
+            if (on)
+            {
+                if (!byMap.TryGetValue(map, out HashSet<IntVec3> set))
+                {
+                    set = new HashSet<IntVec3>();
+                    byMap[map] = set;
+                }
+                if (set.Add(c)) Dirty(map, c);
+            }
+            else if (byMap.TryGetValue(map, out HashSet<IntVec3> set) && set.Remove(c))
+            {
+                Dirty(map, c);
+            }
+        }
+
+        public static bool Contains(Map map, IntVec3 c)
+        {
+            return map != null && byMap.TryGetValue(map, out HashSet<IntVec3> set) && set.Contains(c);
+        }
+
+        // Regenerate only the lighting overlay for this cell — its relevantChangeTypes are Roofs | GroundGlow.
+        // Deliberately NOT glowGrid.DirtyCell: the gameplay glow value is left untouched, keeping this display-only.
+        private static void Dirty(Map map, IntVec3 c)
+        {
+            map.mapDrawer?.MapMeshDirty(c, (ulong)MapMeshFlagDefOf.Roofs | (ulong)MapMeshFlagDefOf.GroundGlow);
+        }
+    }
+
+    /// <summary>
     /// Every Biotech sun-gene, "in sunlight" stat condition, and the in-sunlight mood thought funnels through
     /// <c>SanguophageUtility.InSunlight</c>, which returns false for any roofed cell. Make a clear paned
     /// skylight cell read as in sunlight — exactly as bright as the real sky — so those genes fire indoors
@@ -275,16 +320,26 @@ namespace Skylights
         public static RoofDef RoofAtForLight(RoofGrid grid, int index)
         {
             Map map = MapOf(grid);
-            if (map != null && SkylightGrid.Contains(map, map.cellIndices.IndexToCell(index)))
-                return null;
+            if (map != null)
+            {
+                IntVec3 c = map.cellIndices.IndexToCell(index);
+                // SkylightGrid: paned/atrium cells lit as open sky. VisualSkyGrid: dome pool cells brightened
+                // for display only. Either way the overlay should light the cell like the outdoors.
+                if (SkylightGrid.Contains(map, c) || VisualSkyGrid.Contains(map, c))
+                    return null;
+            }
             return grid.RoofAt(index);
         }
 
         public static bool RoofedForLight(RoofGrid grid, int index)
         {
             Map map = MapOf(grid);
-            if (map != null && SkylightGrid.Contains(map, map.cellIndices.IndexToCell(index)))
-                return false;
+            if (map != null)
+            {
+                IntVec3 c = map.cellIndices.IndexToCell(index);
+                if (SkylightGrid.Contains(map, c) || VisualSkyGrid.Contains(map, c))
+                    return false;
+            }
             return grid.Roofed(index);
         }
     }
@@ -423,7 +478,8 @@ namespace Skylights
         private static bool IsInwardOpen(Map map, RoofEdgeMode mode, int idx, RoofDef roofDefForLight)
         {
             if (mode == RoofEdgeMode.Full) return roofDefForLight == null;
-            return SkylightGrid.Contains(map, map.cellIndices.IndexToCell(idx));
+            IntVec3 c = map.cellIndices.IndexToCell(idx);
+            return SkylightGrid.Contains(map, c) || VisualSkyGrid.Contains(map, c);
         }
 
         /// <summary>True if any of the tile's 8 neighbours is an inward-open tile — i.e. this roofed tile sits on
