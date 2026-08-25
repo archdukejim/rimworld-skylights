@@ -14,7 +14,7 @@
        - Pyramid, T tiers (2x2:0, 3x3:1, 4x4:2, 5x5:3): panes = 4*(T+1) facet sections;
          frames = 4 perimeter + 4 corner-to-apex ridges + 4 per tier  ->  4/8, 8/12, 12/16, 16/20.
        - Dome, S-sided polygon x K rings (2x2: 6x1, 3x3: 8x2, 4x4: 10x2, 5x5: 12x3): panes = S*K band
-         sections; frames = S*K polygon segments + S spokes + 4 corner braces  ->  6/16, 16/28, 20/34, 36/52. -->
+         sections; frames = S*K polygon segments + S spokes  ->  6/12, 16/24, 20/30, 36/48. -->
 
   <!-- One architect-menu button per style+tint; the sizes live in the dropdown. -->
   <DesignatorDropdownGroupDef>
@@ -77,7 +77,7 @@
     </statBases>
     <costList>
       <StructuralGlass>6</StructuralGlass>
-      <StructuralFrame>16</StructuralFrame>
+      <StructuralFrame>12</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -99,7 +99,7 @@
     </statBases>
     <costList>
       <StructuralGlass>16</StructuralGlass>
-      <StructuralFrame>28</StructuralFrame>
+      <StructuralFrame>24</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -121,7 +121,7 @@
     </statBases>
     <costList>
       <StructuralGlass>20</StructuralGlass>
-      <StructuralFrame>34</StructuralFrame>
+      <StructuralFrame>30</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -143,7 +143,7 @@
     </statBases>
     <costList>
       <StructuralGlass>36</StructuralGlass>
-      <StructuralFrame>52</StructuralFrame>
+      <StructuralFrame>48</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -167,7 +167,7 @@
     </statBases>
     <costList>
       <TintedGlass>6</TintedGlass>
-      <StructuralFrame>16</StructuralFrame>
+      <StructuralFrame>12</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -189,7 +189,7 @@
     </statBases>
     <costList>
       <TintedGlass>16</TintedGlass>
-      <StructuralFrame>28</StructuralFrame>
+      <StructuralFrame>24</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -211,7 +211,7 @@
     </statBases>
     <costList>
       <TintedGlass>20</TintedGlass>
-      <StructuralFrame>34</StructuralFrame>
+      <StructuralFrame>30</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -233,7 +233,7 @@
     </statBases>
     <costList>
       <TintedGlass>36</TintedGlass>
-      <StructuralFrame>52</StructuralFrame>
+      <StructuralFrame>48</StructuralFrame>
     </costList>
   </ThingDef>
 
