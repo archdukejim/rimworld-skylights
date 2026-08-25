@@ -7,7 +7,14 @@
        sun) and tinted (same light, UV-filtered) variants. Built from structural/tinted glass panes +
        structural frames scaling with size; materials-only, self-supporting — the room walls carry the
        roof. The sprites are translucent by design and respect the global skylight opacity slider
-       (Skylights architect tab), so players tune how visible the glasswork is. -->
+       (Skylights architect tab), so players tune how visible the glasswork is.
+
+       COUNTABLE CONSTRUCTION: every costList equals what the sprite actually shows, and smaller sizes
+       have genuinely fewer structural layers (not just thicker lines).
+       - Pyramid, T tiers (2x2:0, 3x3:1, 4x4:2, 5x5:3): panes = 4*(T+1) facet sections;
+         frames = 4 perimeter + 4 corner-to-apex ridges + 4 per tier  ->  4/8, 8/12, 12/16, 16/20.
+       - Dome, S-sided polygon x K rings (2x2: 6x1, 3x3: 8x2, 4x4: 10x2, 5x5: 12x3): panes = S*K band
+         sections; frames = S*K polygon segments + S spokes + 4 corner braces  ->  6/16, 16/28, 20/34, 36/52. -->
 
   <!-- One architect-menu button per style+tint; the sizes live in the dropdown. -->
   <DesignatorDropdownGroupDef>
@@ -69,8 +76,8 @@
       <Beauty>15</Beauty>
     </statBases>
     <costList>
-      <StructuralGlass>4</StructuralGlass>
-      <StructuralFrame>4</StructuralFrame>
+      <StructuralGlass>6</StructuralGlass>
+      <StructuralFrame>16</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -91,8 +98,8 @@
       <Beauty>25</Beauty>
     </statBases>
     <costList>
-      <StructuralGlass>9</StructuralGlass>
-      <StructuralFrame>6</StructuralFrame>
+      <StructuralGlass>16</StructuralGlass>
+      <StructuralFrame>28</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -113,8 +120,8 @@
       <Beauty>40</Beauty>
     </statBases>
     <costList>
-      <StructuralGlass>16</StructuralGlass>
-      <StructuralFrame>10</StructuralFrame>
+      <StructuralGlass>20</StructuralGlass>
+      <StructuralFrame>34</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -135,8 +142,8 @@
       <Beauty>60</Beauty>
     </statBases>
     <costList>
-      <StructuralGlass>25</StructuralGlass>
-      <StructuralFrame>14</StructuralFrame>
+      <StructuralGlass>36</StructuralGlass>
+      <StructuralFrame>52</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -159,8 +166,8 @@
       <Beauty>18</Beauty>
     </statBases>
     <costList>
-      <TintedGlass>4</TintedGlass>
-      <StructuralFrame>4</StructuralFrame>
+      <TintedGlass>6</TintedGlass>
+      <StructuralFrame>16</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -181,8 +188,8 @@
       <Beauty>30</Beauty>
     </statBases>
     <costList>
-      <TintedGlass>9</TintedGlass>
-      <StructuralFrame>6</StructuralFrame>
+      <TintedGlass>16</TintedGlass>
+      <StructuralFrame>28</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -203,8 +210,8 @@
       <Beauty>48</Beauty>
     </statBases>
     <costList>
-      <TintedGlass>16</TintedGlass>
-      <StructuralFrame>10</StructuralFrame>
+      <TintedGlass>20</TintedGlass>
+      <StructuralFrame>34</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -225,8 +232,8 @@
       <Beauty>72</Beauty>
     </statBases>
     <costList>
-      <TintedGlass>25</TintedGlass>
-      <StructuralFrame>14</StructuralFrame>
+      <TintedGlass>36</TintedGlass>
+      <StructuralFrame>52</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -250,7 +257,7 @@
     </statBases>
     <costList>
       <StructuralGlass>4</StructuralGlass>
-      <StructuralFrame>4</StructuralFrame>
+      <StructuralFrame>8</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -271,8 +278,8 @@
       <Beauty>25</Beauty>
     </statBases>
     <costList>
-      <StructuralGlass>9</StructuralGlass>
-      <StructuralFrame>6</StructuralFrame>
+      <StructuralGlass>8</StructuralGlass>
+      <StructuralFrame>12</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -293,8 +300,8 @@
       <Beauty>40</Beauty>
     </statBases>
     <costList>
-      <StructuralGlass>16</StructuralGlass>
-      <StructuralFrame>10</StructuralFrame>
+      <StructuralGlass>12</StructuralGlass>
+      <StructuralFrame>16</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -315,8 +322,8 @@
       <Beauty>60</Beauty>
     </statBases>
     <costList>
-      <StructuralGlass>25</StructuralGlass>
-      <StructuralFrame>14</StructuralFrame>
+      <StructuralGlass>16</StructuralGlass>
+      <StructuralFrame>20</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -340,7 +347,7 @@
     </statBases>
     <costList>
       <TintedGlass>4</TintedGlass>
-      <StructuralFrame>4</StructuralFrame>
+      <StructuralFrame>8</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -361,8 +368,8 @@
       <Beauty>30</Beauty>
     </statBases>
     <costList>
-      <TintedGlass>9</TintedGlass>
-      <StructuralFrame>6</StructuralFrame>
+      <TintedGlass>8</TintedGlass>
+      <StructuralFrame>12</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -383,8 +390,8 @@
       <Beauty>48</Beauty>
     </statBases>
     <costList>
-      <TintedGlass>16</TintedGlass>
-      <StructuralFrame>10</StructuralFrame>
+      <TintedGlass>12</TintedGlass>
+      <StructuralFrame>16</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -405,8 +412,8 @@
       <Beauty>72</Beauty>
     </statBases>
     <costList>
-      <TintedGlass>25</TintedGlass>
-      <StructuralFrame>14</StructuralFrame>
+      <TintedGlass>16</TintedGlass>
+      <StructuralFrame>20</StructuralFrame>
     </costList>
   </ThingDef>
 
