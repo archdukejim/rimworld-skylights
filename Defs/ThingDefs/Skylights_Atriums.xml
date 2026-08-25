@@ -13,8 +13,8 @@
        have genuinely fewer structural layers (not just thicker lines).
        - Pyramid, T tiers (2x2:0, 3x3:1, 4x4:2, 5x5:3): panes = 4*(T+1) facet sections;
          frames = 4 perimeter + 4 corner-to-apex ridges + 4 per tier  ->  4/8, 8/12, 12/16, 16/20.
-       - Dome, S-sided polygon x K rings (2x2: 6x1, 3x3: 8x2, 4x4: 10x2, 5x5: 12x3): panes = S*K band
-         sections; frames = S*K polygon segments + S spokes  ->  6/12, 16/24, 20/30, 36/48. -->
+       - Dome, S-sided polygon x K rings (2x2: 6x1, 3x3: 8x2, 4x4: 10x2, 5x5: 12x2): panes = S*K band
+         sections; frames = S*K polygon segments + S spokes  ->  6/12, 16/24, 20/30, 24/36. -->
 
   <!-- One architect-menu button per style+tint; the sizes live in the dropdown. -->
   <DesignatorDropdownGroupDef>
@@ -142,8 +142,8 @@
       <Beauty>60</Beauty>
     </statBases>
     <costList>
-      <StructuralGlass>36</StructuralGlass>
-      <StructuralFrame>48</StructuralFrame>
+      <StructuralGlass>24</StructuralGlass>
+      <StructuralFrame>36</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -232,8 +232,8 @@
       <Beauty>72</Beauty>
     </statBases>
     <costList>
-      <TintedGlass>36</TintedGlass>
-      <StructuralFrame>48</StructuralFrame>
+      <TintedGlass>24</TintedGlass>
+      <StructuralFrame>36</StructuralFrame>
     </costList>
   </ThingDef>
 
