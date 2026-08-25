@@ -3,7 +3,7 @@
 
   <!-- ATRIUM SKYLIGHTS: grand glass ceilings that render their whole footprint as open sky (via the
        multi-cell renderAsSky path in CompSkylight). Two art styles — a domed geodesic ring-and-spoke
-       ceiling and a flat paned grid — in 2x2/3x3/4x4/5x5, each in clear (full daylight, growable, true
+       ceiling and a glass pyramid (four facets to an apex) — in 2x2/3x3/4x4/5x5, each in clear (full daylight, growable, true
        sun) and tinted (same light, UV-filtered) variants. Built from structural/tinted glass panes +
        structural frames scaling with size; materials-only, self-supporting — the room walls carry the
        roof. The sprites are translucent by design and respect the global skylight opacity slider
@@ -234,8 +234,8 @@
 
   <ThingDef ParentName="AtriumClearBase">
     <defName>SkylightAtriumPaned_Small</defName>
-    <label>paned atrium skylight (2x2)</label>
-    <description>A small flat glass atrium ceiling — a grid of structural panes in slender mullions. It opens a two-by-two span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Built from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <label>pyramid atrium skylight (2x2)</label>
+    <description>A small glass pyramid atrium ceiling — four triangular structural-glass facets rising to a central apex. It opens a two-by-two span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Built from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(2,2)</size>
     <designatorDropdown>SkylightAtriumsPaned</designatorDropdown>
     <graphicData>
@@ -256,8 +256,8 @@
 
   <ThingDef ParentName="AtriumClearBase">
     <defName>SkylightAtriumPaned_Medium</defName>
-    <label>paned atrium skylight (3x3)</label>
-    <description>A flat glass atrium ceiling — a grid of structural panes in slender mullions. It opens a three-by-three span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Built from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <label>pyramid atrium skylight (3x3)</label>
+    <description>A glass pyramid atrium ceiling — four triangular structural-glass facets rising to a central apex. It opens a three-by-three span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Built from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(3,3)</size>
     <designatorDropdown>SkylightAtriumsPaned</designatorDropdown>
     <graphicData>
@@ -278,8 +278,8 @@
 
   <ThingDef ParentName="AtriumClearBase">
     <defName>SkylightAtriumPaned_Large</defName>
-    <label>paned atrium skylight (4x4)</label>
-    <description>A large flat glass atrium ceiling — a grid of structural panes in slender mullions. It opens a four-by-four span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Built from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <label>pyramid atrium skylight (4x4)</label>
+    <description>A large glass pyramid atrium ceiling — four triangular structural-glass facets rising to a central apex. It opens a four-by-four span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Built from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(4,4)</size>
     <designatorDropdown>SkylightAtriumsPaned</designatorDropdown>
     <graphicData>
@@ -300,8 +300,8 @@
 
   <ThingDef ParentName="AtriumClearBase">
     <defName>SkylightAtriumPaned_Grand</defName>
-    <label>paned atrium skylight (5x5)</label>
-    <description>A grand flat glass atrium ceiling — a grid of structural panes in slender mullions. It opens a five-by-five span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Built from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <label>pyramid atrium skylight (5x5)</label>
+    <description>A grand glass pyramid atrium ceiling — four triangular structural-glass facets rising to a central apex. It opens a five-by-five span of roof to the full sky — bright enough to grow crops by daylight, dark at night — and passes true sunlight for Biotech genes. Built from structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(5,5)</size>
     <designatorDropdown>SkylightAtriumsPaned</designatorDropdown>
     <graphicData>
@@ -324,8 +324,8 @@
 
   <ThingDef ParentName="AtriumTintedBase">
     <defName>SkylightAtriumPanedTinted_Small</defName>
-    <label>tinted paned atrium skylight (2x2)</label>
-    <description>A small flat atrium ceiling of UV-filtering tinted glass panes in slender mullions. It opens a two-by-two span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Built from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <label>tinted pyramid atrium skylight (2x2)</label>
+    <description>A small glass pyramid atrium ceiling of UV-filtering tinted panes — four triangular facets rising to a central apex. It opens a two-by-two span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Built from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(2,2)</size>
     <designatorDropdown>SkylightAtriumsPanedTinted</designatorDropdown>
     <graphicData>
@@ -346,8 +346,8 @@
 
   <ThingDef ParentName="AtriumTintedBase">
     <defName>SkylightAtriumPanedTinted_Medium</defName>
-    <label>tinted paned atrium skylight (3x3)</label>
-    <description>A flat atrium ceiling of UV-filtering tinted glass panes in slender mullions. It opens a three-by-three span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Built from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <label>tinted pyramid atrium skylight (3x3)</label>
+    <description>A glass pyramid atrium ceiling of UV-filtering tinted panes — four triangular facets rising to a central apex. It opens a three-by-three span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Built from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(3,3)</size>
     <designatorDropdown>SkylightAtriumsPanedTinted</designatorDropdown>
     <graphicData>
@@ -368,8 +368,8 @@
 
   <ThingDef ParentName="AtriumTintedBase">
     <defName>SkylightAtriumPanedTinted_Large</defName>
-    <label>tinted paned atrium skylight (4x4)</label>
-    <description>A large flat atrium ceiling of UV-filtering tinted glass panes in slender mullions. It opens a four-by-four span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Built from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <label>tinted pyramid atrium skylight (4x4)</label>
+    <description>A large glass pyramid atrium ceiling of UV-filtering tinted panes — four triangular facets rising to a central apex. It opens a four-by-four span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Built from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(4,4)</size>
     <designatorDropdown>SkylightAtriumsPanedTinted</designatorDropdown>
     <graphicData>
@@ -390,8 +390,8 @@
 
   <ThingDef ParentName="AtriumTintedBase">
     <defName>SkylightAtriumPanedTinted_Grand</defName>
-    <label>tinted paned atrium skylight (5x5)</label>
-    <description>A grand flat atrium ceiling of UV-filtering tinted glass panes in slender mullions. It opens a five-by-five span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Built from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
+    <label>tinted pyramid atrium skylight (5x5)</label>
+    <description>A grand glass pyramid atrium ceiling of UV-filtering tinted panes — four triangular facets rising to a central apex. It opens a five-by-five span of roof to daylight — bright enough to grow crops, dark at night — but its tint keeps sun-reactive genes from triggering, so sun-sensitive colonists can stand beneath it unharmed. Built from tinted structural glass panes set in a frame of structural supports. It won't work under thick overhead mountain.</description>
     <size>(5,5)</size>
     <designatorDropdown>SkylightAtriumsPanedTinted</designatorDropdown>
     <graphicData>
