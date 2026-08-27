@@ -11,8 +11,9 @@
 
        COUNTABLE CONSTRUCTION: every costList equals what the sprite actually shows, and smaller sizes
        have genuinely fewer structural layers (not just thicker lines).
-       - Pyramid, T tiers (2x2:0, 3x3:1, 4x4:2, 5x5:3): panes = 4*(T+1) facet sections;
-         frames = 4 perimeter + 4 corner-to-apex ridges + 4 per tier  ->  4/8, 8/12, 12/16, 16/20.
+       - Pyramid, equilateral lattice depth n (2x2:1, 3x3:2, 4x4:2, 5x5:3): each facet is midpoint-
+         subdivided into n^2 congruent triangles (Louvre style) -> panes = 4*n^2; frames = 4 perimeter
+         + 4 ridges + 4 per row line + 8 diagonals per depth step = 8 + 12*(n-1)  ->  4/8, 16/20, 16/20, 36/32.
        - Dome, S-sided polygon x K rings (2x2: 6x1, 3x3: 8x2, 4x4: 10x2, 5x5: 12x2): panes = S*K band
          sections; frames = S*K polygon segments + S spokes  ->  6/12, 16/24, 20/30, 24/36. -->
 
@@ -278,8 +279,8 @@
       <Beauty>25</Beauty>
     </statBases>
     <costList>
-      <StructuralGlass>8</StructuralGlass>
-      <StructuralFrame>12</StructuralFrame>
+      <StructuralGlass>16</StructuralGlass>
+      <StructuralFrame>20</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -300,8 +301,8 @@
       <Beauty>40</Beauty>
     </statBases>
     <costList>
-      <StructuralGlass>12</StructuralGlass>
-      <StructuralFrame>16</StructuralFrame>
+      <StructuralGlass>16</StructuralGlass>
+      <StructuralFrame>20</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -322,8 +323,8 @@
       <Beauty>60</Beauty>
     </statBases>
     <costList>
-      <StructuralGlass>16</StructuralGlass>
-      <StructuralFrame>20</StructuralFrame>
+      <StructuralGlass>36</StructuralGlass>
+      <StructuralFrame>32</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -368,8 +369,8 @@
       <Beauty>30</Beauty>
     </statBases>
     <costList>
-      <TintedGlass>8</TintedGlass>
-      <StructuralFrame>12</StructuralFrame>
+      <TintedGlass>16</TintedGlass>
+      <StructuralFrame>20</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -390,8 +391,8 @@
       <Beauty>48</Beauty>
     </statBases>
     <costList>
-      <TintedGlass>12</TintedGlass>
-      <StructuralFrame>16</StructuralFrame>
+      <TintedGlass>16</TintedGlass>
+      <StructuralFrame>20</StructuralFrame>
     </costList>
   </ThingDef>
 
@@ -412,8 +413,8 @@
       <Beauty>72</Beauty>
     </statBases>
     <costList>
-      <TintedGlass>16</TintedGlass>
-      <StructuralFrame>20</StructuralFrame>
+      <TintedGlass>36</TintedGlass>
+      <StructuralFrame>32</StructuralFrame>
     </costList>
   </ThingDef>
 
