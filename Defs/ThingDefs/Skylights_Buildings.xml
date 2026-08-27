@@ -226,7 +226,7 @@
     </researchPrerequisites>
     <statBases>
       <MaxHitPoints>50</MaxHitPoints>
-      <WorkToBuild>210</WorkToBuild>
+      <WorkToBuild>90</WorkToBuild>
       <Mass>3</Mass>
       <Beauty>3</Beauty>
     </statBases>
@@ -270,7 +270,7 @@
     </researchPrerequisites>
     <statBases>
       <MaxHitPoints>50</MaxHitPoints>
-      <WorkToBuild>210</WorkToBuild>
+      <WorkToBuild>90</WorkToBuild>
       <Mass>3</Mass>
       <Beauty>3</Beauty>
     </statBases>
