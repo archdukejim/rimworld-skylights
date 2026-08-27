@@ -72,7 +72,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>180</MaxHitPoints>
-      <WorkToBuild>600</WorkToBuild>
+      <WorkToBuild>750</WorkToBuild>
       <Mass>8</Mass>
       <Beauty>15</Beauty>
     </statBases>
@@ -94,7 +94,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>240</MaxHitPoints>
-      <WorkToBuild>1100</WorkToBuild>
+      <WorkToBuild>1400</WorkToBuild>
       <Mass>16</Mass>
       <Beauty>25</Beauty>
     </statBases>
@@ -116,7 +116,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>320</MaxHitPoints>
-      <WorkToBuild>1700</WorkToBuild>
+      <WorkToBuild>2200</WorkToBuild>
       <Mass>28</Mass>
       <Beauty>40</Beauty>
     </statBases>
@@ -138,7 +138,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>400</MaxHitPoints>
-      <WorkToBuild>2500</WorkToBuild>
+      <WorkToBuild>3200</WorkToBuild>
       <Mass>45</Mass>
       <Beauty>60</Beauty>
     </statBases>
@@ -162,7 +162,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>180</MaxHitPoints>
-      <WorkToBuild>600</WorkToBuild>
+      <WorkToBuild>750</WorkToBuild>
       <Mass>8</Mass>
       <Beauty>18</Beauty>
     </statBases>
@@ -184,7 +184,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>240</MaxHitPoints>
-      <WorkToBuild>1100</WorkToBuild>
+      <WorkToBuild>1400</WorkToBuild>
       <Mass>16</Mass>
       <Beauty>30</Beauty>
     </statBases>
@@ -206,7 +206,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>320</MaxHitPoints>
-      <WorkToBuild>1700</WorkToBuild>
+      <WorkToBuild>2200</WorkToBuild>
       <Mass>28</Mass>
       <Beauty>48</Beauty>
     </statBases>
@@ -228,7 +228,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>400</MaxHitPoints>
-      <WorkToBuild>2500</WorkToBuild>
+      <WorkToBuild>3200</WorkToBuild>
       <Mass>45</Mass>
       <Beauty>72</Beauty>
     </statBases>
@@ -252,7 +252,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>180</MaxHitPoints>
-      <WorkToBuild>600</WorkToBuild>
+      <WorkToBuild>450</WorkToBuild>
       <Mass>8</Mass>
       <Beauty>15</Beauty>
     </statBases>
@@ -274,7 +274,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>240</MaxHitPoints>
-      <WorkToBuild>1100</WorkToBuild>
+      <WorkToBuild>800</WorkToBuild>
       <Mass>16</Mass>
       <Beauty>25</Beauty>
     </statBases>
@@ -296,7 +296,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>320</MaxHitPoints>
-      <WorkToBuild>1700</WorkToBuild>
+      <WorkToBuild>1200</WorkToBuild>
       <Mass>28</Mass>
       <Beauty>40</Beauty>
     </statBases>
@@ -318,7 +318,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>400</MaxHitPoints>
-      <WorkToBuild>2500</WorkToBuild>
+      <WorkToBuild>1800</WorkToBuild>
       <Mass>45</Mass>
       <Beauty>60</Beauty>
     </statBases>
@@ -342,7 +342,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>180</MaxHitPoints>
-      <WorkToBuild>600</WorkToBuild>
+      <WorkToBuild>450</WorkToBuild>
       <Mass>8</Mass>
       <Beauty>18</Beauty>
     </statBases>
@@ -364,7 +364,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>240</MaxHitPoints>
-      <WorkToBuild>1100</WorkToBuild>
+      <WorkToBuild>800</WorkToBuild>
       <Mass>16</Mass>
       <Beauty>30</Beauty>
     </statBases>
@@ -386,7 +386,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>320</MaxHitPoints>
-      <WorkToBuild>1700</WorkToBuild>
+      <WorkToBuild>1200</WorkToBuild>
       <Mass>28</Mass>
       <Beauty>48</Beauty>
     </statBases>
@@ -408,7 +408,7 @@
     </graphicData>
     <statBases>
       <MaxHitPoints>400</MaxHitPoints>
-      <WorkToBuild>2500</WorkToBuild>
+      <WorkToBuild>1800</WorkToBuild>
       <Mass>45</Mass>
       <Beauty>72</Beauty>
     </statBases>
