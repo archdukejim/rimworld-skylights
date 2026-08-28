@@ -20,6 +20,7 @@
   <Skylights_OpacityCmd>skylight opacity</Skylights_OpacityCmd>
   <Skylights_OpacityCmdDesc>Adjust how strongly installed skylight glass and frames are drawn, from barely-there to fully visible. Currently {0}%. Applies to every installed skylight and takes effect immediately.</Skylights_OpacityCmdDesc>
   <Skylights_OpacityLabel>Skylight opacity: {0}%</Skylights_OpacityLabel>
+  <Skylights_NotOnShip>Requires structurally supported ship glazing — ordinary skylight glass can't take a gravship's flight stresses. Build ship windows here instead.</Skylights_NotOnShip>
   <Skylights_OpacitySetting>Skylight sprite opacity: {0}%</Skylights_OpacitySetting>
   <Skylights_OpacitySettingDesc>How strongly installed skylight glass and frames are drawn. Also adjustable from the Skylights architect tab. Takes effect immediately.</Skylights_OpacitySettingDesc>
 </LanguageData>
