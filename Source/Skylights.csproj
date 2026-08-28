@@ -25,6 +25,10 @@
       <HintPath>$(RimWorldPath)\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(RimWorldPath)\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="0Harmony">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\workshop\content\294100\1127530465\1.6\Assemblies\0Harmony.dll</HintPath>
       <Private>False</Private>
