@@ -73,6 +73,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
         <transmitsSun>true</transmitsSun>
       </li>
     </comps>
@@ -95,6 +98,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -116,6 +122,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -137,6 +146,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -158,6 +170,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -179,6 +194,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -200,6 +218,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
         <transmitsSun>true</transmitsSun>
       </li>
     </comps>
@@ -222,6 +243,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -243,6 +267,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -264,6 +291,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -285,6 +315,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -306,6 +339,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -327,6 +363,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
         <transmitsSun>true</transmitsSun>
       </li>
     </comps>
@@ -349,6 +388,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -370,6 +412,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -391,6 +436,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -412,6 +460,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -433,6 +484,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -454,6 +508,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
         <transmitsSun>true</transmitsSun>
       </li>
     </comps>
@@ -476,6 +533,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -497,6 +557,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -518,6 +581,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -539,6 +605,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -560,6 +629,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -581,6 +653,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
         <transmitsSun>true</transmitsSun>
       </li>
     </comps>
@@ -603,6 +678,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -624,6 +702,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -645,6 +726,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -666,6 +750,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -687,6 +774,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -708,6 +798,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
         <transmitsSun>true</transmitsSun>
       </li>
     </comps>
@@ -730,6 +823,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -751,6 +847,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -772,6 +871,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -793,6 +895,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
@@ -814,6 +919,9 @@
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
+        <!-- Pane-style visual halo (v2.3.0): a 1-tile sight-clipped ring renders as sky so a lone
+             window reads wider than its cell and mosaic clusters look continuous. Display-only. -->
+        <glowHaloRadius>1</glowHaloRadius>
       </li>
     </comps>
   </ThingDef>
