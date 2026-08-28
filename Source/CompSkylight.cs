@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using RimWorld;
+using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
@@ -58,6 +59,17 @@ namespace Skylights
         /// sun-sensitive pawns are exposed. The clear paned skylight sets this; the tinted one leaves it false
         /// (UV-filtered — lights the room but registers no sun for genes).</summary>
         public bool transmitsSun = false;
+
+        /// <summary>Context-aware light for Odyssey ship windows: on a normal surface tile the window behaves
+        /// as a regular renderAsSky skylight (daylight, crops, sun genes per transmitsSun); when the map sits
+        /// on a space planet layer (in orbit) there is no daylight to channel, so the sky registration is
+        /// dropped and the window's CompGlower (if any) is driven at <see cref="starlightGlow"/> instead —
+        /// a faint decorative starlight that never grows crops. Requires renderAsSky.</summary>
+        public bool spaceAware = false;
+
+        /// <summary>Fraction of the glower's full-daylight colour emitted as starlight while a
+        /// <see cref="spaceAware"/> window is in space. Kept below the plant-growth threshold.</summary>
+        public float starlightGlow = 0.22f;
 
         /// <summary>When true this skylight needs a roof-holding edifice (wall or pillar) within
         /// <see cref="supportRadius"/> tiles: a PlaceWorker blocks installing it out of range, and if that
@@ -132,8 +144,16 @@ namespace Skylights
             SpawnedSkylights.Add(this);
             if (Props.renderAsSky)
             {
+                // Space-aware windows also carry a CompGlower for their in-orbit starlight.
+                if (Props.spaceAware)
+                {
+                    glower = parent.GetComp<CompGlower>();
+                    if (glower != null) fullColor = glower.Props.glowColor;
+                    lastBucket = -1;
+                }
                 UpdateSkyChannel();
                 UpdateSkyHalo();
+                UpdateStarlight();
                 return;
             }
             if (Props.glowNodeDef != null)
@@ -185,6 +205,8 @@ namespace Skylights
                 UpdateSkyChannel();
                 // Recompute the cosmetic sky-lit ring so it self-heals when a nearby wall or roof changes.
                 UpdateSkyHalo();
+                // Space-aware ship windows drive their faint starlight glower while in orbit.
+                UpdateStarlight();
             }
             else
             {
@@ -192,6 +214,32 @@ namespace Skylights
                 // Recompute the display-only bright pool so it self-heals when a nearby wall or roof changes.
                 UpdateDomeVisual();
             }
+        }
+
+        /// <summary>Whether this map hangs in space (an Odyssey orbit layer) rather than on a planet surface.
+        /// Space has no daylight to channel, so space-aware windows switch to starlight there.</summary>
+        private bool MapInSpace()
+        {
+            Map map = parent.Map;
+            if (map == null) return false;
+            PlanetTile tile = map.Tile;
+            return tile.Valid && tile.LayerDef != null && tile.LayerDef.isSpace;
+        }
+
+        /// <summary>Drive a space-aware window's glower: off on a planet surface (the sky channel lights the
+        /// cell), a fixed faint starlight fraction while in space. Only touches the glower on state change.</summary>
+        private void UpdateStarlight()
+        {
+            if (!Props.spaceAware || glower == null) return;
+            int bucket = MapInSpace() ? 1 : 0;
+            if (bucket == lastBucket) return;
+            lastBucket = bucket;
+            float b = bucket == 1 ? Mathf.Clamp01(Props.starlightGlow) : 0f;
+            glower.GlowColor = new ColorInt(
+                Mathf.RoundToInt(fullColor.r * b),
+                Mathf.RoundToInt(fullColor.g * b),
+                Mathf.RoundToInt(fullColor.b * b),
+                fullColor.a);
         }
 
         /// <summary>Weak-glass skylights are held up by a nearby wall or pillar. If that support has been
@@ -269,9 +317,12 @@ namespace Skylights
             if (map == null) return;
 
             HashSet<IntVec3> desired = new HashSet<IntVec3>();
-            foreach (IntVec3 c in parent.OccupiedRect())
-                if (RoofChannelsLightAt(map, c))
-                    desired.Add(c);
+            // In space there is no daylight above the roof to channel — a space-aware window registers
+            // nothing (its starlight glower takes over) and the room stays sealed exactly as before.
+            if (!(Props.spaceAware && MapInSpace()))
+                foreach (IntVec3 c in parent.OccupiedRect())
+                    if (RoofChannelsLightAt(map, c))
+                        desired.Add(c);
 
             if (skyCells.SetEquals(desired)) return;
 
