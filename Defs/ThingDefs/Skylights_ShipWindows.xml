@@ -7,8 +7,11 @@
        preserves the RGB and drives only the alpha).
        Context-aware light (CompSkylight.spaceAware): on a planet surface they are full renderAsSky
        skylights (daylight, crops; clear passes true sun for genes, tints are UV-filtered); on a space
-       planet layer there is no daylight, so the sky channel drops out and the CompGlower sheds a faint
+       planet layer there is no daylight, so the sky channel drops out and the glower sheds a faint
        fixed starlight instead (starlightGlow, below any plant-growth threshold).
+       COLOURED LIGHT: each tint's CompProperties_Glower carries the tint colour, and CompSkylight
+       drives one glower for both contexts — a stained-glass wash on the surface (tintGlowFactor x sky
+       glow: amber windows pool amber light, gone at night) and tint-coloured starlight in orbit.
        Airtight by construction: the window keeps the physical roof tile and only channels light, so a
        hull room never counts as ExposedToSpace and no vacuum plumbing is involved.
        Luxury pricing: 2 glass + 6 frames per tile (vs 1+4 for a plain flat pane) — windows on a
@@ -45,21 +48,12 @@
       <Mass>3</Mass>
       <Beauty>6</Beauty>
     </statBases>
-    <comps>
-      <li Class="CompProperties_Glower">
-        <!-- Starlight glower for orbit: cool faint light, never bright enough to grow anything.
-             Driven by CompSkylight.UpdateStarlight; off entirely while on a planet surface. -->
-        <overlightRadius>0</overlightRadius>
-        <glowRadius>2</glowRadius>
-        <glowColor>(140,150,190,0)</glowColor>
-      </li>
-    </comps>
   </ThingDef>
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diagonal_Clear</defName>
     <label>ship window: diagonal (clear)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiagonal</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diagonal</texPath>
@@ -70,6 +64,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(205,210,220,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -84,7 +85,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diagonal_Azure</defName>
     <label>ship window: diagonal (azure)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiagonal</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diagonal</texPath>
@@ -95,6 +96,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(60,170,255,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -108,7 +116,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diagonal_Amber</defName>
     <label>ship window: diagonal (amber)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiagonal</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diagonal</texPath>
@@ -119,6 +127,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(255,195,60,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -132,7 +147,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diagonal_Emerald</defName>
     <label>ship window: diagonal (emerald)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiagonal</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diagonal</texPath>
@@ -143,6 +158,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(70,240,140,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -156,7 +178,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diagonal_Rose</defName>
     <label>ship window: diagonal (rose)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiagonal</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diagonal</texPath>
@@ -167,6 +189,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(255,110,180,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -180,7 +209,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diagonal_Violet</defName>
     <label>ship window: diagonal (violet)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiagonal</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diagonal</texPath>
@@ -191,6 +220,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(195,115,255,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -204,7 +240,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Quarter_Clear</defName>
     <label>ship window: quarter-arc (clear)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsQuarter</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Quarter</texPath>
@@ -215,6 +251,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(205,210,220,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -229,7 +272,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Quarter_Azure</defName>
     <label>ship window: quarter-arc (azure)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsQuarter</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Quarter</texPath>
@@ -240,6 +283,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(60,170,255,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -253,7 +303,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Quarter_Amber</defName>
     <label>ship window: quarter-arc (amber)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsQuarter</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Quarter</texPath>
@@ -264,6 +314,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(255,195,60,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -277,7 +334,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Quarter_Emerald</defName>
     <label>ship window: quarter-arc (emerald)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsQuarter</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Quarter</texPath>
@@ -288,6 +345,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(70,240,140,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -301,7 +365,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Quarter_Rose</defName>
     <label>ship window: quarter-arc (rose)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsQuarter</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Quarter</texPath>
@@ -312,6 +376,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(255,110,180,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -325,7 +396,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Quarter_Violet</defName>
     <label>ship window: quarter-arc (violet)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsQuarter</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Quarter</texPath>
@@ -336,6 +407,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(195,115,255,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -349,7 +427,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diamond_Clear</defName>
     <label>ship window: diamond (clear)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiamond</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diamond</texPath>
@@ -360,6 +438,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(205,210,220,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -374,7 +459,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diamond_Azure</defName>
     <label>ship window: diamond (azure)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiamond</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diamond</texPath>
@@ -385,6 +470,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(60,170,255,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -398,7 +490,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diamond_Amber</defName>
     <label>ship window: diamond (amber)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiamond</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diamond</texPath>
@@ -409,6 +501,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(255,195,60,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -422,7 +521,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diamond_Emerald</defName>
     <label>ship window: diamond (emerald)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiamond</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diamond</texPath>
@@ -433,6 +532,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(70,240,140,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -446,7 +552,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diamond_Rose</defName>
     <label>ship window: diamond (rose)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiamond</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diamond</texPath>
@@ -457,6 +563,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(255,110,180,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -470,7 +583,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diamond_Violet</defName>
     <label>ship window: diamond (violet)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiamond</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diamond</texPath>
@@ -481,6 +594,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(195,115,255,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -494,7 +614,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Chevron_Clear</defName>
     <label>ship window: chevron (clear)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsChevron</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Chevron</texPath>
@@ -505,6 +625,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(205,210,220,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -519,7 +646,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Chevron_Azure</defName>
     <label>ship window: chevron (azure)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsChevron</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Chevron</texPath>
@@ -530,6 +657,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(60,170,255,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -543,7 +677,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Chevron_Amber</defName>
     <label>ship window: chevron (amber)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsChevron</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Chevron</texPath>
@@ -554,6 +688,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(255,195,60,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -567,7 +708,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Chevron_Emerald</defName>
     <label>ship window: chevron (emerald)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsChevron</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Chevron</texPath>
@@ -578,6 +719,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(70,240,140,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -591,7 +739,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Chevron_Rose</defName>
     <label>ship window: chevron (rose)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsChevron</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Chevron</texPath>
@@ -602,6 +750,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(255,110,180,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -615,7 +770,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Chevron_Violet</defName>
     <label>ship window: chevron (violet)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsChevron</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Chevron</texPath>
@@ -626,6 +781,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(195,115,255,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -639,7 +801,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Cross_Clear</defName>
     <label>ship window: cross (clear)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsCross</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Cross</texPath>
@@ -650,6 +812,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(205,210,220,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -664,7 +833,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Cross_Azure</defName>
     <label>ship window: cross (azure)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsCross</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Cross</texPath>
@@ -675,6 +844,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(60,170,255,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -688,7 +864,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Cross_Amber</defName>
     <label>ship window: cross (amber)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsCross</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Cross</texPath>
@@ -699,6 +875,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(255,195,60,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -712,7 +895,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Cross_Emerald</defName>
     <label>ship window: cross (emerald)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsCross</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Cross</texPath>
@@ -723,6 +906,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(70,240,140,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -736,7 +926,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Cross_Rose</defName>
     <label>ship window: cross (rose)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsCross</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Cross</texPath>
@@ -747,6 +937,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(255,110,180,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -760,7 +957,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Cross_Violet</defName>
     <label>ship window: cross (violet)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsCross</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Cross</texPath>
@@ -771,6 +968,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(195,115,255,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -784,7 +988,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Star_Clear</defName>
     <label>ship window: starburst (clear)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsStar</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Star</texPath>
@@ -795,6 +999,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(205,210,220,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -809,7 +1020,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Star_Azure</defName>
     <label>ship window: starburst (azure)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsStar</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Star</texPath>
@@ -820,6 +1031,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(60,170,255,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -833,7 +1051,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Star_Amber</defName>
     <label>ship window: starburst (amber)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsStar</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Star</texPath>
@@ -844,6 +1062,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(255,195,60,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -857,7 +1082,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Star_Emerald</defName>
     <label>ship window: starburst (emerald)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsStar</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Star</texPath>
@@ -868,6 +1093,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(70,240,140,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -881,7 +1113,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Star_Rose</defName>
     <label>ship window: starburst (rose)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsStar</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Star</texPath>
@@ -892,6 +1124,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(255,110,180,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>
@@ -905,7 +1144,7 @@
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Star_Violet</defName>
     <label>ship window: starburst (violet)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow. Its coloured glass is UV-filtering — it lights the room but registers no sun for genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and washes the light around it with its tint, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsStar</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Star</texPath>
@@ -916,6 +1155,13 @@
       <StructuralFrame>6</StructuralFrame>
     </costList>
     <comps>
+      <li Class="CompProperties_Glower">
+        <!-- The tint colour itself: CompSkylight drives it as a daylight-tracking stained-glass wash on
+             the surface and as faint coloured starlight in orbit. Never bright enough to grow anything. -->
+        <overlightRadius>0</overlightRadius>
+        <glowRadius>2</glowRadius>
+        <glowColor>(195,115,255,0)</glowColor>
+      </li>
       <li Class="Skylights.CompProperties_Skylight">
         <renderAsSky>true</renderAsSky>
         <spaceAware>true</spaceAware>

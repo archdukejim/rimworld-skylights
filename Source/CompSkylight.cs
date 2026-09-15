@@ -67,9 +67,15 @@ namespace Skylights
         /// a faint decorative starlight that never grows crops. Requires renderAsSky.</summary>
         public bool spaceAware = false;
 
-        /// <summary>Fraction of the glower's full-daylight colour emitted as starlight while a
+        /// <summary>Fraction of the glower's colour emitted as starlight while a
         /// <see cref="spaceAware"/> window is in space. Kept below the plant-growth threshold.</summary>
         public float starlightGlow = 0.22f;
+
+        /// <summary>On a planet surface, a <see cref="spaceAware"/> window also drives its (tint-coloured)
+        /// glower at this fraction of the current sky glow, so stained glass washes the room around it with
+        /// its own colour — bright at midday, gone at night, exactly tracking the daylight it admits.
+        /// The glow is real but faint (a stained-glass wash, not a lamp). 0 disables the wash.</summary>
+        public float tintGlowFactor = 0.35f;
 
         /// <summary>When true this skylight needs a roof-holding edifice (wall or pillar) within
         /// <see cref="supportRadius"/> tiles: a PlaceWorker blocks installing it out of range, and if that
@@ -226,15 +232,36 @@ namespace Skylights
             return tile.Valid && tile.LayerDef != null && tile.LayerDef.isSpace;
         }
 
-        /// <summary>Drive a space-aware window's glower: off on a planet surface (the sky channel lights the
-        /// cell), a fixed faint starlight fraction while in space. Only touches the glower on state change.</summary>
+        /// <summary>Drive a space-aware window's tint-coloured glower by context: in space a fixed faint
+        /// starlight fraction; on a planet surface a stained-glass wash that tracks the sky
+        /// (<see cref="CompProperties_Skylight.tintGlowFactor"/> x current sky glow — bright at midday,
+        /// gone at night or under thick mountain). The glower's colour is the window's tint, so an amber
+        /// window pools amber light beneath it. Bucketised like UpdateGlow so the glow grid only recomputes
+        /// on a real change.</summary>
         private void UpdateStarlight()
         {
             if (!Props.spaceAware || glower == null) return;
-            int bucket = MapInSpace() ? 1 : 0;
+            Map map = parent.Map;
+            if (map == null) return;
+
+            float target;
+            if (MapInSpace())
+            {
+                target = Mathf.Clamp01(Props.starlightGlow);
+            }
+            else
+            {
+                float sky = Mathf.Clamp01(map.skyManager.CurSkyGlow);
+                target = sky >= Props.minChannelGlow && RoofChannelsLight()
+                    ? Mathf.Clamp01(sky * Props.tintGlowFactor)
+                    : 0f;
+            }
+
+            int steps = Mathf.Max(1, Props.glowSteps);
+            int bucket = Mathf.RoundToInt(target * steps);
             if (bucket == lastBucket) return;
             lastBucket = bucket;
-            float b = bucket == 1 ? Mathf.Clamp01(Props.starlightGlow) : 0f;
+            float b = (float)bucket / steps;
             glower.GlowColor = new ColorInt(
                 Mathf.RoundToInt(fullColor.r * b),
                 Mathf.RoundToInt(fullColor.g * b),
