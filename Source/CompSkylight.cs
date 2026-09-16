@@ -72,10 +72,11 @@ namespace Skylights
         public float starlightGlow = 0.22f;
 
         /// <summary>On a planet surface, a <see cref="spaceAware"/> window also drives its (tint-coloured)
-        /// glower at this fraction of the current sky glow, so stained glass washes the room around it with
-        /// its own colour — bright at midday, gone at night, exactly tracking the daylight it admits.
-        /// The glow is real but faint (a stained-glass wash, not a lamp). 0 disables the wash.</summary>
-        public float tintGlowFactor = 0.35f;
+        /// glower at this fraction of the current sky glow, so stained glass pools its own colour in the
+        /// room — bright at midday, gone at night, exactly tracking the daylight it admits. Capped in code
+        /// at 0.5 so the coloured light always stays below the crop growth threshold (0.51). Tinted ship
+        /// windows skip the white halo and let this coloured pool carry their look; 0 disables it.</summary>
+        public float tintGlowFactor = 0.5f;
 
         /// <summary>When true this skylight needs a roof-holding edifice (wall or pillar) within
         /// <see cref="supportRadius"/> tiles: a PlaceWorker blocks installing it out of range, and if that
@@ -278,6 +279,8 @@ namespace Skylights
                 target = sky >= Props.minChannelGlow && RoofChannelsLight()
                     ? Mathf.Clamp01(sky * Props.tintGlowFactor)
                     : 0f;
+                // Never a grow light: crops need glow >= 0.51, so the coloured pool stays just under it.
+                target = Mathf.Min(target, 0.5f);
             }
 
             int steps = Mathf.Max(1, Props.glowSteps);
