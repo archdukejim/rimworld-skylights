@@ -43,6 +43,12 @@ namespace Skylights
         /// sprites are hidden.</summary>
         public bool hideDisablesTintGlow = true;
 
+        /// <summary>Master switch for the skylight visibility HUD button (issue #20): the play-settings-row
+        /// toggle that shows/hides installed skylight sprites in play (and, per
+        /// <see cref="hideDisablesTintGlow"/>, mutes the stained-glass light with them). Off removes the
+        /// button (the mod-menu hide checkbox and the architect-tab button still work). Default on.</summary>
+        public bool skylightVisibilityButton = true;
+
         public const float MinOpacity = 0.1f;
 
         /// <summary>How strongly installed skylight sprites are drawn, 0.1–1. Multiplies the sprite's own
@@ -56,6 +62,7 @@ namespace Skylights
             Scribe_Values.Look(ref roofEdgeMode, "roofEdgeMode", RoofEdgeMode.Vanilla);
             Scribe_Values.Look(ref hideSkylights, "hideSkylights", false);
             Scribe_Values.Look(ref hideDisablesTintGlow, "hideDisablesTintGlow", true);
+            Scribe_Values.Look(ref skylightVisibilityButton, "skylightVisibilityButton", true);
             Scribe_Values.Look(ref skylightOpacity, "skylightOpacity", 1f);
             base.ExposeData();
         }
@@ -117,6 +124,11 @@ namespace Skylights
 
             list.CheckboxLabeled("Skylights_HideTintGlow".Translate(), ref Settings.hideDisablesTintGlow,
                 "Skylights_HideTintGlowDesc".Translate());
+
+            list.Gap(6f);
+
+            list.CheckboxLabeled("Skylights_VisibilityButton".Translate(), ref Settings.skylightVisibilityButton,
+                "Skylights_VisibilityButtonDesc".Translate());
 
             list.Gap(6f);
 
