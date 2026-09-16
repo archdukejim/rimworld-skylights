@@ -41,6 +41,8 @@ namespace Skylights
             settings.hideSkylights = !settings.hideSkylights;
             settings.Write();
             CompSkylight.DirtySkylightSections();
+            // The ship windows' coloured glow follows the hide state (hideDisablesTintGlow).
+            CompSkylight.RefreshWindowGlow();
             SoundDefOf.Mouseover_ButtonToggle.PlayOneShotOnCamera();
         }
     }

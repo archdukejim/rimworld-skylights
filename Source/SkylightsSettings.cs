@@ -37,6 +37,12 @@ namespace Skylights
         /// Default off (skylights visible).</summary>
         public bool hideSkylights = false;
 
+        /// <summary>When true (default), hiding installed skylights also switches off the ship windows'
+        /// coloured light — the stained-glass wash on the surface and the tinted starlight in orbit — so
+        /// hidden glass doesn't shed light from nowhere. Off keeps the coloured light while only the
+        /// sprites are hidden.</summary>
+        public bool hideDisablesTintGlow = true;
+
         public const float MinOpacity = 0.1f;
 
         /// <summary>How strongly installed skylight sprites are drawn, 0.1–1. Multiplies the sprite's own
@@ -49,6 +55,7 @@ namespace Skylights
             Scribe_Values.Look(ref domeGlowRadius, "domeGlowRadius", DefaultDomeGlowRadius);
             Scribe_Values.Look(ref roofEdgeMode, "roofEdgeMode", RoofEdgeMode.Vanilla);
             Scribe_Values.Look(ref hideSkylights, "hideSkylights", false);
+            Scribe_Values.Look(ref hideDisablesTintGlow, "hideDisablesTintGlow", true);
             Scribe_Values.Look(ref skylightOpacity, "skylightOpacity", 1f);
             base.ExposeData();
         }
@@ -108,6 +115,9 @@ namespace Skylights
             list.CheckboxLabeled("Skylights_HideInstalled".Translate(), ref Settings.hideSkylights,
                 "Skylights_HideInstalledDesc".Translate());
 
+            list.CheckboxLabeled("Skylights_HideTintGlow".Translate(), ref Settings.hideDisablesTintGlow,
+                "Skylights_HideTintGlowDesc".Translate());
+
             list.Gap(6f);
 
             list.Label("Skylights_OpacitySetting".Translate(Mathf.RoundToInt(Settings.skylightOpacity * 100f)));
@@ -124,6 +134,8 @@ namespace Skylights
             DomeGlowRadius.Apply();
             SkylightOpacity.Apply();
             CompSkylight.ForceGlowRefresh();
+            // Ship windows' coloured glow follows the hide toggle when hideDisablesTintGlow is on.
+            CompSkylight.RefreshWindowGlow();
             RepaintAllMapLighting();
             // The whole-map repaint above regenerates lazily; hit the skylight sections directly so a
             // hide/show or opacity change is visible the moment the dialog closes.

@@ -201,6 +201,23 @@ namespace Skylights
             }
         }
 
+        /// <summary>Re-drive every spawned ship window's coloured glower at once, so a hide/show flip (or
+        /// the hideDisablesTintGlow setting) takes effect the moment it changes instead of on the next
+        /// rare tick. The renderAsSky windows aren't in <see cref="glowDriven"/> (ForceGlowRefresh would
+        /// run the wrong update path on them), so they get their own walk.</summary>
+        public static void RefreshWindowGlow()
+        {
+            for (int i = 0; i < SpawnedSkylights.Count; i++)
+            {
+                CompSkylight c = SpawnedSkylights[i];
+                if (c.Props.renderAsSky && c.Props.spaceAware)
+                {
+                    c.lastBucket = -1;
+                    c.UpdateStarlight();
+                }
+            }
+        }
+
         public override void CompTickRare()
         {
             if (Props.requiresNearbySupport && CollapseIfUnsupported())
@@ -245,7 +262,13 @@ namespace Skylights
             if (map == null) return;
 
             float target;
-            if (MapInSpace())
+            SkylightsSettings settings = SkylightsSettingsMod.Settings;
+            if (SkylightsSettingsMod.HideSkylights && (settings == null || settings.hideDisablesTintGlow))
+            {
+                // Hidden glass sheds no light from nowhere (configurable: hideDisablesTintGlow).
+                target = 0f;
+            }
+            else if (MapInSpace())
             {
                 target = Mathf.Clamp01(Props.starlightGlow);
             }
