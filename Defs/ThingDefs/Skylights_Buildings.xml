@@ -37,6 +37,11 @@
       <isInert>true</isInert>
       <ai_chillDestination>false</ai_chillDestination>
     </building>
+    <!-- Gravship guard: ordinary skylight glass isn't rated for flight stresses, so placement over
+         ship substructure is blocked. Ship windows (spaceAware) are exempted inside the worker. -->
+    <placeWorkers>
+      <li>Skylights.PlaceWorker_NotOnShipSubstructure</li>
+    </placeWorkers>
     <statBases>
       <Flammability>0</Flammability>
     </statBases>

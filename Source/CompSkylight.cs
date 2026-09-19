@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using RimWorld;
+using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
@@ -58,6 +59,24 @@ namespace Skylights
         /// sun-sensitive pawns are exposed. The clear paned skylight sets this; the tinted one leaves it false
         /// (UV-filtered — lights the room but registers no sun for genes).</summary>
         public bool transmitsSun = false;
+
+        /// <summary>Context-aware light for Odyssey ship windows: on a normal surface tile the window behaves
+        /// as a regular renderAsSky skylight (daylight, crops, sun genes per transmitsSun); when the map sits
+        /// on a space planet layer (in orbit) there is no daylight to channel, so the sky registration is
+        /// dropped and the window's CompGlower (if any) is driven at <see cref="starlightGlow"/> instead —
+        /// a faint decorative starlight that never grows crops. Requires renderAsSky.</summary>
+        public bool spaceAware = false;
+
+        /// <summary>Fraction of the glower's colour emitted as starlight while a
+        /// <see cref="spaceAware"/> window is in space. Kept below the plant-growth threshold.</summary>
+        public float starlightGlow = 0.22f;
+
+        /// <summary>On a planet surface, a <see cref="spaceAware"/> window also drives its (tint-coloured)
+        /// glower at this fraction of the current sky glow, so stained glass pools its own colour in the
+        /// room — bright at midday, gone at night, exactly tracking the daylight it admits. Capped in code
+        /// at 0.5 so the coloured light always stays below the crop growth threshold (0.51). Tinted ship
+        /// windows skip the white halo and let this coloured pool carry their look; 0 disables it.</summary>
+        public float tintGlowFactor = 0.5f;
 
         /// <summary>When true this skylight needs a roof-holding edifice (wall or pillar) within
         /// <see cref="supportRadius"/> tiles: a PlaceWorker blocks installing it out of range, and if that
@@ -132,8 +151,16 @@ namespace Skylights
             SpawnedSkylights.Add(this);
             if (Props.renderAsSky)
             {
+                // Space-aware windows also carry a CompGlower for their in-orbit starlight.
+                if (Props.spaceAware)
+                {
+                    glower = parent.GetComp<CompGlower>();
+                    if (glower != null) fullColor = glower.Props.glowColor;
+                    lastBucket = -1;
+                }
                 UpdateSkyChannel();
                 UpdateSkyHalo();
+                UpdateStarlight();
                 return;
             }
             if (Props.glowNodeDef != null)
@@ -175,6 +202,23 @@ namespace Skylights
             }
         }
 
+        /// <summary>Re-drive every spawned ship window's coloured glower at once, so a hide/show flip (or
+        /// the hideDisablesTintGlow setting) takes effect the moment it changes instead of on the next
+        /// rare tick. The renderAsSky windows aren't in <see cref="glowDriven"/> (ForceGlowRefresh would
+        /// run the wrong update path on them), so they get their own walk.</summary>
+        public static void RefreshWindowGlow()
+        {
+            for (int i = 0; i < SpawnedSkylights.Count; i++)
+            {
+                CompSkylight c = SpawnedSkylights[i];
+                if (c.Props.renderAsSky && c.Props.spaceAware)
+                {
+                    c.lastBucket = -1;
+                    c.UpdateStarlight();
+                }
+            }
+        }
+
         public override void CompTickRare()
         {
             if (Props.requiresNearbySupport && CollapseIfUnsupported())
@@ -185,6 +229,8 @@ namespace Skylights
                 UpdateSkyChannel();
                 // Recompute the cosmetic sky-lit ring so it self-heals when a nearby wall or roof changes.
                 UpdateSkyHalo();
+                // Space-aware ship windows drive their faint starlight glower while in orbit.
+                UpdateStarlight();
             }
             else
             {
@@ -192,6 +238,61 @@ namespace Skylights
                 // Recompute the display-only bright pool so it self-heals when a nearby wall or roof changes.
                 UpdateDomeVisual();
             }
+        }
+
+        /// <summary>Whether this map hangs in space (an Odyssey orbit layer) rather than on a planet surface.
+        /// Space has no daylight to channel, so space-aware windows switch to starlight there.</summary>
+        private bool MapInSpace()
+        {
+            Map map = parent.Map;
+            if (map == null) return false;
+            PlanetTile tile = map.Tile;
+            return tile.Valid && tile.LayerDef != null && tile.LayerDef.isSpace;
+        }
+
+        /// <summary>Drive a space-aware window's tint-coloured glower by context: in space a fixed faint
+        /// starlight fraction; on a planet surface a stained-glass wash that tracks the sky
+        /// (<see cref="CompProperties_Skylight.tintGlowFactor"/> x current sky glow — bright at midday,
+        /// gone at night or under thick mountain). The glower's colour is the window's tint, so an amber
+        /// window pools amber light beneath it. Bucketised like UpdateGlow so the glow grid only recomputes
+        /// on a real change.</summary>
+        private void UpdateStarlight()
+        {
+            if (!Props.spaceAware || glower == null) return;
+            Map map = parent.Map;
+            if (map == null) return;
+
+            float target;
+            SkylightsSettings settings = SkylightsSettingsMod.Settings;
+            if (SkylightsSettingsMod.HideSkylights && (settings == null || settings.hideDisablesTintGlow))
+            {
+                // Hidden glass sheds no light from nowhere (configurable: hideDisablesTintGlow).
+                target = 0f;
+            }
+            else if (MapInSpace())
+            {
+                target = Mathf.Clamp01(Props.starlightGlow);
+            }
+            else
+            {
+                float sky = Mathf.Clamp01(map.skyManager.CurSkyGlow);
+                target = sky >= Props.minChannelGlow && RoofChannelsLight()
+                    ? Mathf.Clamp01(sky * Props.tintGlowFactor)
+                    : 0f;
+                // Never a grow light: crops need glow >= 0.51, so the coloured pool stays just under it.
+                target = Mathf.Min(target, 0.5f);
+            }
+
+            int steps = Mathf.Max(1, Props.glowSteps);
+            int bucket = Mathf.RoundToInt(target * steps);
+            if (bucket == lastBucket) return;
+            lastBucket = bucket;
+            float b = (float)bucket / steps;
+            glower.GlowColor = new ColorInt(
+                Mathf.RoundToInt(fullColor.r * b),
+                Mathf.RoundToInt(fullColor.g * b),
+                Mathf.RoundToInt(fullColor.b * b),
+                fullColor.a);
         }
 
         /// <summary>Weak-glass skylights are held up by a nearby wall or pillar. If that support has been
@@ -269,9 +370,12 @@ namespace Skylights
             if (map == null) return;
 
             HashSet<IntVec3> desired = new HashSet<IntVec3>();
-            foreach (IntVec3 c in parent.OccupiedRect())
-                if (RoofChannelsLightAt(map, c))
-                    desired.Add(c);
+            // In space there is no daylight above the roof to channel — a space-aware window registers
+            // nothing (its starlight glower takes over) and the room stays sealed exactly as before.
+            if (!(Props.spaceAware && MapInSpace()))
+                foreach (IntVec3 c in parent.OccupiedRect())
+                    if (RoofChannelsLightAt(map, c))
+                        desired.Add(c);
 
             if (skyCells.SetEquals(desired)) return;
 

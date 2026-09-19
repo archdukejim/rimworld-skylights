@@ -12,14 +12,25 @@
   <Skylights_RoofEdge_SkylightsOnly>Skylights only — soft edge inward around skylights (experimental)</Skylights_RoofEdge_SkylightsOnly>
   <Skylights_RoofEdge_Full>All roofs — soft edge inward at every roof edge (experimental)</Skylights_RoofEdge_Full>
   <Skylights_RoofEdgeModeDesc>⚠ Under development. The idea: keep the tiles just outside a roof fully lit and soften the shadow edge inward instead, so light appears to reach just past a skylight. The inward modes currently have rendering bugs — dome skylights may not glow, and a bright artifact can appear near walls where the shadow should be darkest. Leave this on Vanilla for now; the inward modes are here for testing only.</Skylights_RoofEdgeModeDesc>
-  <Skylights_HideInstalled>Hide installed skylights</Skylights_HideInstalled>
-  <Skylights_HideInstalledDesc>Hides the skylight's frame/glass sprite so it sits flush and out of sight. The skylight still works exactly the same — it keeps channeling daylight and lighting the room. Takes effect immediately.</Skylights_HideInstalledDesc>
-  <Skylights_HideInstalledCmd>hide skylights</Skylights_HideInstalledCmd>
-  <Skylights_ShowInstalledCmd>show skylights</Skylights_ShowInstalledCmd>
-  <Skylights_VisibilityCmdDesc>Show or hide every installed skylight's frame/glass sprite so roofs sit flush. Hidden skylights keep working — they still channel daylight and light the room exactly the same.</Skylights_VisibilityCmdDesc>
+  <Skylights_DisplayMode>Installed skylight display</Skylights_DisplayMode>
+  <Skylights_Display_Selectable>Selectable — sprites drawn and skylights are directly clickable (circle)</Skylights_Display_Selectable>
+  <Skylights_Display_Visible>Visible — sprites drawn, clicks pass through to what's beneath (check)</Skylights_Display_Visible>
+  <Skylights_Display_Hidden>Hidden — no sprites; skylights keep working invisibly (X)</Skylights_Display_Hidden>
+  <Skylights_HUD_Selectable>Skylights: selectable\n\nSprites are drawn and skylights can be clicked directly for their inspect pane. Click to cycle: selectable → visible → hidden.</Skylights_HUD_Selectable>
+  <Skylights_HUD_Visible>Skylights: visible\n\nSprites are drawn; clicks pass through to whatever is beneath. Click to cycle: visible → hidden → selectable.</Skylights_HUD_Visible>
+  <Skylights_HUD_Hidden>Skylights: hidden\n\nSprites are hidden (and, per the mod settings, stained-glass light muted) — skylights keep channeling daylight exactly the same. Click to cycle: hidden → selectable → visible.</Skylights_HUD_Hidden>
+  <Skylights_Cmd_Selectable>skylights: selectable</Skylights_Cmd_Selectable>
+  <Skylights_Cmd_Visible>skylights: visible</Skylights_Cmd_Visible>
+  <Skylights_Cmd_Hidden>skylights: hidden</Skylights_Cmd_Hidden>
+  <Skylights_VisibilityCmdDesc>Cycle how installed skylights present themselves: selectable (sprites drawn, directly clickable — circle), visible (sprites drawn, clicks pass through — check), or hidden (no sprites — X). Whatever the mode, skylights keep channeling daylight and lighting the room exactly the same.</Skylights_VisibilityCmdDesc>
   <Skylights_OpacityCmd>skylight opacity</Skylights_OpacityCmd>
   <Skylights_OpacityCmdDesc>Adjust how strongly installed skylight glass and frames are drawn, from barely-there to fully visible. Currently {0}%. Applies to every installed skylight and takes effect immediately.</Skylights_OpacityCmdDesc>
   <Skylights_OpacityLabel>Skylight opacity: {0}%</Skylights_OpacityLabel>
+  <Skylights_VisibilityButton>Skylight display button</Skylights_VisibilityButton>
+  <Skylights_VisibilityButtonDesc>Adds a button to the bottom-right overlay row that cycles the installed-skylight display mode above (selectable / visible / hidden) with one click, badged circle / check / X. Whatever the mode, skylights keep working. Turning this off removes the button.</Skylights_VisibilityButtonDesc>
+  <Skylights_HideTintGlow>Hiding also disables stained-glass light</Skylights_HideTintGlow>
+  <Skylights_HideTintGlowDesc>When installed skylights are hidden, also switch off the ship windows' coloured light — the stained-glass wash by day and the tinted starlight in orbit — so hidden glass doesn't shed light from nowhere. Turn this off to keep the coloured light while hiding only the sprites.</Skylights_HideTintGlowDesc>
+  <Skylights_NotOnShip>Requires structurally supported ship glazing — ordinary skylight glass can't take a gravship's flight stresses. Build ship windows here instead.</Skylights_NotOnShip>
   <Skylights_OpacitySetting>Skylight sprite opacity: {0}%</Skylights_OpacitySetting>
   <Skylights_OpacitySettingDesc>How strongly installed skylight glass and frames are drawn. Also adjustable from the Skylights architect tab. Takes effect immediately.</Skylights_OpacitySettingDesc>
 </LanguageData>
