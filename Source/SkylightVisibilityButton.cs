@@ -7,21 +7,42 @@ using Verse.Sound;
 namespace Skylights
 {
     /// <summary>
-    /// Skylight visibility HUD button (issue #20): a toggle on the play-settings row (bottom right) that
-    /// shows or hides every installed skylight's sprite in play. It drives the same state as the mod menu's
-    /// "hide installed skylights" checkbox (issue #21) and the architect-tab hide button — button on =
-    /// skylights drawn, button off = hidden — so the controls never disagree, and the choice persists like
-    /// any other mod setting. As of v3 the button does more than the sprite: when the mod-menu setting
-    /// "Hiding also disables stained-glass light" is on, hiding also mutes the ship windows' coloured glow
-    /// (see CompSkylight.RefreshWindowGlow). The daylight channel itself is never touched — hidden skylights
-    /// keep lighting and growing exactly the same (see Patch_Thing_Print_HideSkylight).
-    /// The button itself can be removed via the mod menu's master switch. Default: shown.
+    /// Skylight display HUD button (issue #20, three-state since v3): a button on the play-settings row
+    /// (bottom right) that cycles how installed skylights present themselves —
+    /// Selectable (circle badge: sprites drawn and the buildings are directly clickable),
+    /// Visible (check badge: sprites drawn, clicks pass through — the classic behaviour), and
+    /// Hidden (X badge: sprites hidden and, per the mod-menu setting, the stained-glass light muted).
+    /// It drives the same persisted state as the mod-menu radios and the architect-tab button, so the
+    /// controls never disagree. Whatever the mode, skylights keep channeling light exactly the same
+    /// (see Patch_Thing_Print_HideSkylight). The button itself can be removed via the mod menu's master
+    /// switch. Default: shown, mode Visible.
     /// </summary>
     [StaticConstructorOnStartup]
     public static class SkylightVisibilityButton
     {
-        /// <summary>Button art: the dome sprite players already know from the build menu.</summary>
-        public static readonly Texture2D ToggleIcon = ContentFinder<Texture2D>.Get("Things/Building/Skylight_Dome");
+        public static readonly Texture2D IconSelectable = ContentFinder<Texture2D>.Get("UI/SkylightHUD_Selectable");
+        public static readonly Texture2D IconVisible = ContentFinder<Texture2D>.Get("UI/SkylightHUD_Visible");
+        public static readonly Texture2D IconHidden = ContentFinder<Texture2D>.Get("UI/SkylightHUD_Hidden");
+
+        public static Texture2D IconFor(SkylightDisplayMode mode)
+        {
+            switch (mode)
+            {
+                case SkylightDisplayMode.Selectable: return IconSelectable;
+                case SkylightDisplayMode.Hidden: return IconHidden;
+                default: return IconVisible;
+            }
+        }
+
+        public static string TooltipFor(SkylightDisplayMode mode)
+        {
+            switch (mode)
+            {
+                case SkylightDisplayMode.Selectable: return "Skylights_HUD_Selectable".Translate();
+                case SkylightDisplayMode.Hidden: return "Skylights_HUD_Hidden".Translate();
+                default: return "Skylights_HUD_Visible".Translate();
+            }
+        }
     }
 
     [HarmonyPatch(typeof(PlaySettings), nameof(PlaySettings.DoPlaySettingsGlobalControls))]
@@ -32,18 +53,13 @@ namespace Skylights
             SkylightsSettings settings = SkylightsSettingsMod.Settings;
             if (worldView || row == null || settings == null || !settings.skylightVisibilityButton) return;
 
-            bool visible = !settings.hideSkylights;
-            bool wasVisible = visible;
-            row.ToggleableIcon(ref visible, SkylightVisibilityButton.ToggleIcon,
-                "Skylights_VisibilityToggle".Translate(), SoundDefOf.Mouseover_ButtonToggle);
-            if (visible == wasVisible) return;
-
-            settings.hideSkylights = !visible;
-            settings.Write();
-            // The sprite lives in the Buildings map-mesh (Thing.Print), so regenerate the skylight sections;
-            // the ship windows' coloured glow follows the hide state (hideDisablesTintGlow).
-            CompSkylight.DirtySkylightSections();
-            CompSkylight.RefreshWindowGlow();
+            SkylightDisplayMode mode = settings.displayMode;
+            if (row.ButtonIcon(SkylightVisibilityButton.IconFor(mode),
+                SkylightVisibilityButton.TooltipFor(mode)))
+            {
+                SkylightsSettingsMod.CycleDisplayMode();
+                SoundDefOf.Mouseover_ButtonToggle.PlayOneShotOnCamera();
+            }
         }
     }
 }

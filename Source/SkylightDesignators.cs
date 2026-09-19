@@ -17,32 +17,38 @@ namespace Skylights
     {
         public Designator_SkylightVisibility()
         {
-            icon = ContentFinder<Texture2D>.Get("Things/Building/Skylight_Dome");
             useMouseIcon = false;
         }
 
-        public override string Label =>
-            (SkylightsSettingsMod.HideSkylights ? "Skylights_ShowInstalledCmd" : "Skylights_HideInstalledCmd")
-            .Translate();
+        /// <summary>Live per-state icon: the same circle/check/X badges the HUD button shows. The icon is
+        /// a plain field read at draw time, so refresh it just before the base draw.</summary>
+        public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth, GizmoRenderParms parms)
+        {
+            icon = SkylightVisibilityButton.IconFor(SkylightsSettingsMod.DisplayMode);
+            return base.GizmoOnGUI(topLeft, maxWidth, parms);
+        }
+
+        public override string Label
+        {
+            get
+            {
+                switch (SkylightsSettingsMod.DisplayMode)
+                {
+                    case SkylightDisplayMode.Selectable: return "Skylights_Cmd_Selectable".Translate();
+                    case SkylightDisplayMode.Hidden: return "Skylights_Cmd_Hidden".Translate();
+                    default: return "Skylights_Cmd_Visible".Translate();
+                }
+            }
+        }
 
         public override string Desc => "Skylights_VisibilityCmdDesc".Translate();
-
-        /// <summary>Dim the icon while skylights are hidden, so the tab shows the state at a glance.</summary>
-        public override Color IconDrawColor =>
-            SkylightsSettingsMod.HideSkylights ? new Color(1f, 1f, 1f, 0.4f) : Color.white;
 
         public override AcceptanceReport CanDesignateCell(IntVec3 loc) => false;
 
         public override void ProcessInput(Event ev)
         {
-            // Instant toggle — deliberately not calling base, which would select this as a targeting tool.
-            SkylightsSettings settings = SkylightsSettingsMod.Settings;
-            if (settings == null) return;
-            settings.hideSkylights = !settings.hideSkylights;
-            settings.Write();
-            CompSkylight.DirtySkylightSections();
-            // The ship windows' coloured glow follows the hide state (hideDisablesTintGlow).
-            CompSkylight.RefreshWindowGlow();
+            // Instant cycle — deliberately not calling base, which would select this as a targeting tool.
+            SkylightsSettingsMod.CycleDisplayMode();
             SoundDefOf.Mouseover_ButtonToggle.PlayOneShotOnCamera();
         }
     }
