@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using RimWorld;
+using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
@@ -59,6 +60,24 @@ namespace Skylights
         /// (UV-filtered — lights the room but registers no sun for genes).</summary>
         public bool transmitsSun = false;
 
+        /// <summary>Context-aware light for Odyssey ship windows: on a normal surface tile the window behaves
+        /// as a regular renderAsSky skylight (daylight, crops, sun genes per transmitsSun); when the map sits
+        /// on a space planet layer (in orbit) there is no daylight to channel, so the sky registration is
+        /// dropped and the window's CompGlower (if any) is driven at <see cref="starlightGlow"/> instead —
+        /// a faint decorative starlight that never grows crops. Requires renderAsSky.</summary>
+        public bool spaceAware = false;
+
+        /// <summary>Fraction of the glower's colour emitted as starlight while a
+        /// <see cref="spaceAware"/> window is in space. Kept below the plant-growth threshold.</summary>
+        public float starlightGlow = 0.22f;
+
+        /// <summary>On a planet surface, a <see cref="spaceAware"/> window also drives its (tint-coloured)
+        /// glower at this fraction of the current sky glow, so stained glass pools its own colour in the
+        /// room — bright at midday, gone at night, exactly tracking the daylight it admits. Capped in code
+        /// at 0.5 so the coloured light always stays below the crop growth threshold (0.51). Tinted ship
+        /// windows skip the white halo and let this coloured pool carry their look; 0 disables it.</summary>
+        public float tintGlowFactor = 0.5f;
+
         /// <summary>When true this skylight needs a roof-holding edifice (wall or pillar) within
         /// <see cref="supportRadius"/> tiles: a PlaceWorker blocks installing it out of range, and if that
         /// support is later removed the weak glass caves in (its own roof tile collapses and crushes it).
@@ -86,8 +105,9 @@ namespace Skylights
         private CompGlower glower;
         private ColorInt fullColor;   // full-daylight colour, taken from the glower's props
         private int lastBucket = -1;  // last applied brightness step, so we only touch the grid on change
-        private bool skyRegistered;   // renderAsSky: whether our cell is currently in the SkylightGrid
-        private IntVec3 skyCell = IntVec3.Invalid;  // the cell we registered, so we can deregister on despawn
+        // renderAsSky: the footprint cells currently registered in the SkylightGrid. A 1x1 pane holds one cell;
+        // a multi-cell atrium holds its whole footprint, so every tile beneath it renders and lights as open sky.
+        private readonly HashSet<IntVec3> skyCells = new HashSet<IntVec3>();
 
         // glowNodeDef domes: one hidden glower per footprint cell, spawned fresh each time we spawn (the node
         // def is isSaveable=false, so they never persist and can't duplicate on load). Driven together below.
@@ -108,6 +128,21 @@ namespace Skylights
         // that actually hold a skylight (a whole-map repaint regenerates lazily and lags for seconds).
         public static readonly List<CompSkylight> SpawnedSkylights = new List<CompSkylight>();
 
+        /// <summary>Dirty just the map-mesh sections that hold a skylight, so a visibility or opacity flip
+        /// shows the moment those sections redraw. Building sprites are printed by SectionLayer_ThingsGeneral,
+        /// whose relevantChangeTypes is the Things flag — Buildings would regenerate the wrong layers. A
+        /// whole-map repaint is also avoided: it regenerates lazily and can lag seconds on a large map.</summary>
+        public static void DirtySkylightSections()
+        {
+            for (int i = 0; i < SpawnedSkylights.Count; i++)
+            {
+                Thing t = SpawnedSkylights[i].parent;
+                if (t.Spawned)
+                    t.Map.mapDrawer.MapMeshDirty(t.Position, (ulong)MapMeshFlagDefOf.Things,
+                        regenAdjacentCells: true, regenAdjacentSections: true);
+            }
+        }
+
         public CompProperties_Skylight Props => (CompProperties_Skylight)props;
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
@@ -116,8 +151,16 @@ namespace Skylights
             SpawnedSkylights.Add(this);
             if (Props.renderAsSky)
             {
+                // Space-aware windows also carry a CompGlower for their in-orbit starlight.
+                if (Props.spaceAware)
+                {
+                    glower = parent.GetComp<CompGlower>();
+                    if (glower != null) fullColor = glower.Props.glowColor;
+                    lastBucket = -1;
+                }
                 UpdateSkyChannel();
                 UpdateSkyHalo();
+                UpdateStarlight();
                 return;
             }
             if (Props.glowNodeDef != null)
@@ -159,6 +202,23 @@ namespace Skylights
             }
         }
 
+        /// <summary>Re-drive every spawned ship window's coloured glower at once, so a hide/show flip (or
+        /// the hideDisablesTintGlow setting) takes effect the moment it changes instead of on the next
+        /// rare tick. The renderAsSky windows aren't in <see cref="glowDriven"/> (ForceGlowRefresh would
+        /// run the wrong update path on them), so they get their own walk.</summary>
+        public static void RefreshWindowGlow()
+        {
+            for (int i = 0; i < SpawnedSkylights.Count; i++)
+            {
+                CompSkylight c = SpawnedSkylights[i];
+                if (c.Props.renderAsSky && c.Props.spaceAware)
+                {
+                    c.lastBucket = -1;
+                    c.UpdateStarlight();
+                }
+            }
+        }
+
         public override void CompTickRare()
         {
             if (Props.requiresNearbySupport && CollapseIfUnsupported())
@@ -169,6 +229,8 @@ namespace Skylights
                 UpdateSkyChannel();
                 // Recompute the cosmetic sky-lit ring so it self-heals when a nearby wall or roof changes.
                 UpdateSkyHalo();
+                // Space-aware ship windows drive their faint starlight glower while in orbit.
+                UpdateStarlight();
             }
             else
             {
@@ -176,6 +238,61 @@ namespace Skylights
                 // Recompute the display-only bright pool so it self-heals when a nearby wall or roof changes.
                 UpdateDomeVisual();
             }
+        }
+
+        /// <summary>Whether this map hangs in space (an Odyssey orbit layer) rather than on a planet surface.
+        /// Space has no daylight to channel, so space-aware windows switch to starlight there.</summary>
+        private bool MapInSpace()
+        {
+            Map map = parent.Map;
+            if (map == null) return false;
+            PlanetTile tile = map.Tile;
+            return tile.Valid && tile.LayerDef != null && tile.LayerDef.isSpace;
+        }
+
+        /// <summary>Drive a space-aware window's tint-coloured glower by context: in space a fixed faint
+        /// starlight fraction; on a planet surface a stained-glass wash that tracks the sky
+        /// (<see cref="CompProperties_Skylight.tintGlowFactor"/> x current sky glow — bright at midday,
+        /// gone at night or under thick mountain). The glower's colour is the window's tint, so an amber
+        /// window pools amber light beneath it. Bucketised like UpdateGlow so the glow grid only recomputes
+        /// on a real change.</summary>
+        private void UpdateStarlight()
+        {
+            if (!Props.spaceAware || glower == null) return;
+            Map map = parent.Map;
+            if (map == null) return;
+
+            float target;
+            SkylightsSettings settings = SkylightsSettingsMod.Settings;
+            if (SkylightsSettingsMod.HideSkylights && (settings == null || settings.hideDisablesTintGlow))
+            {
+                // Hidden glass sheds no light from nowhere (configurable: hideDisablesTintGlow).
+                target = 0f;
+            }
+            else if (MapInSpace())
+            {
+                target = Mathf.Clamp01(Props.starlightGlow);
+            }
+            else
+            {
+                float sky = Mathf.Clamp01(map.skyManager.CurSkyGlow);
+                target = sky >= Props.minChannelGlow && RoofChannelsLight()
+                    ? Mathf.Clamp01(sky * Props.tintGlowFactor)
+                    : 0f;
+                // Never a grow light: crops need glow >= 0.51, so the coloured pool stays just under it.
+                target = Mathf.Min(target, 0.5f);
+            }
+
+            int steps = Mathf.Max(1, Props.glowSteps);
+            int bucket = Mathf.RoundToInt(target * steps);
+            if (bucket == lastBucket) return;
+            lastBucket = bucket;
+            float b = (float)bucket / steps;
+            glower.GlowColor = new ColorInt(
+                Mathf.RoundToInt(fullColor.r * b),
+                Mathf.RoundToInt(fullColor.g * b),
+                Mathf.RoundToInt(fullColor.b * b),
+                fullColor.a);
         }
 
         /// <summary>Weak-glass skylights are held up by a nearby wall or pillar. If that support has been
@@ -199,12 +316,15 @@ namespace Skylights
 
         public override void PostDeSpawn(Map map, DestroyMode mode = DestroyMode.Vanish)
         {
-            if (Props.renderAsSky && skyRegistered)
+            if (Props.renderAsSky && skyCells.Count > 0)
             {
-                SkylightGrid.Set(map, skyCell, false);
-                if (Props.transmitsSun)
-                    SunlightGrid.Set(map, skyCell, false);
-                skyRegistered = false;
+                foreach (IntVec3 c in skyCells)
+                {
+                    SkylightGrid.Set(map, c, false);
+                    if (Props.transmitsSun)
+                        SunlightGrid.Set(map, c, false);
+                }
+                skyCells.Clear();
             }
             if (visualCells.Count > 0)
             {
@@ -241,49 +361,62 @@ namespace Skylights
             glowNodes = null;
         }
 
-        /// <summary>Keep our cell's "as if no roof" registration in sync with whether we're channeling.</summary>
+        /// <summary>Keep our footprint's "as if no roof" registration in sync with which cells are channeling.
+        /// Works for a single-tile pane and for a multi-tile atrium alike: every occupied cell that has a roof
+        /// to channel through renders and lights as open sky.</summary>
         private void UpdateSkyChannel()
         {
             Map map = parent.Map;
             if (map == null) return;
-            bool shouldChannel = RoofChannelsLight();
-            IntVec3 cell = parent.Position;
-            if (shouldChannel && skyRegistered && cell == skyCell) return;
 
-            if (skyRegistered)
-            {
-                SkylightGrid.Set(map, skyCell, false);
-                if (Props.transmitsSun)
-                    SunlightGrid.Set(map, skyCell, false);
-            }
-            if (shouldChannel)
-            {
-                SkylightGrid.Set(map, cell, true);
-                if (Props.transmitsSun)
-                    SunlightGrid.Set(map, cell, true);
-                skyCell = cell;
-                skyRegistered = true;
-            }
-            else
-            {
-                skyRegistered = false;
-            }
+            HashSet<IntVec3> desired = new HashSet<IntVec3>();
+            // In space there is no daylight above the roof to channel — a space-aware window registers
+            // nothing (its starlight glower takes over) and the room stays sealed exactly as before.
+            if (!(Props.spaceAware && MapInSpace()))
+                foreach (IntVec3 c in parent.OccupiedRect())
+                    if (RoofChannelsLightAt(map, c))
+                        desired.Add(c);
+
+            if (skyCells.SetEquals(desired)) return;
+
+            // Drop cells that no longer channel.
+            List<IntVec3> stale = new List<IntVec3>();
+            foreach (IntVec3 c in skyCells)
+                if (!desired.Contains(c)) stale.Add(c);
+            foreach (IntVec3 c in stale) SetSkyCell(map, c, false);
+
+            // Add newly channeling cells.
+            foreach (IntVec3 c in desired)
+                if (!skyCells.Contains(c)) SetSkyCell(map, c, true);
         }
 
-        /// <summary>True when the skylight should channel daylight down: there is a roof above to
-        /// channel through, and it isn't blocking. Open sky is excluded — it already lights the cell
-        /// directly, so adding glow there would make the spot brighter than the sun outside.</summary>
-        private bool RoofChannelsLight()
+        private void SetSkyCell(Map map, IntVec3 c, bool on)
         {
-            Map map = parent.Map;
-            if (map == null) return false;
-            RoofDef roof = map.roofGrid.RoofAt(parent.Position);
+            SkylightGrid.Set(map, c, on);
+            if (Props.transmitsSun)
+                SunlightGrid.Set(map, c, on);
+            if (on) skyCells.Add(c);
+            else skyCells.Remove(c);
+        }
+
+        /// <summary>True when this cell should channel daylight down: there is a roof above to channel
+        /// through, and it isn't blocking. Open sky is excluded — it already lights the cell directly.</summary>
+        private bool RoofChannelsLightAt(Map map, IntVec3 cell)
+        {
+            RoofDef roof = map.roofGrid.RoofAt(cell);
             // Open sky already lights this spot directly — channel nothing.
             if (roof == null) return false;
             // Thick overhead rock seals off the sky, unless a reflection tube pierces it.
             if (roof.isThickRoof) return Props.worksUnderThickRoof;
             // Constructed or thin roof: channel the daylight through.
             return true;
+        }
+
+        /// <summary>Whether the building's root cell is channeling — used by the glow-dome path and inspect text.</summary>
+        private bool RoofChannelsLight()
+        {
+            Map map = parent.Map;
+            return map != null && RoofChannelsLightAt(map, parent.Position);
         }
 
         private void UpdateGlow()
@@ -388,9 +521,9 @@ namespace Skylights
             if (map == null) return;
 
             tmpDesired.Clear();
-            // Only while the pane is actually channeling its own cell as open sky (skyRegistered): a sealed or
-            // roofless pane channels nothing, so it shows no ring either.
-            if (skyRegistered)
+            // Only while at least one footprint cell is channeling as open sky: a sealed or roofless pane
+            // channels nothing, so it shows no ring either.
+            if (skyCells.Count > 0)
             {
                 int r = Mathf.Max(1, Mathf.RoundToInt(Props.glowHaloRadius));
                 // Square box around the pane (r = 1 gives a 3x3 around a 1x1 pane), matching the square glass.

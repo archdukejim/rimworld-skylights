@@ -1,6 +1,6 @@
 # Developer's Guide
 
-Interop reference for **Skylights v2.3** (packageId `archdukejim.Skylights`, RimWorld 1.6). Everything on this page is a surface another mod can reference, patch, or order around.
+Interop reference for **Skylights v3.0** (packageId `archdukejim.Skylights`, RimWorld 1.6). Everything on this page is a surface another mod can reference, patch, or order around.
 
 **Quick facts**
 
@@ -245,7 +245,23 @@ Defs using it should declare **no** `specialDisplayRadius` (the off-centre vanil
 public static readonly List<CompSkylight> CompSkylight.SpawnedSkylights
 ```
 
-Every currently-spawned skylight comp, across all maps (registered in `PostSpawnSetup`, removed in `PostDeSpawn`). Read-only iteration is safe from the main thread; filter by `comp.parent.Map`. Used by the visibility toggle to dirty only skylight-holding map-mesh sections.
+Every currently-spawned skylight comp, across all maps (registered in `PostSpawnSetup`, removed in `PostDeSpawn`). Read-only iteration is safe from the main thread; filter by `comp.parent.Map`. Used by the display controls to dirty only skylight-holding map-mesh sections.
+
+### `CompSkylight.DirtySkylightSections`
+
+```csharp
+public static void CompSkylight.DirtySkylightSections()
+```
+
+Marks the map-mesh section under each spawned skylight dirty with the **Things** flag (`MapMeshDirty(pos, Things, regenAdjacentCells: true, regenAdjacentSections: true)`), so a sprite show/hide or opacity change applies the moment those sections redraw. Call it after changing anything that alters whether or how `Thing.Print` emits a skylight's sprite. Note the flag: building sprites are printed by `SectionLayer_ThingsGeneral` (`relevantChangeTypes = Things`) — dirtying `Buildings` regenerates the wrong layers.
+
+### `CompSkylight.RefreshWindowGlow`
+
+```csharp
+public static void CompSkylight.RefreshWindowGlow()
+```
+
+Re-drives every spawned space-aware window's coloured glower immediately (resets the change-detection bucket and re-evaluates surface wash / orbit starlight / hidden-mute). Call after changing `SkylightsSettings.displayMode`, `hideDisablesTintGlow`, or anything else the glow target depends on, so the change lands now instead of on the next rare tick.
 
 ### `SkylightVisibilityButton`
 
@@ -253,16 +269,34 @@ Every currently-spawned skylight comp, across all maps (registered in `PostSpawn
 [StaticConstructorOnStartup]
 public static class SkylightVisibilityButton
 {
-    public static readonly Texture2D ToggleIcon;   // the play-settings row button art
-    public static void DirtySkylightSections();    // regen the Things map-mesh layer under every spawned skylight
+    public static readonly Texture2D IconSelectable, IconVisible, IconHidden;  // HUD art (dome + circle/check/X badge)
+    public static Texture2D IconFor(SkylightDisplayMode mode);
+    public static string TooltipFor(SkylightDisplayMode mode);
 }
 ```
 
-`DirtySkylightSections()` marks the map-mesh section under each spawned skylight dirty with the **Things** flag (`MapMeshDirty(pos, Things, regenAdjacentCells: true, regenAdjacentSections: true)`), so a sprite show/hide applies the moment those sections redraw. Call it after changing anything that alters whether `Thing.Print` emits a skylight's sprite. Note the flag: building sprites are printed by `SectionLayer_ThingsGeneral` (`relevantChangeTypes = Things`) — dirtying `Buildings` regenerates the wrong layers.
+Art and strings for the three-state play-settings-row button. The button itself is drawn by the `Patch_PlaySettings_SkylightVisibility` postfix and calls `SkylightsSettingsMod.CycleDisplayMode()` on click; its master switch is `SkylightsSettings.skylightVisibilityButton`.
+
+### `SkylightSelectability` (settings applier)
+
+```csharp
+[StaticConstructorOnStartup]
+public static class SkylightSelectability { public static void Apply(); }
+```
+
+Pushes the display mode's selectability onto every skylight `ThingDef`: `def.selectable = (DisplayMode == Selectable)` for each def carrying `CompProperties_Skylight`. Selection reads `def.selectable` at click time, so the flip is instant with no Harmony. Runs at startup and from `SkylightsSettingsMod.ApplyDisplayMode()`. If your mod adds a skylight def, it inherits this behaviour automatically.
+
+### `PlaceWorker_NotOnShipSubstructure`
+
+```csharp
+public class PlaceWorker_NotOnShipSubstructure : PlaceWorker
+```
+
+Attached to the shared `SkylightBase` def: rejects placement when any footprint cell's foundation (`TerrainGrid.FoundationAt`) or live terrain `IsSubstructure` — i.e. Odyssey gravship decking — UNLESS the def's `CompProperties_Skylight.spaceAware` is true (ship windows). Inherit from `SkylightBase` and set `spaceAware` to make your own def gravship-rated; leave it false to be blocked on ships like the stock panes/domes/atriums.
 
 ### Settings types
 
-See section 8 for `RoofEdgeMode`, `SkylightsSettings`, `SkylightsSettingsMod`, and `DomeGlowRadius`.
+See section 8 for `RoofEdgeMode`, `SkylightDisplayMode`, `SkylightsSettings`, `SkylightsSettingsMod`, and the appliers (`DomeGlowRadius`, `SkylightOpacity`, `SkylightSelectability`).
 
 ---
 
@@ -293,6 +327,11 @@ The parent def needs `<tickerType>Rare</tickerType>` for the comp to update.
 | `supportRadius` | `float` | `3` | Radius for the support rule (and for `PlaceWorker_NearRoofSupport`). |
 | `matchOutdoorGlow` | `bool` | `false` | Display-only. Glower dome: render the lit pool at full open-sky brightness out to the mod-menu dome radius (via `VisualSkyGrid`), matching the outdoors. Gameplay light (the CompGlower) is unchanged — no crops, same half-strength glow. |
 | `glowHaloRadius` | `float` | `0` | Display-only. `renderAsSky` pane: render a square ring of this many tiles around the pane's own sky cell as open sky (1 = a 3x3), so the lit patch reads wider than one tile. The ring never grows crops or transmits sun. |
+| `spaceAware` | `bool` | `false` | Ship windows (needs `renderAsSky` AND a sibling `CompProperties_Glower`). On a space planet layer (`PlanetTile.LayerDef.isSpace`) the sky registration drops out and the glower sheds `starlightGlow`; on a surface the glower runs as a daylight-tracking coloured wash (`tintGlowFactor`). Also exempts the def from `PlaceWorker_NotOnShipSubstructure`. |
+| `starlightGlow` | `float` | `0.22` | `spaceAware`: glower fraction while in space (faint, below plant growth). The glower's `glowColor` is the window's tint, so starlight is tint-coloured. |
+| `tintGlowFactor` | `float` | `0.5` | `spaceAware`: on a surface the glower runs at `tintGlowFactor x CurSkyGlow`, hard-capped at 0.5 in code so the coloured pool never crosses the crop threshold (0.51). The Hidden display mode mutes it when `hideDisablesTintGlow` is on. |
+
+**Third operating mode — space-aware window** (`renderAsSky` + `spaceAware` + a sibling glower): the sky channel and the glower run together, context-switched by planet layer. The stock ship windows also colour their shared white texture per def via `graphicData.color`, which survives the opacity applier (it only drives alpha).
 
 Channeling condition (all modes): the cell must have a roof (`RoofAt != null`) that is not thick — open sky channels nothing (it already lights the cell), thick rock blocks unless `worksUnderThickRoof`.
 
@@ -485,6 +524,12 @@ Two abstract bases you can parent your own recipes to (load after Skylights):
 </Operation>
 ```
 
+### 6.5 v3 def files (atriums + ship windows)
+
+- **`Defs/ThingDefs/Skylights_Atriums.xml`** — 16 atrium buildings: `SkylightAtrium[Tinted]_{Small,Medium,Large,Grand}` (domed) and `SkylightAtriumPaned[Tinted]_{...}` (pyramid), 2x2-5x5, all `renderAsSky` multi-cell (the whole `OccupiedRect` registers in the grids). Costs are geometry-derived — the file's header comment documents the countable-construction formulas. Grouped by four `DesignatorDropdownGroupDef`s (`SkylightAtriums{Domed,DomedTinted,Paned,PanedTinted}`).
+- **`Defs/ThingDefs/Skylights_ShipWindows.xml`** — 36 ship windows `ShipWindow_{Pattern}_{Tint}` (patterns Diagonal/Quarter/Diamond/Chevron/Cross/Star x tints Clear/Azure/Amber/Emerald/Rose/Violet), rotatable 1x1, `renderAsSky` + `spaceAware` + a tint-coloured glower. Six shared white textures; the tint is `graphicData.color`. Six dropdown groups `ShipWindows{Pattern}`.
+- **`Defs/RecipeDefs`** — 16 `Make_AtriumKit_*` smelter recipes (one bill = one atrium's exact glass + frames at bulk work rates).
+
 ---
 
 ## 7. ReBuild: Doors and Corners glass interop
@@ -539,21 +584,18 @@ public class SkylightsSettings : ModSettings
 
     public int domeGlowRadius = DefaultDomeGlowRadius;     // 1–10 slider
     public RoofEdgeMode roofEdgeMode = RoofEdgeMode.Vanilla;
-    public bool hideSkylights = false;                     // hide installed skylight sprites (v2.2)
-    public bool skylightVisibilityButton = true;           // show the play-settings HUD button (v2.2)
-
-    public override void ExposeData()
-    {
-        Scribe_Values.Look(ref domeGlowRadius, "domeGlowRadius", DefaultDomeGlowRadius);
-        Scribe_Values.Look(ref roofEdgeMode, "roofEdgeMode", RoofEdgeMode.Vanilla);
-        Scribe_Values.Look(ref hideSkylights, "hideSkylights", false);
-        Scribe_Values.Look(ref skylightVisibilityButton, "skylightVisibilityButton", true);
-        base.ExposeData();
-    }
+    public SkylightDisplayMode displayMode = SkylightDisplayMode.Visible;  // three-state display (v3)
+    public bool hideDisablesTintGlow = true;               // Hidden also mutes ship-window coloured light (v3)
+    public bool skylightVisibilityButton = true;           // show the play-settings HUD button
+    public float skylightOpacity = 1f;                     // global sprite opacity 0.1-1 (v3)
 }
 ```
 
-Scribed with `Scribe_Values.Look` under keys `domeGlowRadius`, `roofEdgeMode`, `hideSkylights`, and `skylightVisibilityButton` into RimWorld's standard per-mod config XML (`Config/Mod_..._SkylightsSettings.xml` in the save-data folder). All fields fall back to their defaults when absent, so the mod is safe to add mid-save.
+```csharp
+public enum SkylightDisplayMode { Selectable = 0, Visible = 1, Hidden = 2 }   // (v3)
+```
+
+Scribed with `Scribe_Values.Look` under keys `domeGlowRadius`, `roofEdgeMode`, `displayMode`, `hideDisablesTintGlow`, `skylightVisibilityButton`, and `skylightOpacity` into RimWorld's standard per-mod config XML (`Config/Mod_..._SkylightsSettingsMod.xml` in the save-data folder). All fields fall back to their defaults when absent, so the mod is safe to add mid-save. The pre-v3 `hideSkylights` bool is still read once for migration: an old `True` becomes `displayMode = Hidden`.
 
 ### `SkylightsSettingsMod : Mod`
 
@@ -562,9 +604,12 @@ public class SkylightsSettingsMod : Mod
 {
     public static SkylightsSettings Settings;              // live settings instance
     public static RoofEdgeMode RoofEdge { get; }           // null-safe hot-path read, used by patch 5
-    public static bool HideSkylights { get; }              // null-safe hot-path read, used by patch 6 (v2.2)
+    public static SkylightDisplayMode DisplayMode { get; } // null-safe display-mode read (v3)
+    public static bool HideSkylights { get; }              // == (DisplayMode == Hidden); used by patch 6
+    public static void CycleDisplayMode()                  // advance Selectable->Visible->Hidden, persist, apply (v3)
+    public static void ApplyDisplayMode()                  // SkylightSelectability.Apply + DirtySkylightSections + RefreshWindowGlow (v3)
     public static void RepaintAllMapLighting()             // WholeMapChanged(Roofs|GroundGlow|Buildings) on every map
-    public override void WriteSettings()                   // applies radius, ForceGlowRefresh, repaints lighting + skylight sections
+    public override void WriteSettings()                   // applies radius + opacity, ForceGlowRefresh, repaints, ApplyDisplayMode
 }
 ```
 
@@ -587,6 +632,15 @@ public static class DomeGlowRadius
 
 `Apply()` (no parameters, returns `void`) writes `Settings.domeGlowRadius` into `CompProperties_Glower.glowRadius` and `specialDisplayRadius` of `Skylight_Dome`, `Skylight_MountainDome`, and `Skylight_DomeGlowNode`. The multi-cell `Skylight_Dome_Wide` / `Skylight_Dome_Quad` deliberately get **no** `specialDisplayRadius` — their placement circle is drawn footprint-centred by `PlaceWorker_ShowFootprint` from the node's live `glowRadius` (v2.2). Runs once at startup and again from `WriteSettings()`. **Heads-up:** if your mod patches a dome's glow radius, this applier overwrites it at startup and on any settings save — patch *after* startup or adjust the setting instead.
 
+### `SkylightOpacity` (settings applier, v3)
+
+```csharp
+[StaticConstructorOnStartup]
+public static class SkylightOpacity { public static void Apply(); }
+```
+
+Writes `Settings.skylightOpacity` into the **alpha** of `graphicData.color` for every def carrying `CompProperties_Skylight`, clears the cached graphic, and re-resolves `def.graphic`; spawned skylights get `Notify_ColorChanged()`. The RGB of `graphicData.color` is preserved — that's how the ship windows keep their per-def tint (white shared texture x def colour) under any opacity. The skylight defs use `shaderType Transparent` specifically so this alpha renders. Same heads-up as `DomeGlowRadius`: it overwrites graphic colour alpha at startup and on settings save.
+
 ---
 
-*Page generated from the `release/2.3.0` branch source of Skylights v2.3. File an issue at [archdukejim/rimworld-skylights](https://github.com/archdukejim/rimworld-skylights/issues) if a surface documented here changes.*
+*Page generated from the `release/3.0.0` branch source of Skylights v3.0. File an issue at [archdukejim/rimworld-skylights](https://github.com/archdukejim/rimworld-skylights/issues) if a surface documented here changes.*

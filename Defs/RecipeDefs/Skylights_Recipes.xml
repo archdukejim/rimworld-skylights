@@ -331,4 +331,449 @@
     </products>
   </RecipeDef>
 
+
+  <!-- ATRIUM KITS: one smelter bill per atrium — takes all the steel at once and produces the exact
+       glass panes + structural frames that atrium's costList needs, priced at the bulk-recipe rates
+       (glass 187.5 work/pane, tinted 230, frames 46.875). Steel = panes + ceil(frames/4); the dome
+       4x4's half-batch of frames costs a full steel (offcuts). Purely a convenience — same materials
+       as billing the components separately, one work order instead of two. -->
+
+  <RecipeDef Name="AtriumKitBase" ParentName="SkylightSmelterRecipeBase" Abstract="True">
+    <researchPrerequisites>
+      <li>ComplexFurniture</li>
+    </researchPrerequisites>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_Domed_22</defName>
+    <label>smelt domed atrium kit (2x2)</label>
+    <description>Smelt everything a domed atrium skylight (2x2) needs in one order: 6 structural glass panes and 12 structural frames, from 9 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting domed atrium kit.</jobString>
+    <workAmount>1700</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>9</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <StructuralGlass>6</StructuralGlass>
+      <StructuralFrame>12</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_Domed_33</defName>
+    <label>smelt domed atrium kit (3x3)</label>
+    <description>Smelt everything a domed atrium skylight (3x3) needs in one order: 16 structural glass panes and 24 structural frames, from 22 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting domed atrium kit.</jobString>
+    <workAmount>4100</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>22</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <StructuralGlass>16</StructuralGlass>
+      <StructuralFrame>24</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_Domed_44</defName>
+    <label>smelt domed atrium kit (4x4)</label>
+    <description>Smelt everything a domed atrium skylight (4x4) needs in one order: 20 structural glass panes and 30 structural frames, from 28 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting domed atrium kit.</jobString>
+    <workAmount>5200</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>28</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <StructuralGlass>20</StructuralGlass>
+      <StructuralFrame>30</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_Domed_55</defName>
+    <label>smelt domed atrium kit (5x5)</label>
+    <description>Smelt everything a domed atrium skylight (5x5) needs in one order: 24 structural glass panes and 36 structural frames, from 33 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting domed atrium kit.</jobString>
+    <workAmount>6200</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>33</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <StructuralGlass>24</StructuralGlass>
+      <StructuralFrame>36</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_DomedTinted_22</defName>
+    <label>smelt tinted domed atrium kit (2x2)</label>
+    <description>Smelt everything a tinted domed atrium skylight (2x2) needs in one order: 6 tinted structural glass panes and 12 structural frames, from 9 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting domed atrium kit.</jobString>
+    <workAmount>1950</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>9</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <TintedGlass>6</TintedGlass>
+      <StructuralFrame>12</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_DomedTinted_33</defName>
+    <label>smelt tinted domed atrium kit (3x3)</label>
+    <description>Smelt everything a tinted domed atrium skylight (3x3) needs in one order: 16 tinted structural glass panes and 24 structural frames, from 22 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting domed atrium kit.</jobString>
+    <workAmount>4800</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>22</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <TintedGlass>16</TintedGlass>
+      <StructuralFrame>24</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_DomedTinted_44</defName>
+    <label>smelt tinted domed atrium kit (4x4)</label>
+    <description>Smelt everything a tinted domed atrium skylight (4x4) needs in one order: 20 tinted structural glass panes and 30 structural frames, from 28 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting domed atrium kit.</jobString>
+    <workAmount>6000</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>28</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <TintedGlass>20</TintedGlass>
+      <StructuralFrame>30</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_DomedTinted_55</defName>
+    <label>smelt tinted domed atrium kit (5x5)</label>
+    <description>Smelt everything a tinted domed atrium skylight (5x5) needs in one order: 24 tinted structural glass panes and 36 structural frames, from 33 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting domed atrium kit.</jobString>
+    <workAmount>7200</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>33</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <TintedGlass>24</TintedGlass>
+      <StructuralFrame>36</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_Pyramid_22</defName>
+    <label>smelt pyramid atrium kit (2x2)</label>
+    <description>Smelt everything a pyramid atrium skylight (2x2) needs in one order: 4 structural glass panes and 8 structural frames, from 6 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting pyramid atrium kit.</jobString>
+    <workAmount>1100</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>6</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <StructuralGlass>4</StructuralGlass>
+      <StructuralFrame>8</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_Pyramid_33</defName>
+    <label>smelt pyramid atrium kit (3x3)</label>
+    <description>Smelt everything a pyramid atrium skylight (3x3) needs in one order: 16 structural glass panes and 20 structural frames, from 21 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting pyramid atrium kit.</jobString>
+    <workAmount>3900</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>21</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <StructuralGlass>16</StructuralGlass>
+      <StructuralFrame>20</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_Pyramid_44</defName>
+    <label>smelt pyramid atrium kit (4x4)</label>
+    <description>Smelt everything a pyramid atrium skylight (4x4) needs in one order: 16 structural glass panes and 20 structural frames, from 21 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting pyramid atrium kit.</jobString>
+    <workAmount>3900</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>21</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <StructuralGlass>16</StructuralGlass>
+      <StructuralFrame>20</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_Pyramid_55</defName>
+    <label>smelt pyramid atrium kit (5x5)</label>
+    <description>Smelt everything a pyramid atrium skylight (5x5) needs in one order: 36 structural glass panes and 32 structural frames, from 44 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting pyramid atrium kit.</jobString>
+    <workAmount>8200</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>44</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <StructuralGlass>36</StructuralGlass>
+      <StructuralFrame>32</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_PyramidTinted_22</defName>
+    <label>smelt tinted pyramid atrium kit (2x2)</label>
+    <description>Smelt everything a tinted pyramid atrium skylight (2x2) needs in one order: 4 tinted structural glass panes and 8 structural frames, from 6 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting pyramid atrium kit.</jobString>
+    <workAmount>1300</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>6</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <TintedGlass>4</TintedGlass>
+      <StructuralFrame>8</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_PyramidTinted_33</defName>
+    <label>smelt tinted pyramid atrium kit (3x3)</label>
+    <description>Smelt everything a tinted pyramid atrium skylight (3x3) needs in one order: 16 tinted structural glass panes and 20 structural frames, from 21 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting pyramid atrium kit.</jobString>
+    <workAmount>4600</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>21</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <TintedGlass>16</TintedGlass>
+      <StructuralFrame>20</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_PyramidTinted_44</defName>
+    <label>smelt tinted pyramid atrium kit (4x4)</label>
+    <description>Smelt everything a tinted pyramid atrium skylight (4x4) needs in one order: 16 tinted structural glass panes and 20 structural frames, from 21 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting pyramid atrium kit.</jobString>
+    <workAmount>4600</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>21</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <TintedGlass>16</TintedGlass>
+      <StructuralFrame>20</StructuralFrame>
+    </products>
+  </RecipeDef>
+
+  <RecipeDef ParentName="AtriumKitBase">
+    <defName>Make_AtriumKit_PyramidTinted_55</defName>
+    <label>smelt tinted pyramid atrium kit (5x5)</label>
+    <description>Smelt everything a tinted pyramid atrium skylight (5x5) needs in one order: 36 tinted structural glass panes and 32 structural frames, from 44 units of steel. Same materials as billing the parts separately — just one bill.</description>
+    <jobString>Smelting pyramid atrium kit.</jobString>
+    <workAmount>9800</workAmount>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>44</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>Steel</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <TintedGlass>36</TintedGlass>
+      <StructuralFrame>32</StructuralFrame>
+    </products>
+  </RecipeDef>
+
 </Defs>
