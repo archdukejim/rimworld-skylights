@@ -57,11 +57,11 @@ namespace Skylights
         /// <see cref="displayMode"/> on load. Never read at runtime.</summary>
         private bool hideSkylights = false;
 
-        /// <summary>When true (default), hiding installed skylights also switches off the ship windows'
-        /// coloured light — the stained-glass wash on the surface and the tinted starlight in orbit — so
-        /// hidden glass doesn't shed light from nowhere. Off keeps the coloured light while only the
-        /// sprites are hidden.</summary>
-        public bool hideDisablesTintGlow = true;
+        /// <summary>When true, hiding installed skylights also switches off the ship windows' coloured
+        /// light — the stained-glass wash on the surface and the tinted starlight in orbit. Default OFF
+        /// (v3.0.0 fast-follow): hiding strips only the sprites and the coloured light keeps shining,
+        /// which is what hiding has always meant for skylight function; muting is the opt-in.</summary>
+        public bool hideDisablesTintGlow = false;
 
         /// <summary>Master switch for the skylight visibility HUD button (issue #20): the play-settings-row
         /// toggle that shows/hides installed skylight sprites in play (and, per
@@ -82,7 +82,7 @@ namespace Skylights
             Scribe_Values.Look(ref roofEdgeMode, "roofEdgeMode", RoofEdgeMode.Vanilla);
             Scribe_Values.Look(ref displayMode, "displayMode", SkylightDisplayMode.Visible);
             Scribe_Values.Look(ref hideSkylights, "hideSkylights", false);
-            Scribe_Values.Look(ref hideDisablesTintGlow, "hideDisablesTintGlow", true);
+            Scribe_Values.Look(ref hideDisablesTintGlow, "hideDisablesTintGlow", false);
             Scribe_Values.Look(ref skylightVisibilityButton, "skylightVisibilityButton", true);
             Scribe_Values.Look(ref skylightOpacity, "skylightOpacity", 1f);
             // Migrate a pre-three-state config: the old hide toggle becomes the Hidden mode.

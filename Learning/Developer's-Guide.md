@@ -585,7 +585,7 @@ public class SkylightsSettings : ModSettings
     public int domeGlowRadius = DefaultDomeGlowRadius;     // 1–10 slider
     public RoofEdgeMode roofEdgeMode = RoofEdgeMode.Vanilla;
     public SkylightDisplayMode displayMode = SkylightDisplayMode.Visible;  // three-state display (v3)
-    public bool hideDisablesTintGlow = true;               // Hidden also mutes ship-window coloured light (v3)
+    public bool hideDisablesTintGlow = false;              // opt-in: Hidden also mutes ship-window coloured light (v3)
     public bool skylightVisibilityButton = true;           // show the play-settings HUD button
     public float skylightOpacity = 1f;                     // global sprite opacity 0.1-1 (v3)
 }

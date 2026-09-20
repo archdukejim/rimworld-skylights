@@ -1,4 +1,4 @@
-# Skylights v3.0.0 release binaries
-# commit-at-build: d05b2f237266e5a778b3f36b19be01b598e7f7df
-# generated: 2026-09-19T10:31:46-04:00
-74d569ff4efd98eb4fbd20f715e31898aec79dd440265388e7b28b5712e54b45  Skylights.dll
+# Skylights v3.0.0 release binaries (fast-follow)
+# commit-at-build: pending-fast-follow (parent 2d4b7d433d242b46ffc9fddb17d6567f13b3a876)
+# generated: 2026-09-19T20:22:09-04:00
+d38b7a9855a2bab8fe25c50c5069cf903079f1e0798810f64290ba7b7b90ffef  Skylights.dll
