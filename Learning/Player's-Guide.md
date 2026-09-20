@@ -8,7 +8,7 @@ Every skylight lights a room by the actual sky above the map. The light is brigh
 
 ## The four skylight families
 
-The mod's skylights come in four families. Panes open one roof tile fully to the sky: the tile below gets the sky's full strength, so it can grow crops by daylight, and a clear pane passes true sunlight through to Biotech genes. Domes spread a soft glow over a radius of several tiles: good ambient light for living and working spaces, but capped so it can never grow crops, and never counting as sunlight for genes. Atriums open a whole 2x2 to 5x5 footprint to the sky like a field of panes in one grand building. Ship windows are 1x1 stained-glass mosaic tiles built for gravship roofs, but equally at home over a colony gallery. If you want an indoor farm or gene-relevant sun, use panes or a clear atrium; to light a workshop or bedroom, use a dome; to decorate, use stained glass.
+The mod's skylights come in four families. Panes open one roof tile fully to the sky: the tile below gets the sky's full strength, so it can grow crops by daylight, and a clear pane passes true sunlight through to Biotech genes. Domes spread a soft glow over a radius of several tiles: good ambient light for living and working spaces, but capped so it can never grow crops, and never counting as sunlight for genes. Atriums open a whole 2x2 to 5x5 footprint to the sky like a field of panes in one grand building. Stained-glass windows are 1x1 mosaic window tiles rated for gravship roofs, but equally at home over a colony gallery. If you want an indoor farm or gene-relevant sun, use panes or a clear atrium; to light a workshop or bedroom, use a dome; to decorate, use stained glass.
 
 ## Basic Skylight
 
@@ -52,17 +52,17 @@ The two atrium styles trade materials against build time. The domed atrium is a 
 
 Each atrium has a matching one-bill kit recipe at the electric smelter: the kit takes all the steel at once and produces exactly the structural glass and frames that atrium's blueprint calls for. It costs the same materials and work as billing the parts separately — it just saves you managing two bills. Kits exist for every size and style, clear and tinted.
 
-## Ship windows (stained glass)
+## Stained-glass windows
 
-Ship windows are rotatable 1x1 leaded stained-glass roof tiles in six patterns (diagonal, quarter-arc, diamond, chevron, cross, starburst) and six tints (clear, azure, amber, emerald, rose, violet). Lay them out like mosaics: four quarter-arcs rotate into a circle, chevrons stack into zigzag bands, diagonals join into long lines and grand diamonds. Each pattern has its own button in the Skylights architect tab with the six tints in a dropdown. They cost 2 glass and 6 structural frames per tile — windows on a spaceship are a luxury. Clear ship windows pass true sunlight for genes; tinted ones are UV-filtered.
+Stained-glass windows are rotatable 1x1 leaded-glass roof tiles in six patterns (diagonal, quarter-arc, diamond, chevron, cross, starburst) and six tints (clear, azure, amber, emerald, rose, violet). Lay them out like mosaics: four quarter-arcs rotate into a circle, chevrons stack into zigzag bands, diagonals join into long lines and grand diamonds. Each pattern has its own button in the Skylights architect tab with the six tints in a dropdown. They cost 2 glass and 6 structural frames per tile — windows on a spaceship are a luxury. Clear stained-glass windows pass true sunlight for genes; tinted ones are UV-filtered.
 
 ## Stained-glass light
 
-A tinted ship window pools its own colour in the room below — an amber window casts a warm amber pool, an azure window a cool blue one. The pool tracks the daylight (brightest at midday, gone at night) and is always capped just below crop-growing strength, so stained glass never becomes a free grow light. The window's own tile still gets full real daylight and grows crops like any pane. In the mod settings you can choose whether hiding skylights also switches this coloured light off.
+A tinted stained-glass window pools its own colour in the room below — an amber window casts a warm amber pool, an azure window a cool blue one. The pool tracks the daylight (brightest at midday, gone at night) and is always capped just below crop-growing strength, so stained glass never becomes a free grow light. The window's own tile still gets full real daylight and grows crops like any pane. The coloured light is part of the window's function: it keeps shining whatever the display mode, hidden included.
 
-## Ship windows on gravships (Odyssey)
+## Stained-glass windows on gravships (Odyssey)
 
-With the Odyssey DLC, ship windows are aware of where the ship is. Landed on a planet, they channel full daylight like any skylight. In orbit there is no sun, so the daylight stops and each window sheds a faint starlight glow in its own colour instead — never enough to grow anything. The glazing keeps the physical roof tile in place, so a hull room with windows stays airtight. Ship windows are also the only glazing rated for a gravship: ordinary skylights and atriums refuse to be placed over ship substructure ("Requires structurally supported ship glazing"). Without Odyssey, ship windows simply behave as colony stained glass.
+With the Odyssey DLC, stained-glass windows are aware of where the ship is. Landed on a planet, they channel full daylight like any skylight. In orbit there is no sun, so the daylight stops and each window sheds a faint starlight glow in its own colour instead — never enough to grow anything. The glazing keeps the physical roof tile in place, so a hull room with windows stays airtight. Stained-glass windows are also the only glazing rated for a gravship: ordinary skylights and atriums refuse to be placed over ship substructure ("Requires structurally supported ship glazing"). Without Odyssey, they are simply colony stained glass.
 
 ## Gene-aware sunlight (Biotech)
 
@@ -90,7 +90,7 @@ Every skylight unlocks by Complex Furniture, which has no prerequisites — so i
 
 ## The Skylights architect tab
 
-All skylights live in their own "Skylights" category in the Architect menu, just below Furniture. Atriums are grouped into four dropdown buttons (domed / pyramid, clear / tinted, sizes inside) and ship windows into six (one per pattern, tints inside), so the tab stays tidy. The tab also carries its own Cancel and Deconstruct tools, plus two display controls: a skylight-display button that cycles selectable / visible / hidden, and a skylight-opacity button that opens a 10-100% slider fading every installed skylight's sprite.
+All skylights live in their own "Skylights" category in the Architect menu, just below Furniture. Atriums are grouped into four dropdown buttons (domed / pyramid, clear / tinted, sizes inside) and stained-glass windows into six (one per pattern, tints inside), so the tab stays tidy. The tab also carries its own Cancel and Deconstruct tools, plus two display controls: a skylight-display button that cycles selectable / visible / hidden, and a skylight-opacity button that opens a 10-100% slider fading every installed skylight's sprite.
 
 ## Mod settings
 
@@ -98,14 +98,13 @@ The mod settings (Options > Mod Settings > Skylights) offer these controls:
 
 - **Dome skylight light radius** — a slider from 1 to 10 tiles (default 4) that sets how far the soft glow of Dome Skylights and Light Tunnels reaches. It takes effect immediately, including on domes already built, and the placement previews follow it.
 - **Installed skylight display** — three states: selectable (sprites drawn and skylights can be clicked directly), visible (sprites drawn, clicks pass through — the default), hidden (no sprites; skylights keep working invisibly). The same state is cycled by the HUD button and the architect-tab button.
-- **Hiding also disables stained-glass light** — when skylights are hidden, also switch off the ship windows' coloured light (the daytime pools and the orbit starlight). Default off: hiding normally strips only the sprites and the coloured light keeps shining; turn this on if invisible glass shedding light bothers you.
 - **Skylight display button** — a master switch (default on) for the display-cycle button on the bottom-right overlay row; turn it off to remove the button. The mod-menu radios keep working either way.
 - **Skylight sprite opacity** — a 10-100% slider fading every installed skylight's glass/frame art; also available from the architect tab. Takes effect immediately.
 - **Roof edge lighting** — UNDER DEVELOPMENT. Vanilla RimWorld lets a roof's shadow bleed outward onto the lit tiles just outside it; the experimental inward modes instead keep those open tiles fully lit and soften the shadow inward, so light appears to reach just past a skylight. Three options: Vanilla (unchanged, recommended), Skylights only (inward soft edge around skylight tiles), and All roofs (inward soft edge at every roof edge). The inward modes currently have known rendering bugs — dome skylights may not glow, and a bright artifact can appear near walls where the shadow should be darkest. Leave this on Vanilla for now; the inward modes are there for testing only.
 
 ## The skylight display modes
 
-Installed skylights have three display states, and one button cycles them: the skylight button on the bottom-right overlay row (next to roof and zone visibility), badged with a circle, check, or X for the current state. Selectable (circle) draws the sprites and makes skylights directly clickable — click one to see its inspect pane ("Channeling daylight: 87% of full sun") and its Claim, Deconstruct, and Build copy buttons. Visible (check) is the default: sprites drawn, clicks pass straight through to whatever is beneath. Hidden (X) hides every sprite so roofs sit flush; skylights keep channeling daylight, growing crops, and pooling stained-glass light exactly the same (unless you enabled the stained-glass mute setting). The same state can be cycled from the Skylights architect tab or picked directly in the mod settings, all three controls always agree, and the choice persists between sessions.
+Installed skylights have three display states, and one button cycles them: the skylight button on the bottom-right overlay row (next to roof and zone visibility), badged with a circle, check, or X for the current state. Selectable (circle) draws the sprites and makes skylights directly clickable — click one to see its inspect pane ("Channeling daylight: 87% of full sun") and its Claim, Deconstruct, and Build copy buttons. Visible (check) is the default: sprites drawn, clicks pass straight through to whatever is beneath. Hidden (X) hides every sprite so roofs sit flush; skylights keep channeling daylight, growing crops, and pooling stained-glass light exactly the same — hiding is purely visual, always. The same state can be cycled from the Skylights architect tab or picked directly in the mod settings, all three controls always agree, and the choice persists between sessions.
 
 ## Removing a skylight
 

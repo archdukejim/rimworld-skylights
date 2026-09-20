@@ -13,8 +13,8 @@
        drives one glower for both contexts — a stained-glass pool on the surface (tintGlowFactor x sky
        glow, capped below crop growth) and tint-coloured starlight in orbit. TINTED windows skip the
        white halo so their surround shows the coloured pool instead of being washed to full white sky;
-       CLEAR windows keep the halo (white light is their colour). The hide toggle can mute the pool
-       (hideDisablesTintGlow).
+       CLEAR windows keep the halo (white light is their colour). Display modes never touch the pool —
+       the coloured light is skylight function, like the daylight channel.
        Airtight by construction: the window keeps the physical roof tile and only channels light, so a
        hull room never counts as ExposedToSpace and no vacuum plumbing is involved.
        Luxury pricing: 2 glass + 6 frames per tile (vs 1+4 for a plain flat pane) — windows on a
@@ -55,8 +55,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diagonal_Clear</defName>
-    <label>ship window: diagonal (clear)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: diagonal (clear)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiagonal</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diagonal</texPath>
@@ -85,8 +85,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diagonal_Azure</defName>
-    <label>ship window: diagonal (azure)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: diagonal (azure)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiagonal</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diagonal</texPath>
@@ -114,8 +114,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diagonal_Amber</defName>
-    <label>ship window: diagonal (amber)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: diagonal (amber)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiagonal</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diagonal</texPath>
@@ -143,8 +143,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diagonal_Emerald</defName>
-    <label>ship window: diagonal (emerald)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: diagonal (emerald)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiagonal</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diagonal</texPath>
@@ -172,8 +172,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diagonal_Rose</defName>
-    <label>ship window: diagonal (rose)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: diagonal (rose)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiagonal</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diagonal</texPath>
@@ -201,8 +201,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diagonal_Violet</defName>
-    <label>ship window: diagonal (violet)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: diagonal (violet)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations form long lines and big diamonds). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiagonal</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diagonal</texPath>
@@ -230,8 +230,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Quarter_Clear</defName>
-    <label>ship window: quarter-arc (clear)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: quarter-arc (clear)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsQuarter</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Quarter</texPath>
@@ -260,8 +260,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Quarter_Azure</defName>
-    <label>ship window: quarter-arc (azure)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: quarter-arc (azure)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsQuarter</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Quarter</texPath>
@@ -289,8 +289,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Quarter_Amber</defName>
-    <label>ship window: quarter-arc (amber)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: quarter-arc (amber)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsQuarter</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Quarter</texPath>
@@ -318,8 +318,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Quarter_Emerald</defName>
-    <label>ship window: quarter-arc (emerald)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: quarter-arc (emerald)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsQuarter</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Quarter</texPath>
@@ -347,8 +347,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Quarter_Rose</defName>
-    <label>ship window: quarter-arc (rose)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: quarter-arc (rose)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsQuarter</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Quarter</texPath>
@@ -376,8 +376,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Quarter_Violet</defName>
-    <label>ship window: quarter-arc (violet)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: quarter-arc (violet)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (four rotations close into a circle). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsQuarter</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Quarter</texPath>
@@ -405,8 +405,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diamond_Clear</defName>
-    <label>ship window: diamond (clear)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: diamond (clear)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiamond</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diamond</texPath>
@@ -435,8 +435,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diamond_Azure</defName>
-    <label>ship window: diamond (azure)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: diamond (azure)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiamond</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diamond</texPath>
@@ -464,8 +464,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diamond_Amber</defName>
-    <label>ship window: diamond (amber)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: diamond (amber)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiamond</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diamond</texPath>
@@ -493,8 +493,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diamond_Emerald</defName>
-    <label>ship window: diamond (emerald)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: diamond (emerald)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiamond</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diamond</texPath>
@@ -522,8 +522,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diamond_Rose</defName>
-    <label>ship window: diamond (rose)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: diamond (rose)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiamond</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diamond</texPath>
@@ -551,8 +551,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Diamond_Violet</defName>
-    <label>ship window: diamond (violet)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: diamond (violet)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (centres tile into a diamond lattice). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsDiamond</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Diamond</texPath>
@@ -580,8 +580,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Chevron_Clear</defName>
-    <label>ship window: chevron (clear)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: chevron (clear)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsChevron</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Chevron</texPath>
@@ -610,8 +610,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Chevron_Azure</defName>
-    <label>ship window: chevron (azure)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: chevron (azure)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsChevron</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Chevron</texPath>
@@ -639,8 +639,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Chevron_Amber</defName>
-    <label>ship window: chevron (amber)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: chevron (amber)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsChevron</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Chevron</texPath>
@@ -668,8 +668,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Chevron_Emerald</defName>
-    <label>ship window: chevron (emerald)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: chevron (emerald)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsChevron</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Chevron</texPath>
@@ -697,8 +697,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Chevron_Rose</defName>
-    <label>ship window: chevron (rose)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: chevron (rose)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsChevron</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Chevron</texPath>
@@ -726,8 +726,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Chevron_Violet</defName>
-    <label>ship window: chevron (violet)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: chevron (violet)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (rotations stack into zigzag bands). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsChevron</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Chevron</texPath>
@@ -755,8 +755,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Cross_Clear</defName>
-    <label>ship window: cross (clear)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: cross (clear)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsCross</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Cross</texPath>
@@ -785,8 +785,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Cross_Azure</defName>
-    <label>ship window: cross (azure)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: cross (azure)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsCross</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Cross</texPath>
@@ -814,8 +814,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Cross_Amber</defName>
-    <label>ship window: cross (amber)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: cross (amber)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsCross</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Cross</texPath>
@@ -843,8 +843,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Cross_Emerald</defName>
-    <label>ship window: cross (emerald)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: cross (emerald)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsCross</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Cross</texPath>
@@ -872,8 +872,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Cross_Rose</defName>
-    <label>ship window: cross (rose)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: cross (rose)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsCross</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Cross</texPath>
@@ -901,8 +901,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Cross_Violet</defName>
-    <label>ship window: cross (violet)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: cross (violet)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a simple four-pane grid). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsCross</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Cross</texPath>
@@ -930,8 +930,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Star_Clear</defName>
-    <label>ship window: starburst (clear)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: starburst (clear)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its clear glass passes true sunlight for Biotech genes. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsStar</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Star</texPath>
@@ -960,8 +960,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Star_Azure</defName>
-    <label>ship window: starburst (azure)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: starburst (azure)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsStar</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Star</texPath>
@@ -989,8 +989,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Star_Amber</defName>
-    <label>ship window: starburst (amber)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: starburst (amber)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsStar</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Star</texPath>
@@ -1018,8 +1018,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Star_Emerald</defName>
-    <label>ship window: starburst (emerald)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: starburst (emerald)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsStar</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Star</texPath>
@@ -1047,8 +1047,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Star_Rose</defName>
-    <label>ship window: starburst (rose)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: starburst (rose)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsStar</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Star</texPath>
@@ -1076,8 +1076,8 @@
 
   <ThingDef ParentName="ShipWindowBase">
     <defName>ShipWindow_Star_Violet</defName>
-    <label>ship window: starburst (violet)</label>
-    <description>A leaded stained-glass ship window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
+    <label>stained-glass window: starburst (violet)</label>
+    <description>A leaded stained-glass window that glazes one square of roof — a mosaic piece: rotate and combine tiles to compose your own designs (a radiating accent piece). On a planet's surface it channels full daylight, bright enough to grow crops; in orbit there is no sun, so it sheds only a faint starlight glow in its own colour. Its coloured glass is UV-filtering — no sun registers for genes — and pools its own colour in the room below, like a true stained-glass window. The glazing keeps the roof sealed, so a hull room stays airtight. It won't work under thick overhead mountain.</description>
     <designatorDropdown>ShipWindowsStar</designatorDropdown>
     <graphicData>
       <texPath>Things/Building/ShipWindow_Star</texPath>

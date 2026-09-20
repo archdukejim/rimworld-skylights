@@ -38,7 +38,7 @@
       <ai_chillDestination>false</ai_chillDestination>
     </building>
     <!-- Gravship guard: ordinary skylight glass isn't rated for flight stresses, so placement over
-         ship substructure is blocked. Ship windows (spaceAware) are exempted inside the worker. -->
+         ship substructure is blocked. Stained-glass windows (spaceAware) are exempted inside the worker. -->
     <placeWorkers>
       <li>Skylights.PlaceWorker_NotOnShipSubstructure</li>
     </placeWorkers>

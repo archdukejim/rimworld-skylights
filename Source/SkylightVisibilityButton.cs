@@ -11,7 +11,7 @@ namespace Skylights
     /// (bottom right) that cycles how installed skylights present themselves —
     /// Selectable (circle badge: sprites drawn and the buildings are directly clickable),
     /// Visible (check badge: sprites drawn, clicks pass through — the classic behaviour), and
-    /// Hidden (X badge: sprites hidden and, per the mod-menu setting, the stained-glass light muted).
+    /// Hidden (X badge: sprites hidden — daylight, crops and stained-glass light keep working).
     /// It drives the same persisted state as the mod-menu radios and the architect-tab button, so the
     /// controls never disagree. Whatever the mode, skylights keep channeling light exactly the same
     /// (see Patch_Thing_Print_HideSkylight). The button itself can be removed via the mod menu's master

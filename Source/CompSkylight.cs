@@ -203,7 +203,7 @@ namespace Skylights
         }
 
         /// <summary>Re-drive every spawned ship window's coloured glower at once, so a hide/show flip (or
-        /// the hideDisablesTintGlow setting) takes effect the moment it changes instead of on the next
+        /// anything the glow target depends on) takes effect the moment it changes instead of on the next
         /// rare tick. The renderAsSky windows aren't in <see cref="glowDriven"/> (ForceGlowRefresh would
         /// run the wrong update path on them), so they get their own walk.</summary>
         public static void RefreshWindowGlow()
@@ -262,14 +262,10 @@ namespace Skylights
             Map map = parent.Map;
             if (map == null) return;
 
+            // The coloured light is skylight FUNCTION, like the daylight channel — display modes never
+            // touch it. Hiding strips sprites only.
             float target;
-            SkylightsSettings settings = SkylightsSettingsMod.Settings;
-            if (SkylightsSettingsMod.HideSkylights && (settings == null || settings.hideDisablesTintGlow))
-            {
-                // Hidden glass sheds no light from nowhere (configurable: hideDisablesTintGlow).
-                target = 0f;
-            }
-            else if (MapInSpace())
+            if (MapInSpace())
             {
                 target = Mathf.Clamp01(Props.starlightGlow);
             }

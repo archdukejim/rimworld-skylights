@@ -261,7 +261,7 @@ Marks the map-mesh section under each spawned skylight dirty with the **Things**
 public static void CompSkylight.RefreshWindowGlow()
 ```
 
-Re-drives every spawned space-aware window's coloured glower immediately (resets the change-detection bucket and re-evaluates surface wash / orbit starlight / hidden-mute). Call after changing `SkylightsSettings.displayMode`, `hideDisablesTintGlow`, or anything else the glow target depends on, so the change lands now instead of on the next rare tick.
+Re-drives every spawned stained-glass window's coloured glower immediately (resets the change-detection bucket and re-evaluates surface wash / orbit starlight). Call after changing anything the glow target depends on, so the change lands now instead of on the next rare tick. Note the display mode is NOT such an input — the coloured light is skylight function and never mutes.
 
 ### `SkylightVisibilityButton`
 
@@ -292,7 +292,7 @@ Pushes the display mode's selectability onto every skylight `ThingDef`: `def.sel
 public class PlaceWorker_NotOnShipSubstructure : PlaceWorker
 ```
 
-Attached to the shared `SkylightBase` def: rejects placement when any footprint cell's foundation (`TerrainGrid.FoundationAt`) or live terrain `IsSubstructure` — i.e. Odyssey gravship decking — UNLESS the def's `CompProperties_Skylight.spaceAware` is true (ship windows). Inherit from `SkylightBase` and set `spaceAware` to make your own def gravship-rated; leave it false to be blocked on ships like the stock panes/domes/atriums.
+Attached to the shared `SkylightBase` def: rejects placement when any footprint cell's foundation (`TerrainGrid.FoundationAt`) or live terrain `IsSubstructure` — i.e. Odyssey gravship decking — UNLESS the def's `CompProperties_Skylight.spaceAware` is true (the stained-glass windows). Inherit from `SkylightBase` and set `spaceAware` to make your own def gravship-rated; leave it false to be blocked on ships like the stock panes/domes/atriums.
 
 ### Settings types
 
@@ -327,11 +327,11 @@ The parent def needs `<tickerType>Rare</tickerType>` for the comp to update.
 | `supportRadius` | `float` | `3` | Radius for the support rule (and for `PlaceWorker_NearRoofSupport`). |
 | `matchOutdoorGlow` | `bool` | `false` | Display-only. Glower dome: render the lit pool at full open-sky brightness out to the mod-menu dome radius (via `VisualSkyGrid`), matching the outdoors. Gameplay light (the CompGlower) is unchanged — no crops, same half-strength glow. |
 | `glowHaloRadius` | `float` | `0` | Display-only. `renderAsSky` pane: render a square ring of this many tiles around the pane's own sky cell as open sky (1 = a 3x3), so the lit patch reads wider than one tile. The ring never grows crops or transmits sun. |
-| `spaceAware` | `bool` | `false` | Ship windows (needs `renderAsSky` AND a sibling `CompProperties_Glower`). On a space planet layer (`PlanetTile.LayerDef.isSpace`) the sky registration drops out and the glower sheds `starlightGlow`; on a surface the glower runs as a daylight-tracking coloured wash (`tintGlowFactor`). Also exempts the def from `PlaceWorker_NotOnShipSubstructure`. |
+| `spaceAware` | `bool` | `false` | Stained-glass windows (needs `renderAsSky` AND a sibling `CompProperties_Glower`). On a space planet layer (`PlanetTile.LayerDef.isSpace`) the sky registration drops out and the glower sheds `starlightGlow`; on a surface the glower runs as a daylight-tracking coloured wash (`tintGlowFactor`). Also exempts the def from `PlaceWorker_NotOnShipSubstructure`. |
 | `starlightGlow` | `float` | `0.22` | `spaceAware`: glower fraction while in space (faint, below plant growth). The glower's `glowColor` is the window's tint, so starlight is tint-coloured. |
-| `tintGlowFactor` | `float` | `0.5` | `spaceAware`: on a surface the glower runs at `tintGlowFactor x CurSkyGlow`, hard-capped at 0.5 in code so the coloured pool never crosses the crop threshold (0.51). The Hidden display mode mutes it when `hideDisablesTintGlow` is on. |
+| `tintGlowFactor` | `float` | `0.5` | `spaceAware`: on a surface the glower runs at `tintGlowFactor x CurSkyGlow`, hard-capped at 0.5 in code so the coloured pool never crosses the crop threshold (0.51). Display modes never mute it — the coloured light is function, like the daylight channel. |
 
-**Third operating mode — space-aware window** (`renderAsSky` + `spaceAware` + a sibling glower): the sky channel and the glower run together, context-switched by planet layer. The stock ship windows also colour their shared white texture per def via `graphicData.color`, which survives the opacity applier (it only drives alpha).
+**Third operating mode — space-aware window** (`renderAsSky` + `spaceAware` + a sibling glower): the sky channel and the glower run together, context-switched by planet layer. The stock stained-glass windows also colour their shared white texture per def via `graphicData.color`, which survives the opacity applier (it only drives alpha).
 
 Channeling condition (all modes): the cell must have a roof (`RoofAt != null`) that is not thick — open sky channels nothing (it already lights the cell), thick rock blocks unless `worksUnderThickRoof`.
 
@@ -524,10 +524,10 @@ Two abstract bases you can parent your own recipes to (load after Skylights):
 </Operation>
 ```
 
-### 6.5 v3 def files (atriums + ship windows)
+### 6.5 v3 def files (atriums + stained-glass windows)
 
 - **`Defs/ThingDefs/Skylights_Atriums.xml`** — 16 atrium buildings: `SkylightAtrium[Tinted]_{Small,Medium,Large,Grand}` (domed) and `SkylightAtriumPaned[Tinted]_{...}` (pyramid), 2x2-5x5, all `renderAsSky` multi-cell (the whole `OccupiedRect` registers in the grids). Costs are geometry-derived — the file's header comment documents the countable-construction formulas. Grouped by four `DesignatorDropdownGroupDef`s (`SkylightAtriums{Domed,DomedTinted,Paned,PanedTinted}`).
-- **`Defs/ThingDefs/Skylights_ShipWindows.xml`** — 36 ship windows `ShipWindow_{Pattern}_{Tint}` (patterns Diagonal/Quarter/Diamond/Chevron/Cross/Star x tints Clear/Azure/Amber/Emerald/Rose/Violet), rotatable 1x1, `renderAsSky` + `spaceAware` + a tint-coloured glower. Six shared white textures; the tint is `graphicData.color`. Six dropdown groups `ShipWindows{Pattern}`.
+- **`Defs/ThingDefs/Skylights_ShipWindows.xml`** — 36 stained-glass windows `ShipWindow_{Pattern}_{Tint}` (defNames keep the ShipWindow prefix) (patterns Diagonal/Quarter/Diamond/Chevron/Cross/Star x tints Clear/Azure/Amber/Emerald/Rose/Violet), rotatable 1x1, `renderAsSky` + `spaceAware` + a tint-coloured glower. Six shared white textures; the tint is `graphicData.color`. Six dropdown groups `ShipWindows{Pattern}`.
 - **`Defs/RecipeDefs`** — 16 `Make_AtriumKit_*` smelter recipes (one bill = one atrium's exact glass + frames at bulk work rates).
 
 ---
@@ -585,7 +585,6 @@ public class SkylightsSettings : ModSettings
     public int domeGlowRadius = DefaultDomeGlowRadius;     // 1–10 slider
     public RoofEdgeMode roofEdgeMode = RoofEdgeMode.Vanilla;
     public SkylightDisplayMode displayMode = SkylightDisplayMode.Visible;  // three-state display (v3)
-    public bool hideDisablesTintGlow = false;              // opt-in: Hidden also mutes ship-window coloured light (v3)
     public bool skylightVisibilityButton = true;           // show the play-settings HUD button
     public float skylightOpacity = 1f;                     // global sprite opacity 0.1-1 (v3)
 }
@@ -595,7 +594,7 @@ public class SkylightsSettings : ModSettings
 public enum SkylightDisplayMode { Selectable = 0, Visible = 1, Hidden = 2 }   // (v3)
 ```
 
-Scribed with `Scribe_Values.Look` under keys `domeGlowRadius`, `roofEdgeMode`, `displayMode`, `hideDisablesTintGlow`, `skylightVisibilityButton`, and `skylightOpacity` into RimWorld's standard per-mod config XML (`Config/Mod_..._SkylightsSettingsMod.xml` in the save-data folder). All fields fall back to their defaults when absent, so the mod is safe to add mid-save. The pre-v3 `hideSkylights` bool is still read once for migration: an old `True` becomes `displayMode = Hidden`.
+Scribed with `Scribe_Values.Look` under keys `domeGlowRadius`, `roofEdgeMode`, `displayMode`, `skylightVisibilityButton`, and `skylightOpacity` into RimWorld's standard per-mod config XML (`Config/Mod_..._SkylightsSettingsMod.xml` in the save-data folder). All fields fall back to their defaults when absent, so the mod is safe to add mid-save. The pre-v3 `hideSkylights` bool is still read once for migration: an old `True` becomes `displayMode = Hidden`.
 
 ### `SkylightsSettingsMod : Mod`
 
@@ -639,7 +638,7 @@ public static class DomeGlowRadius
 public static class SkylightOpacity { public static void Apply(); }
 ```
 
-Writes `Settings.skylightOpacity` into the **alpha** of `graphicData.color` for every def carrying `CompProperties_Skylight`, clears the cached graphic, and re-resolves `def.graphic`; spawned skylights get `Notify_ColorChanged()`. The RGB of `graphicData.color` is preserved — that's how the ship windows keep their per-def tint (white shared texture x def colour) under any opacity. The skylight defs use `shaderType Transparent` specifically so this alpha renders. Same heads-up as `DomeGlowRadius`: it overwrites graphic colour alpha at startup and on settings save.
+Writes `Settings.skylightOpacity` into the **alpha** of `graphicData.color` for every def carrying `CompProperties_Skylight`, clears the cached graphic, and re-resolves `def.graphic`; spawned skylights get `Notify_ColorChanged()`. The RGB of `graphicData.color` is preserved — that is how the stained-glass windows keep their per-def tint (white shared texture x def colour) under any opacity. The skylight defs use `shaderType Transparent` specifically so this alpha renders. Same heads-up as `DomeGlowRadius`: it overwrites graphic colour alpha at startup and on settings save.
 
 ---
 

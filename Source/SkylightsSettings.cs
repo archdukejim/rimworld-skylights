@@ -31,8 +31,8 @@ namespace Skylights
         /// <summary>Sprites drawn, clicks pass through to what's below (the classic behaviour).
         /// HUD badge: check.</summary>
         Visible = 1,
-        /// <summary>Sprites hidden (and, per hideDisablesTintGlow, the stained-glass light muted);
-        /// skylights keep channeling light exactly the same. HUD badge: X.</summary>
+        /// <summary>Sprites hidden — display only: daylight, crops, and the coloured stained-glass
+        /// light all keep working exactly the same. HUD badge: X.</summary>
         Hidden = 2,
     }
 
@@ -57,16 +57,9 @@ namespace Skylights
         /// <see cref="displayMode"/> on load. Never read at runtime.</summary>
         private bool hideSkylights = false;
 
-        /// <summary>When true, hiding installed skylights also switches off the ship windows' coloured
-        /// light — the stained-glass wash on the surface and the tinted starlight in orbit. Default OFF
-        /// (v3.0.0 fast-follow): hiding strips only the sprites and the coloured light keeps shining,
-        /// which is what hiding has always meant for skylight function; muting is the opt-in.</summary>
-        public bool hideDisablesTintGlow = false;
-
-        /// <summary>Master switch for the skylight visibility HUD button (issue #20): the play-settings-row
-        /// toggle that shows/hides installed skylight sprites in play (and, per
-        /// <see cref="hideDisablesTintGlow"/>, mutes the stained-glass light with them). Off removes the
-        /// button (the mod-menu hide checkbox and the architect-tab button still work). Default on.</summary>
+        /// <summary>Master switch for the skylight display HUD button (issue #20): the play-settings-row
+        /// button that cycles the three-state display mode. Off removes the button (the mod-menu radios
+        /// and the architect-tab button still work). Default on.</summary>
         public bool skylightVisibilityButton = true;
 
         public const float MinOpacity = 0.1f;
@@ -82,7 +75,6 @@ namespace Skylights
             Scribe_Values.Look(ref roofEdgeMode, "roofEdgeMode", RoofEdgeMode.Vanilla);
             Scribe_Values.Look(ref displayMode, "displayMode", SkylightDisplayMode.Visible);
             Scribe_Values.Look(ref hideSkylights, "hideSkylights", false);
-            Scribe_Values.Look(ref hideDisablesTintGlow, "hideDisablesTintGlow", false);
             Scribe_Values.Look(ref skylightVisibilityButton, "skylightVisibilityButton", true);
             Scribe_Values.Look(ref skylightOpacity, "skylightOpacity", 1f);
             // Migrate a pre-three-state config: the old hide toggle becomes the Hidden mode.
@@ -177,11 +169,6 @@ namespace Skylights
             if (list.RadioButton("Skylights_Display_Hidden".Translate(),
                     Settings.displayMode == SkylightDisplayMode.Hidden))
                 Settings.displayMode = SkylightDisplayMode.Hidden;
-
-            list.Gap(6f);
-
-            list.CheckboxLabeled("Skylights_HideTintGlow".Translate(), ref Settings.hideDisablesTintGlow,
-                "Skylights_HideTintGlowDesc".Translate());
 
             list.Gap(6f);
 
